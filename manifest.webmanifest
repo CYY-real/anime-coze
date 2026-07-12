@@ -1,0 +1,1 @@
+{"name": "追番不迷路", "short_name": "追番不迷路", "description": "追番不迷路 — 二次元番剧追踪助手", "start_url": "/", "display": "standalone", "orientation": "portrait", "background_color": "#FFF0F5", "theme_color": "#FF6B9D", "icons": [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"}]}
