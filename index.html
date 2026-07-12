@@ -537,6 +537,14 @@ html,body{
 }
 .wl-item .btn-status.finished{background:#F1EDF8;color:#B0A8C4}
 .wl-item .btn-status.dropped{background:#FFECEC;color:#FF8A8A}
+.wl-item .btn-go-watch{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:54px;height:26px;padding:0 12px;border-radius:13px;
+  font-size:12px;font-weight:700;box-sizing:border-box;
+  background:#fff;color:#C44AFF;border:1.5px solid rgba(196,74,255,0.35);
+  cursor:pointer;white-space:nowrap;
+}
+.wl-item .btn-go-watch:active{transform:scale(0.94);opacity:0.85}
 
 /* 旧的内联控件（不再使用，保留以防兼容） */
 .wl-item .controls{display:none}
@@ -1294,6 +1302,19 @@ html,body{
         </div>
         <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="loadCustomUrl()">加载此 URL</button>
       </div>
+
+      <div style="margin-top:18px;border-top:1px solid var(--border);padding-top:14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">🔑 GitHub Token（仅存本机，用于“保存到 GitHub”）</div>
+        <div class="setting-item" style="padding:6px 0">
+          <input id="ghTokenInput" type="password" placeholder="粘贴你的 GitHub Personal Access Token" autocomplete="off">
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="saveGhToken()">保存 Token</button>
+          <button class="btn btn-sm" onclick="exportConfig()">导出配置</button>
+          <button class="btn btn-sm" onclick="document.getElementById('importFile').click()">导入配置</button>
+        </div>
+        <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importConfig(this.files[0])">
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeModal('sourceModal')">取消</button>
@@ -1317,6 +1338,9 @@ let activeSeason = 1;
 function init() {
   const saved = localStorage.getItem('anime_coze_watchlist');
   if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
+  // 载入设置（含 GitHub Token，仅存本机，实现"填一次永久用"）
+  const savedSettings = localStorage.getItem('anime_coze_settings');
+  if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
   else {
     // 首次访问：注入 mock 追番数据，方便看效果
     // 字段说明：
@@ -1346,6 +1370,8 @@ function init() {
   renderMylist();
   // 从 GitHub 同步追剧列表（静默，首次不弹 toast）
   pullWatchlistFromGitHub();
+  // 加载番剧库（GitHub Action 刷新的最新 TMDB 数据），让"我的追番"能实时跟随最新集数
+  refreshAnimeDb();
 }
 
 // ======================== TOAST ========================
@@ -1370,6 +1396,9 @@ function switchTab(tab, el) {
   } else if (tab === 'browse') {
     initBrowseTab();
   }
+  // 切 tab 时刷新番剧库，保证页面上的 TMDB 数据是最新的（GitHub Action 跑的结果）
+  refreshAnimeDb();
+  syncBodyScroll();
 }
 
 function initBrowseTab() {
@@ -1449,6 +1478,30 @@ async function loadAnime(opts = {}) {
   }
 }
 
+// 静默刷新番剧库（GitHub Action 写入仓库的最新 TMDB 数据）。
+// 我的追番据此实时跟随"最新集数"，而非添加时冻结的值。
+async function refreshAnimeDb() {
+  try {
+    const resp = await fetch('./data/anime.json', { cache: 'no-store' });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (!Array.isArray(data)) return;
+    const changed = data.length !== animeDb.length ||
+      data.some(d => {
+        const old = animeDb.find(x => String(x.tmdbId) === String(d.tmdbId));
+        return !old || old.latestEpisode !== d.latestEpisode;
+      });
+    animeDb = data;
+    updateBadges();
+    if (changed) {
+      const mylistVisible = !document.getElementById('tabMylist').classList.contains('hidden');
+      const browseVisible = !document.getElementById('tabBrowse').classList.contains('hidden');
+      if (mylistVisible) renderMylist();
+      if (browseVisible) renderBrowse();
+    }
+  } catch (e) { /* 保留旧数据，不弹错 */ }
+}
+
 // 更新 source card 状态展示
 function updateSourceCard(url, metaText, isError = false) {
   const card = document.getElementById('sourceCard');
@@ -1488,6 +1541,8 @@ function showSourcePicker() {
   });
   // 预填自定义 URL
   document.getElementById('customUrl').value = settings.dataUrl || '';
+  const ghInp = document.getElementById('ghTokenInput');
+  if (ghInp) ghInp.value = settings.ghToken || '';
   openModal('sourceModal');
 }
 
@@ -2130,11 +2185,7 @@ function openProgress(tmdbId) {
   const activeLatest = seasonLatest(activeSeason) || latestEpisode;
   const banked = activeLatest ? activeLatest - w.watchedEpisode : 0;
 
-  function closeProgressModal() {
-    document.body.style.overflow = '';
-    const el = document.getElementById('progressModal');
-    if (el) el.remove();
-  }
+  // closeProgressModal 已提升为全局函数（见 MODAL HELPERS），供内联 onclick 调用
 
   const div = document.createElement('div');
   div.className = 'modal-overlay';
@@ -2164,7 +2215,7 @@ function openProgress(tmdbId) {
       <button class="btn btn-primary" onclick="saveProgress('${tmdbId}')">保存</button>
     </div>
   </div>`;
-  document.body.style.overflow = 'hidden';
+  syncBodyScroll();
   document.body.appendChild(div);
   setTimeout(() => {
     const inp = document.getElementById('popupEpisode');
@@ -2190,8 +2241,7 @@ function saveProgress(tmdbId) {
   // status 不再由 saveProgress 计算，由 enrichWatchlistItem 动态算（只保留 dropped）
   if (watchlist[idx].status !== 'dropped') delete watchlist[idx].status;
   saveWatchlist();
-  document.body.style.overflow = '';
-  document.getElementById('progressModal')?.remove();
+  closeProgressModal();
   renderBrowse();
   renderMylist();
   showToast('✅ 进度已更新');
@@ -2287,6 +2337,10 @@ const MYLIST_STATUS_TEXT = {
 //   - bilibili_intl: 复用 bilibili
 // 全部 SVG 已内嵌具体颜色（不依赖 currentColor），外层无染色背景。
 const PLATFORM_BRAND = {
+  wukong: {
+    name: '悟空浏览器', short: '悟', color: '#FF6B35',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#FF6B35"/><path fill="none" stroke="#FFD23F" stroke-width="2.6" stroke-linecap="round" d="M11.5 17.5 Q24 11 36.5 17.5"/><path fill="#FFF1E6" d="M24 15.5c-3.2-3.6-9.6-1.9-9 4.2.5 5 4 9 9 10.3 5-1.3 8.5-5.3 9-10.3.6-6.1-5.8-7.8-9-4.2z"/><circle cx="20.3" cy="21" r="1.7" fill="#3A2A1A"/><circle cx="27.7" cy="21" r="1.7" fill="#3A2A1A"/><path fill="none" stroke="#3A2A1A" stroke-width="1.6" stroke-linecap="round" d="M20.5 26.5 Q24 29 27.5 26.5"/></svg>'
+  },
   bilibili: {
     name: '哔哩哔哩', short: 'B', color: '#00A1D6',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
@@ -2315,10 +2369,6 @@ const PLATFORM_BRAND = {
     name: 'B站国际', short: 'Bi', color: '#00A1D6',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
   },
-  wukong: {
-    name: '悟空', short: '悟', color: '#FF6B35',
-    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#FF6B35" stroke-width="2.5"/><path fill="#FF6B35" d="M24 12c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4m-6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="24" cy="16" r="1.5" fill="#FF6B35"/></svg>'
-  },
 };
 // 平台搜索 URL 兜底（当 platforms[i].url 为空时使用）
 const PLATFORM_SEARCH_URL = {
@@ -2327,7 +2377,8 @@ const PLATFORM_SEARCH_URL = {
   iqiyi:    'https://search.iqiyi.com/o?key=',
   youku:    'https://so.youku.com/search_video/q_',
   migu:     'https://www.migu.cn/search?keyword=',
-  wukong:   'https://www.wukong.com/search/?keyword=',
+  // 悟空浏览器是 iOS 浏览器（非视频站）：无直链时回退到网页搜索，链接在悟空内打开
+  wukong:   'https://www.baidu.com/s?wd=',
 };
 // 给未知平台兜底（"其他" 用灰色问号圆）
 const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#DFE6E9"/><text x="24" y="32" text-anchor="middle" fill="#636E72" font-size="22" font-weight="bold" font-family="sans-serif">?</text></svg>';
@@ -2421,7 +2472,7 @@ function renderMylist() {
     const platShort = platBrand ? platBrand.short : (platform ? platform.charAt(0).toUpperCase() : '');
     const platColor = platBrand ? platBrand.color : '#8B7AA8';
     const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
-    // 右侧操作：raising/已追上+remaining>0 显示"追更"按钮 + 角标；finished 显示"已完结"；dropped 显示"已弃番"
+    // 右侧操作：raising/已追完+remaining>0 显示"追更"按钮 + 角标；finished 显示"已完结"；dropped 显示"已弃番"
     let actionHtml = '';
     if (status === 'raising' || (status === 'caughtup' && remaining > 0)) {
       actionHtml = `<div class="btn-catch-wrap">
@@ -2435,12 +2486,23 @@ function renderMylist() {
     } else if (status === 'dropped') {
       actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="操作">已弃番</button>`;
     } else if (status === 'caughtup') {
-      actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追上</button>`;
+      actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追完</button>`;
     }
     // 链接 icon（点开平台弹窗）—— 如果没有 platforms 数据则不渲染
     const linkIcon = platforms.length > 0
       ? `<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C44AFF' stroke-width='2.5' stroke-linecap='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>" onclick="event.stopPropagation();openPlatformPopup('${tmdbId}')" title="查看播放平台">`
       : '';
+    // 主平台「去看」按钮：点击直接跳转主平台链接（无直链时回退到平台搜索页）
+    let goWatchBtn = '';
+    if (platforms.length > 0) {
+      const primaryPlat = platforms.find(p => p.isPrimary) || platforms[0];
+      const pu = (primaryPlat.url || '').trim();
+      const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
+      if (goUrl) {
+        const goLabel = pu ? '去看' : '搜看';
+        goWatchBtn = `<button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button>`;
+      }
+    }
     const catLabel = it.categoryLabel || '番剧';
     return `<div class="wl-item" onclick="openDetail('${tmdbId}')">
       <div class="card-deco"></div>
@@ -2471,7 +2533,7 @@ function renderMylist() {
           <span>更新至${latestLabel}</span>
         </div>
       </div>
-      <div class="anime-actions">${actionHtml}</div>
+      <div class="anime-actions">${actionHtml}${goWatchBtn}</div>
     </div>`;
   }).join('');
 }
@@ -2481,10 +2543,12 @@ function saveWatchlist() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
   scheduleGhSync();
 }
+function saveSettings() {
+  localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
+}
 
 // ======================== GITHUB WATCHLIST SYNC ========================
-// GH_TOKEN 由 GitHub Actions 在部署时替换，无需手动配置
-const GH_TOKEN = '__GH_TOKEN__';
+// GitHub Token 由用户在设置中填写，仅存浏览器 localStorage，不写进源码（避免公开泄露）
 const GH_OWNER = 'CYY-real';
 const GH_REPO = 'anime-coze';
 const GH_BRANCH = 'main';
@@ -2510,7 +2574,8 @@ async function pullWatchlistFromGitHub(showMsg = false) {
 }
 
 async function pushWatchlistToGitHub() {
-  if (!GH_TOKEN || GH_TOKEN === '__GH_TOKEN__' || GH_TOKEN.length < 10) return;
+  const token = (settings.ghToken || '').trim();
+  if (!token || token.length < 10) return;
   try {
     const content = JSON.stringify(watchlist, null, 2);
     const base64Content = btoa(unescape(encodeURIComponent(content)));
@@ -2518,7 +2583,7 @@ async function pushWatchlistToGitHub() {
     let sha = null;
     const getUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_WATCHLIST_PATH}`;
     const getResp = await fetch(getUrl, {
-      headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github+json' },
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
     });
     if (getResp.ok) {
       const existing = await getResp.json();
@@ -2528,7 +2593,7 @@ async function pushWatchlistToGitHub() {
     const putResp = await fetch(getUrl, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${GH_TOKEN}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
         Accept: 'application/vnd.github+json',
       },
@@ -2547,6 +2612,44 @@ function scheduleGhSync() {
   _ghSyncTimer = setTimeout(pushWatchlistToGitHub, 3000);
 }
 
+// 设置中的 GitHub Token 保存到本机 localStorage（不写进源码）
+function saveGhToken() {
+  const v = (document.getElementById('ghTokenInput')?.value || '').trim();
+  settings.ghToken = v;
+  saveSettings();
+  showToast(v ? '✅ GitHub Token 已保存（仅存你本机）' : '已清除 Token');
+}
+
+// 导出配置为本地 JSON 文件（清缓存后可一键恢复，无需重新复制 token）
+function exportConfig() {
+  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'anime-coze-settings.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('📤 配置已导出');
+}
+
+// 从本地 JSON 文件导入配置（含 ghToken）
+function importConfig(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      Object.assign(settings, data);
+      saveSettings();
+      const inp = document.getElementById('ghTokenInput');
+      if (inp) inp.value = settings.ghToken || '';
+      showToast('✅ 配置已导入');
+    } catch (err) {
+      showToast('❌ 配置文件无效');
+    }
+  };
+  reader.readAsText(file);
+}
+
 // ======================== REFRESH ========================
 function refreshWatchlist() {
   showToast('🔄 正在刷新追剧列表...');
@@ -2554,13 +2657,29 @@ function refreshWatchlist() {
 }
 
 // ======================== MODAL HELPERS ========================
+// 滚动锁改为"派生状态"：只要有任意弹窗可见就锁，关闭任一个都基于实际状态还原，
+// 避免嵌套弹窗（如详情→进度）关闭时误把滚动锁永久留下导致页面无法滑动。
+function syncBodyScroll() {
+  // 只要页面上存在任意「可见」的弹窗层就锁住背景滚动；
+  // 不再逐个列举弹窗 id，避免新增弹窗（platformPopup / editPlatformsModal 等）漏锁导致背景仍可滑动。
+  const anyOpen = !!document.querySelector('.modal-overlay:not(.hidden)');
+  document.body.style.overflow = anyOpen ? 'hidden' : '';
+}
+// 自动同步：任意弹窗 append / remove 时重新计算滚动锁，彻底规避「漏调 syncBodyScroll」导致的背景可滑。
+const _scrollLockObserver = new MutationObserver(syncBodyScroll);
+_scrollLockObserver.observe(document.body, { childList: true });
+function closeProgressModal() {
+  const el = document.getElementById('progressModal');
+  if (el) el.remove();
+  syncBodyScroll();
+}
 function openModal(id) {
   document.getElementById(id).classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
+  syncBodyScroll();
 }
 function closeModal(id) {
   document.getElementById(id).classList.add('hidden');
-  document.body.style.overflow = '';
+  syncBodyScroll();
 }
 
 // ======================== UTILITY ========================
