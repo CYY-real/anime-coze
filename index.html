@@ -1999,9 +1999,8 @@ function epRefreshList() {
   if (!w) return;
   const list = document.getElementById('epList');
   if (!list) return;
-  // 重渲染（保留输入焦点麻烦，干脆整体刷新；用户少改时问题不大）
-  // 为减少体验损失，只在非输入状态时刷新
-  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT')) return;
+  // 整体刷新：输入框保持焦点（阻止刷新），选择框允许刷新（logo 需更新）
+  if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
   // 简单重写
   const knownKeys = Object.keys(PLATFORM_BRAND);
   if (w.platforms.length === 0) {
