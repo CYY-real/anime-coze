@@ -1344,6 +1344,8 @@ function init() {
     saveWatchlist();
   }
   renderMylist();
+  // 预加载番剧库
+  loadAnime({ url: './data/anime.json', source: 'local' });
 
   // 从 GitHub 同步追剧列表（静默，首次不弹 toast）
   pullWatchlistFromGitHub();
@@ -2203,13 +2205,16 @@ function saveProgress(tmdbId) {
 // ======================== ANIME DETAIL ========================
 function openDetail(tmdbId) {
   const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
-  if (!a) return;
-  const inList = watchlist.some(w => String(w.tmdbId) === String(tmdbId));
-  const w = inList ? watchlist.find(w => String(w.tmdbId) === String(tmdbId)) : null;
-  const status = getStatusForAnime(a);
-  const statusText = STATUS_TEXT[status];
-  const platforms = a.platforms || [];
-  const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'));
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  const inList = !!w;
+  if (!a && !w) return;
+  const name = a ? (a.name || a.displayName || '') : (w ? w.name : '');
+  const cover = a ? a.cover : (w ? w.cover : '');
+  const hasCover = cover && (cover.startsWith('http') || cover.startsWith('data:'));
+  const status = a ? getStatusForAnime(a) : (w.status || 'raising');
+  const statusText = STATUS_TEXT[status] || '追番中';
+  const platforms = (a ? a.platforms : w ? w.platforms : []) || [];
+  const categoryLabel = a ? (a.categoryLabel || (a.category === 'cdrama' ? '国产剧' : a.category === 'kdrama' ? '韩剧' : '番剧')) : '番剧';
 
   const div = document.createElement('div');
   div.className = 'modal-overlay';
@@ -2219,19 +2224,19 @@ function openDetail(tmdbId) {
     <div class="modal-handle"></div>
     <div class="modal-body" style="text-align:center;padding-top:16px">
       ${hasCover
-        ? `<img class="detail-cover" src="${esc(a.cover)}" loading="lazy" onerror="this.style.display='none'">`
-        : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(a.name||'?').charAt(0)}</div>`}
-      <div class="detail-name">${esc(a.name || a.displayName || '')}</div>
+        ? `<img class="detail-cover" src="${esc(cover)}" loading="lazy" onerror="this.style.display='none'">`
+        : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(name||'?').charAt(0)}</div>`}
+      <div class="detail-name">${esc(name)}</div>
       <div class="detail-meta">
         <span class="cover-status ${status}" style="position:static;display:inline-block;margin-right:4px">${statusText}</span>
-        <span style="font-size:10px;font-weight:600;color:var(--orange,#ff9f43);margin-right:4px">${esc(a.categoryLabel || (a.category === 'cdrama' ? '国产剧' : a.category === 'kdrama' ? '韩剧' : '番剧'))}</span>
-        ${a.regionLabel ? esc(a.regionLabel) : ''}
-        ${a.latestEpisode ? ' · 更新至 E' + a.latestEpisode : ''}
-        ${a.totalEpisodes ? ' · 共 ' + a.totalEpisodes + ' 集' : ''}
-        ${a.voteAverage ? ' · ⭐ ' + a.voteAverage.toFixed(1) : ''}
+        <span style="font-size:10px;font-weight:600;color:var(--orange,#ff9f43);margin-right:4px">${esc(categoryLabel)}</span>
+        ${a && a.regionLabel ? esc(a.regionLabel) : ''}
+        ${a && a.latestEpisode ? ' · 更新至 E' + a.latestEpisode : ''}
+        ${a && a.totalEpisodes ? ' · 共 ' + a.totalEpisodes + ' 集' : ''}
+        ${a && a.voteAverage ? ' · ⭐ ' + a.voteAverage.toFixed(1) : ''}
       </div>
       ${w ? `<div style="margin-top:6px;font-size:12px;color:var(--purple);font-weight:700">追至 E${w.watchedEpisode}</div>` : ''}
-      ${a.overview ? `<div class="detail-overview">${esc(a.overview)}</div>` : ''}
+      ${a && a.overview ? `<div class="detail-overview">${esc(a.overview)}</div>` : ''}
       ${platforms.length > 0 ? `<div class="detail-platforms">${platforms.map(p => '<span class="detail-platform-tag">' + esc(p.platform) + '</span>').join('')}</div>` : ''}
     </div>
     <div class="modal-actions">
