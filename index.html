@@ -1272,7 +1272,7 @@ html,body{
         <div class="mylist-title">我的追番</div>
       </div>
       <div class="mylist-header-actions">
-        <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="从云端重新加载追剧列表">🔄 刷新</button>
+        <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="刷新整个页面">🔄 刷新</button>
         <button class="btn btn-primary btn-sm" onclick="uploadWatchlist()" id="uploadBtn" title="把本地最新追剧列表上传到 Gitee">☁️ 上传到 Gitee</button>
       </div>
     </div>
@@ -2507,8 +2507,8 @@ function enrichWatchlistItem(w) {
   const status = w.status === 'dropped' ? 'dropped' : getMylistStatus(w);
   // 剩余集数 = latestEpisode - watchedEpisode
   const remaining = status === 'finished' ? 0 : Math.max(0, latestEpisode - w.watchedEpisode);
-  // 更新频率
-  const updateFrequency = w.updateFrequency || '';
+  // 更新频率：优先用番剧库 anime 的 nextAirDate 实时推算（与添加页 browseCard 一致），追番自带值兜底
+  const updateFrequency = (a ? computeUpdateFrequency(a) : '') || w.updateFrequency || '';
   const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧' };
   const acat = (a && a.category) || 'anime';
   return {
@@ -2839,8 +2839,8 @@ function importConfigFromText() {
 
 // ======================== REFRESH ========================
 function refreshWatchlist() {
-  showToast('🔄 正在刷新追剧列表...');
-  pullWatchlist(true);
+  // 整页刷新：等价于浏览器 F5 / 重新加载，保证追番列表与番剧库都从最新部署重新加载
+  location.reload();
 }
 
 // ======================== UPLOAD (兜底) ========================
