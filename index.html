@@ -103,6 +103,10 @@ html,body{
   .set-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(196,74,255,.16)}
   .set-textarea{width:100%;box-sizing:border-box;min-height:104px;margin-top:10px;padding:11px 12px;font-size:12px;line-height:1.55;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-card-light);color:var(--text-primary);outline:none;resize:vertical;transition:border-color .15s,box-shadow .15s}
   .set-textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(196,74,255,.16)}
+  .sync-status{background:var(--bg-card-light);border:1px solid var(--border-soft);border-radius:11px;padding:10px 12px}
+  .sync-status-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:3px 0}
+  .sync-status-key{color:var(--text-secondary)}
+  .sync-status-val{font-weight:700;color:var(--text-primary)}
 .deco-heart{display:inline-block;color:var(--pink);font-size:12px}
 
 .header-actions{display:flex;align-items:center;gap:6px}
@@ -756,10 +760,31 @@ html,body{
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,0.9);
   font-size:13px;font-weight:600;color:var(--text-primary);
-  z-index:999;box-shadow:var(--shadow-card);
+  z-index:9999;box-shadow:var(--shadow-card);
   transition:opacity .3s;white-space:nowrap;pointer-events:none;
   max-width:80vw;
 }
+
+/* 上传到 Gitee 时的整页锁定遮罩 */
+.upload-block-overlay{
+  position:fixed;inset:0;z-index:9998;
+  background:rgba(20,18,32,0.55);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .15s;
+}
+.upload-block-overlay.hidden{display:none;}
+.upload-block-box{
+  background:#fff;border-radius:18px;padding:30px 40px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  box-shadow:0 16px 48px rgba(0,0,0,.28);
+}
+.upload-spinner{
+  width:40px;height:40px;border-radius:50%;
+  border:4px solid #ece3ff;border-top-color:#7c4dff;
+  animation:spin .8s linear infinite;
+}
+.upload-block-text{color:#3a3a4a;font-size:15px;font-weight:600;letter-spacing:.3px;}
 
 /* ============================================
    Modal - 底部抽屉风格（对齐小程序）
@@ -1204,14 +1229,8 @@ html,body{
       <div class="browse-title">➕ 添加剧集</div>
       <div class="browse-sub" id="browseSub">从剧库中选择要追的剧</div>
     </div>
-    <!-- 未加载数据提示 -->
-    <div class="setup-required" id="setupRequired" style="display:none">
-      <div class="setup-icon">🔧</div>
-      <div class="setup-title">需要先选择数据源</div>
-      <div class="setup-desc">请先选择剧库的数据源，才能浏览并添加剧集。</div>
-      <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="showSourcePicker()">选择数据源</button>
-    </div>
-    <!-- 已配置：搜索 + 列表 -->
+    <!-- 剧库自动从同源 ./data/anime.json 加载（GitHub Actions 每日更新并部署），无需选择数据源 -->
+    <div id="browseContent" style="display:none">
     <div id="browseContent" style="display:none">
       <!-- 分类/地区合并筛选 -->
       <div class="sub-tabs" id="browseFilters">
@@ -1288,43 +1307,6 @@ html,body{
 <!-- Toast -->
 <div id="toast" class="toast" style="opacity:0"></div>
 
-<!-- Source Picker Modal -->
-<div id="sourceModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('sourceModal')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">📂 选择数据源</div>
-      <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p class="modal-desc">选择数据源后立即加载——数据由 GitHub Actions 自动更新并随站点部署</p>
-
-      <div class="source-presets">
-        <button class="source-preset" data-preset="local" onclick="pickSource('local')">
-          <div class="preset-icon">🗂️</div>
-          <div class="preset-info">
-            <div class="preset-name">本地文件（默认）</div>
-            <div class="preset-meta">./data/anime.json（随站点部署自动更新）</div>
-          </div>
-        </button>
-      </div>
-
-      <div style="margin-top:14px">
-        <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">自定义 URL</div>
-        <div class="setting-item" style="padding:6px 0">
-          <input id="customUrl" type="text" class="set-input" placeholder="粘贴任意 anime.json URL">
-        </div>
-        <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="loadCustomUrl()">加载此 URL</button>
-      </div>
-
-
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="closeModal('sourceModal')">取消</button>
-    </div>
-  </div>
-</div>
-
 <!-- Settings Modal -->
 <div id="settingsModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settingsModal')">
   <div class="modal" onclick="event.stopPropagation()">
@@ -1336,17 +1318,31 @@ html,body{
     <div class="modal-body">
       <div class="set-section">
         <div class="set-label">☁️ 云端同步</div>
-        <div class="set-hint">追剧记录自动保存到 Gitee（经 Cloudflare 代理转发，浏览器无需任何 Token）。GitHub Actions 每日把最新配置与番剧数据整合后部署到线上，次日生效。</div>
+        <div class="sync-status">
+          <div class="sync-status-row">
+            <span class="sync-status-key">当前追番</span>
+            <span class="sync-status-val" id="syncCount">—</span>
+          </div>
+          <div class="sync-status-row">
+            <span class="sync-status-key">上次同步</span>
+            <span class="sync-status-val" id="syncTime">—</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn btn-sm" style="flex:1" onclick="pullFromCloud()">☁️ 从云端拉取</button>
+          <button class="btn btn-sm" style="flex:1" onclick="pushToCloud()">⬆️ 上传到云端</button>
+        </div>
+        <div class="set-hint" style="margin-top:8px">追番记录自动保存到 Gitee（经 Cloudflare 代理转发，浏览器无需任何 Token）；番剧库由 GitHub Actions 每日自动更新并随站点部署，无需手动选择数据源。</div>
       </div>
       <div class="set-section">
-        <div class="set-label">⚙️ 配置备份（JSON 文本）</div>
-        <div class="set-hint">清缓存会丢失 Token。点「生成配置文本」导出并复制保存；需要时粘贴回来点「导入配置」即可恢复。</div>
+        <div class="set-label">💾 追番记录备份（JSON 文本）</div>
+        <div class="set-hint">导出的是你的完整追番列表，可复制保存到备忘录等处；换设备或误删时，粘贴回来「导入并合并」即可恢复（不会覆盖已有记录，按剧集智能合并）。</div>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <button class="btn btn-sm" onclick="exportConfig()">生成配置文本</button>
+          <button class="btn btn-sm" onclick="exportConfig()">生成备份文本</button>
           <button class="btn btn-sm" id="copyCfgBtn" style="display:none" onclick="copyConfigText()">复制</button>
         </div>
-        <textarea id="cfgTextArea" class="set-textarea" placeholder="点「生成配置文本」导出；或在此粘贴配置 JSON 后点「导入配置」"></textarea>
-        <button class="btn btn-sm btn-block" style="margin-top:8px" onclick="importConfigFromText()">导入配置</button>
+        <textarea id="cfgTextArea" class="set-textarea" placeholder="点「生成备份文本」导出；或在此粘贴之前备份的追番 JSON 后点「导入并合并」"></textarea>
+        <button class="btn btn-sm btn-block" style="margin-top:8px" onclick="importConfigFromText()">导入并合并</button>
       </div>
     </div>
     <div class="modal-actions">
@@ -1355,11 +1351,19 @@ html,body{
   </div>
 </div>
 
+<!-- 上传到 Gitee 时整页锁定，直到返回结果才允许继续操作 -->
+<div id="uploadBlockOverlay" class="upload-block-overlay hidden">
+  <div class="upload-block-box">
+    <div class="upload-spinner"></div>
+    <div class="upload-block-text">正在上传到 Gitee…</div>
+  </div>
+</div>
+
 <script>
 // ======================== STATE ========================
 let animeDb = [];
 let watchlist = [];
-let settings = { dataUrl: '', dataSource: '', lastAnimeCount: 0 };
+let settings = { lastSyncAt: '', lastAnimeCount: 0 };
 let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
@@ -1443,7 +1447,7 @@ function initBrowseTab() {
   if (animeDb.length > 0) { renderBrowse(); return; }
 
   browseSub.textContent = '正在自动加载剧库…';
-  loadAnime({ url: './data/anime.json', source: 'local' });
+  loadAnime();
 }
 
 
@@ -1476,37 +1480,25 @@ function debounceSearch() {
 }
 
 // ======================== LOAD ANIME JSON ========================
-// 加载 anime.json（供 source picker / 手动 URL 复用）
-//  接受参数：{ url?, source? }  至少传一个
-async function loadAnime(opts = {}) {
-  const url = (opts.url || settings.dataUrl || '').trim();
-  if (!url) { showToast('请先选择数据源'); return; }
-  // 写入设置
-  settings.dataUrl = url;
-  settings.dataSource = opts.source || settings.dataSource || 'custom';
-  localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
-
-  // 更新 source card 显示
-  updateSourceCard(url, '⏳ 加载中…');
-
+// 番剧库固定读同源 ./data/anime.json（由 GitHub Actions 每日更新并随站点部署，无需选择数据源）
+const ANIME_DB_URL = './data/anime.json';
+async function loadAnime() {
   const list = document.getElementById('browseList');
-    list.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在加载剧库...</p></div>';
+  list.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在加载剧库...</p></div>';
   try {
-    const resp = await fetch(url);
+    const resp = await fetch(ANIME_DB_URL, { cache: 'no-store' });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
     if (!Array.isArray(data)) throw new Error('数据格式异常（需为 JSON 数组）');
     animeDb = data;
     updateBadges();
     renderBrowse();
-    updateSourceCard(url, `✅ ${animeDb.length} 部剧集`);
     settings.lastAnimeCount = animeDb.length;
-    localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
+    saveSettings();
     showToast(`✨ 已加载 ${animeDb.length} 部剧集`);
   } catch (e) {
     // 加载失败：保留旧数据（如果有），但显示明确错误
     list.innerHTML = '<div class="empty-state"><div class="icon">😵</div><p class="text">加载番剧库失败</p><p class="sub">' + esc(e.message) + '</p><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="initBrowseTab()">重试</button></div>';
-    updateSourceCard(url, '❌ ' + e.message.slice(0, 40), true);
     showToast('❌ 加载失败：' + e.message.slice(0, 40));
   }
 }
@@ -1535,68 +1527,42 @@ async function refreshAnimeDb() {
   } catch (e) { /* 保留旧数据，不弹错 */ }
 }
 
-// 更新 source card 状态展示
-function updateSourceCard(url, metaText, isError = false) {
-  const card = document.getElementById('sourceCard');
-  const icon = document.getElementById('sourceIcon');
-  const label = document.getElementById('sourceLabel');
-  const meta = document.getElementById('sourceMeta');
-  if (!card) return;
-
-  const source = settings.dataSource || 'custom';
-  const sourceMap = {
-    local: { icon: '🗂️', name: '本地文件' },
-    custom: { icon: '🔗', name: '自定义 URL' },
-  };
-  const cfg = sourceMap[source] || sourceMap.custom;
-  icon.textContent = cfg.icon;
-  label.textContent = cfg.name;
-
-  if (url) {
-    meta.textContent = metaText || url;
-    card.classList.add('loaded');
-  } else {
-    meta.textContent = '点此选择或粘贴 anime.json URL';
-    card.classList.remove('loaded');
-  }
-  if (isError) {
-    meta.style.color = 'var(--red)';
-  } else {
-    meta.style.color = '';
-  }
-}
-
-// 显示数据源选择器
-function showSourcePicker() {
-  // 高亮当前选中的预设
-  document.querySelectorAll('.source-preset').forEach(b => {
-    b.classList.toggle('active', b.dataset.preset === (settings.dataSource || 'custom'));
-  });
-  // 预填自定义 URL
-  document.getElementById('customUrl').value = settings.dataUrl || '';
-  openModal('sourceModal');
-}
-
-// 打开「设置」弹窗
+// 打开「设置 / 同步中心」弹窗，并刷新云端同步状态展示
 function showSettings() {
+  updateSyncStatus();
   openModal('settingsModal');
 }
 
-function pickSource(kind) {
-  let url = '';
-  if (kind === 'local') {
-    url = './data/anime.json';
-  }
-  closeModal('sourceModal');
-  loadAnime({ url, source: kind });
+// 刷新「同步中心」里的状态数字（追番数量 + 上次同步时间）
+function updateSyncStatus() {
+  const cEl = document.getElementById('syncCount');
+  const tEl = document.getElementById('syncTime');
+  if (cEl) cEl.textContent = `${watchlist.length} 部`;
+  if (tEl) tEl.textContent = settings.lastSyncAt ? fmtSyncTime(settings.lastSyncAt) : '尚未同步';
 }
 
-// 加载自定义 URL
-function loadCustomUrl() {
-  const url = document.getElementById('customUrl').value.trim();
-  if (!url) { showToast('请粘贴 URL'); return; }
-  closeModal('sourceModal');
-  loadAnime({ url, source: 'custom' });
+// 把 ISO 时间格式化为「MM-DD HH:mm」的简短本地时间
+function fmtSyncTime(iso) {
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '—';
+    const p = n => String(n).padStart(2, '0');
+    return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  } catch (_) { return '—'; }
+}
+
+// 「同步中心」按钮：立即从云端拉取
+async function pullFromCloud() {
+  showToast('🔄 正在从云端拉取…');
+  await pullWatchlist(true);
+  updateSyncStatus();
+}
+
+// 「同步中心」按钮：立即上传到云端
+async function pushToCloud() {
+  showToast('🔄 正在上传到云端…');
+  await pushWatchlist();
+  updateSyncStatus();
 }
 
 // ======================== STATUS ========================
@@ -2640,6 +2606,7 @@ async function pullWatchlist(showMsg = false) {
     const data = text ? JSON.parse(text) : [];
     if (!Array.isArray(data)) return;
     mergeWatchlist(data);
+    markSynced();
     if (showMsg) showToast(`🔄 已刷新，当前 ${watchlist.length} 条追剧记录`);
   } catch (e) {
     if (await tryFallbackSnapshot(showMsg)) return;
@@ -2657,6 +2624,7 @@ async function pushWatchlist() {
       body: content,
     });
     if (resp.ok) {
+      markSynced();
       showToast('☁️ 已保存到 Gitee');
     } else {
       const err = await resp.json().catch(() => ({}));
@@ -2693,6 +2661,13 @@ async function tryFallbackSnapshot(showMsg) {
   } catch (_) { return false; }
 }
 
+// 记录一次成功同步的时间戳（供「同步中心」展示）
+function markSynced() {
+  settings.lastSyncAt = new Date().toISOString();
+  saveSettings();
+  updateSyncStatus();
+}
+
 // 本机保存后 3 秒自动同步到云端
 function scheduleSync() {
   clearTimeout(_syncTimer);
@@ -2704,14 +2679,14 @@ function saveWatchlistLocal() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
 }
 
-// 导出配置为 JSON 文本（适配手机端：不依赖文件，直接复制）
+// 导出「追番记录」为 JSON 文本（适配手机端：不依赖文件，直接复制）
 function exportConfig() {
-  const text = JSON.stringify(settings, null, 2);
+  const text = JSON.stringify(watchlist, null, 2);
   const ta = document.getElementById('cfgTextArea');
   if (ta) ta.value = text;
   const cp = document.getElementById('copyCfgBtn');
   if (cp) cp.style.display = '';
-  showToast('📤 已生成配置文本，可点「复制」保存');
+  showToast(`📤 已生成备份（${watchlist.length} 部），可点「复制」保存`);
 }
 
 // 复制配置文本到剪贴板
@@ -2731,19 +2706,23 @@ function fallbackCopy(ta, done) {
   if (window.getSelection) window.getSelection().removeAllRanges();
 }
 
-// 从 JSON 文本导入配置，适配手机端
+// 从 JSON 文本导入「追番记录」并按剧集智能合并，随后上传云端，适配手机端
 function importConfigFromText() {
   const ta = document.getElementById('cfgTextArea');
   const raw = (ta && ta.value || '').trim();
-  if (!raw) { showToast('❌ 请先粘贴配置 JSON'); return; }
+  if (!raw) { showToast('❌ 请先粘贴追番备份 JSON'); return; }
+  let data;
   try {
-    const data = JSON.parse(raw);
-    Object.assign(settings, data);
-    saveSettings();
-    showToast('✅ 配置已导入');
+    data = JSON.parse(raw);
   } catch (err) {
-    showToast('❌ 配置 JSON 无效');
+    showToast('❌ 备份 JSON 无效'); return;
   }
+  if (!Array.isArray(data)) { showToast('❌ 这不是追番备份（应为 JSON 数组）'); return; }
+  const before = watchlist.length;
+  mergeWatchlist(data);          // 按 tmdbId/名字合并，不覆盖已有记录
+  updateSyncStatus();
+  showToast(`✅ 已导入并合并（${before} → ${watchlist.length} 部）`);
+  scheduleSync();               // 合并结果自动同步回云端
 }
 
 // ======================== REFRESH ========================
@@ -2762,10 +2741,15 @@ async function uploadWatchlist() {
   const btn = document.getElementById('uploadBtn');
   const prevText = btn ? btn.textContent : '';
   if (btn) { btn.disabled = true; btn.textContent = '⏳ 上传中'; }
-  showToast('🔄 正在上传到 Gitee...');
-  await pushWatchlist();                    // 内部已含成功/失败 toast
-  if (btn) { btn.disabled = false; btn.textContent = prevText; }
-  _uploadingToGitee = false;
+  const overlay = document.getElementById('uploadBlockOverlay');
+  if (overlay) overlay.classList.remove('hidden');   // 整页锁定，禁止继续操作
+  try {
+    await pushWatchlist();                  // 内部已含成功/失败 toast
+  } finally {
+    if (overlay) overlay.classList.add('hidden');    // 返回结果后才解锁
+    if (btn) { btn.disabled = false; btn.textContent = prevText; }
+    _uploadingToGitee = false;
+  }
 }
 
 // ======================== MODAL HELPERS ========================
