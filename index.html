@@ -298,6 +298,15 @@ html,body{
   display:flex;flex-direction:column;gap:10px;
   padding-bottom:12px;
 }
+.browse-net-divider{
+  margin:14px 2px 4px;
+  padding:7px 10px;
+  font-size:12px;font-weight:700;letter-spacing:.3px;
+  color:var(--purple,#a855f7);
+  background:linear-gradient(90deg,rgba(168,85,247,.12),rgba(168,85,247,0));
+  border-left:3px solid var(--purple,#a855f7);
+  border-radius:6px;
+}
 .anime-card{
   display:flex;align-items:center;gap:10px;
   padding:10px;
@@ -1373,6 +1382,10 @@ let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
 let activeSeason = 1;
+// 添加页实时搜索(TMDB)结果缓存 + 加载态
+let liveResults = [];
+let liveLoading = false;
+let liveQuery = '';
 
 // ======================== INIT ========================
 function init() {
@@ -1393,20 +1406,15 @@ function init() {
     //   - platforms[]: 完整平台列表（用于平台弹窗）— 每条 {platform, name, url, isPrimary}
     //   - url: 该平台"去看"链接（留空 → 降级为"复制链接"按钮）
     watchlist = [
-      { tmdbId: 209867, name: '葬送的芙莉莲',       watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 28, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss2867',isPrimary:true},{platform:'tencent',name:'腾讯视频',url:''}], updateFrequency: '周更' },
-      { tmdbId: 120089, name: '间谍过家家 第二季',  watchedSeason: 2, watchedEpisode: 5,  latestSeason: 2, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss42005',isPrimary:true}], updateFrequency: '周日更' },
-      { tmdbId: 106449, name: '凡人修仙传',         watchedSeason: 1, watchedEpisode: 86, latestSeason: 1, latestEpisode: 96, threshold: 5, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200r8j8vut.html',isPrimary:true}], updateFrequency: '周更' },
-      { tmdbId: 76572,  name: '斗罗大陆',           watchedSeason: 1, watchedEpisode: 263,latestSeason: 1, latestEpisode: 264,threshold: 10,notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200m3nqqhp.html',isPrimary:true}], updateFrequency: '周六更' },
-      { tmdbId: 1429,   name: '进击的巨人 最终季',  watchedSeason: 4, watchedEpisode: 28, latestSeason: 4, latestEpisode: 28, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 85937,  name: '鬼灭之刃',           watchedSeason: 3, watchedEpisode: 11, latestSeason: 3, latestEpisode: 11, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss37172',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 120092, name: '孤独摇滚！',         watchedSeason: 1, watchedEpisode: 12, latestSeason: 1, latestEpisode: 12, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss41410',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 154654, name: '莉可丽丝',           watchedSeason: 1, watchedEpisode: 13, latestSeason: 1, latestEpisode: 13, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 197189, name: '蓝色监狱',           watchedSeason: 1, watchedEpisode: 24, latestSeason: 1, latestEpisode: 24, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss43692',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 223911, name: '仙逆',               watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 26, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], updateFrequency: '周更' },
-      { tmdbId: 120094, name: '摇曳露营△ 第三季',  watchedSeason: 3, watchedEpisode: 12, latestSeason: 3, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 226126, name: '时光代理人 第二季',  watchedSeason: 2, watchedEpisode: 12, latestSeason: 2, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss44753',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 215968, name: '雾山五行',           watchedSeason: 1, watchedEpisode: 3,  latestSeason: 1, latestEpisode: 3,  threshold: 1, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 91097,  name: '灵笼',               watchedSeason: 1, watchedEpisode: 16, latestSeason: 1, latestEpisode: 16, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'dropped',  platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 106449, name: '凡人修仙传', watchedSeason: 1, watchedEpisode: 180, latestSeason: 1, latestEpisode: 96, threshold: 5, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://v.qq.com/x/cover/mzc00200r8j8vut.html',isPrimary:true}], updateFrequency: '周更' },
+      { tmdbId: 223911, name: '仙逆', watchedSeason: 1, watchedEpisode: 130, latestSeason: 1, latestEpisode: 26, threshold: 3, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], updateFrequency: '周更' },
+      { tmdbId: 91097, name: '灵笼', watchedSeason: 1, watchedEpisode: 16, latestSeason: 1, latestEpisode: 16, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'dropped', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 124003, name: '完美世界', watchedSeason: 1, watchedEpisode: 241, latestSeason: 1, latestEpisode: 277, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
+      { tmdbId: 224839, name: '遮天', watchedSeason: 1, watchedEpisode: 146, latestSeason: 1, latestEpisode: 170, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
+      { tmdbId: 229192, name: '沧元图', watchedSeason: 1, watchedEpisode: 49, latestSeason: 1, latestEpisode: 85, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [], platform: '', updateFrequency: '' },
+      { tmdbId: 228429, name: '斗罗大陆Ⅱ绝世唐门', watchedSeason: 1, watchedEpisode: 0, latestSeason: 1, latestEpisode: 161, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
+      { tmdbId: 218642, name: '师兄啊师兄', watchedSeason: 1, watchedEpisode: 129, latestSeason: 1, latestEpisode: 149, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'youku',name:'优酷',url:'',isPrimary:true}], platform: 'youku', updateFrequency: '' },
+      { tmdbId: 259537, name: '剑来', watchedSeason: 1, watchedEpisode: 0, latestSeason: 2, latestEpisode: 27, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
     ];
     saveWatchlist();
   }
@@ -1478,11 +1486,33 @@ function switchMylistFilter(el) {
 // ======================== SEARCH ========================
 function debounceSearch() {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => {
+  searchTimer = setTimeout(async () => {
     const mylistVisible = !document.getElementById('tabMylist').classList.contains('hidden');
-    if (mylistVisible) renderMylist();
-    else renderBrowse();
-  }, 200);
+    if (mylistVisible) { renderMylist(); return; }
+    const q = (document.getElementById('browseSearchInput')?.value || '').trim();
+    if (!q) { liveResults = []; renderBrowse(); return; }
+    // 有查询词：先渲染本地结果 + loading 态，再异步拉取 TMDB 全网结果合并
+    liveLoading = true;
+    liveQuery = q;
+    renderBrowse();
+    try {
+      const r = await fetch(`/api/tmdb?q=${encodeURIComponent(q)}`, { cache: 'no-store' });
+      if (r.ok) {
+        const j = await r.json();
+        const net = Array.isArray(j.results) ? j.results : [];
+        // 排除已存在于本地剧库的（fetch 端已排过，这里双保险）
+        liveResults = net.filter((x) => !animeDb.some((a) => String(a.tmdbId) === String(x.tmdbId)));
+      } else {
+        liveResults = [];
+      }
+    } catch (e) {
+      liveResults = [];
+    }
+    liveLoading = false;
+    // 仅当搜索框仍是同一查询时才重渲染，避免竞态覆盖
+    const q2 = (document.getElementById('browseSearchInput')?.value || '').trim();
+    if (q2 === q) renderBrowse();
+  }, 250);
 }
 
 // ======================== LOAD ANIME JSON ========================
@@ -1648,90 +1678,111 @@ function updateMylistBadges() {
 // ======================== RENDER BROWSE (list) ========================
 function renderBrowse() {
   const q = (document.getElementById('browseSearchInput')?.value || '').trim().toLowerCase();
-  let items = animeDb;
-  if (q) items = items.filter(a => (a.name || '').toLowerCase().includes(q));
+  let localItems = animeDb;
+  if (q) localItems = localItems.filter(a => (a.name || '').toLowerCase().includes(q));
   if (currentBrowseFilter !== 'all') {
-    if (currentBrowseFilter === 'jp-anime') items = items.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP');
-    else if (currentBrowseFilter === 'cn-anime') items = items.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN');
-    else items = items.filter(a => (a.category || 'anime') === currentBrowseFilter);
+    if (currentBrowseFilter === 'jp-anime') localItems = localItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP');
+    else if (currentBrowseFilter === 'cn-anime') localItems = localItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN');
+    else localItems = localItems.filter(a => (a.category || 'anime') === currentBrowseFilter);
+  }
+
+  // 实时搜索结果（仅在有查询词时合并；已按 tmdbId 排除本地库重复项）
+  let liveItems = [];
+  if (q && liveResults.length) {
+    liveItems = liveResults.filter(x => (x.name || '').toLowerCase().includes(q));
+    if (currentBrowseFilter !== 'all') {
+      if (currentBrowseFilter === 'jp-anime') liveItems = liveItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP');
+      else if (currentBrowseFilter === 'cn-anime') liveItems = liveItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN');
+      else liveItems = liveItems.filter(a => (a.category || 'anime') === currentBrowseFilter);
+    }
+    liveItems = liveItems.filter(x => !localItems.some(a => String(a.tmdbId) === String(x.tmdbId)));
   }
 
   const list = document.getElementById('browseList');
-  if (items.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">未找到匹配的剧集</p><p class="sub">试试其他关键词或分类</p></div>';
+  if (localItems.length === 0 && liveItems.length === 0) {
+    list.innerHTML = liveLoading
+      ? '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在搜索全网剧集…</p></div>'
+      : '<div class="empty-state"><div class="icon">🔍</div><p class="text">未找到匹配的剧集</p><p class="sub">试试其他关键词或分类</p></div>';
     return;
   }
-  list.innerHTML = items.map(a => {
-    const inList = watchlist.some(w => String(w.tmdbId) === String(a.tmdbId));
-    const w = inList ? watchlist.find(w => String(w.tmdbId) === String(a.tmdbId)) : null;
-    const status = getStatusForAnime(a);
-    const statusText = STATUS_TEXT[status];
-    const banked = a.latestEpisode && w ? a.latestEpisode - w.watchedEpisode : 0;
-    const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'));
 
-    // 平台：取第一个
-    const primaryPlatform = (a.platforms && a.platforms[0]) || null;
-    const platformInfo = primaryPlatform ? PLATFORM_INFO[primaryPlatform.platform] : null;
+  let html = localItems.map(a => browseCard(a)).join('');
+  if (liveItems.length) {
+    html += `<div class="browse-net-divider">🌐 全网结果（TMDB）· 点击即可追</div>` + liveItems.map(a => browseCard(a)).join('');
+  }
+  list.innerHTML = html;
+}
 
-    // 更新频率：从 nextAirDate 推断（仅 raising 显示）
-    const updateFreq = computeUpdateFrequency(a);
+// 单卡片渲染（本地剧库 / 实时搜索结果共用）
+function browseCard(a) {
+  const inList = watchlist.some(w => String(w.tmdbId) === String(a.tmdbId));
+  const w = inList ? watchlist.find(w => String(w.tmdbId) === String(a.tmdbId)) : null;
+  const status = getStatusForAnime(a);
+  const statusText = STATUS_TEXT[status];
+  const banked = a.latestEpisode && w ? a.latestEpisode - w.watchedEpisode : 0;
+  const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'));
 
-    // 右侧操作：追番状态
-    let actionHtml;
-    if (status === 'finished' || status === 'unreleased') {
-      // 已完结 / 未开播：显示状态 badge
-      actionHtml = `<div class="btn-status ${status === 'finished' ? 'finished' : 'unreleased'}">${statusText}</div>`;
-    } else if (inList && w) {
-      // 已追番：追更按钮 + 角标
-      const isCaughtup = banked <= 0;
-      if (banked > 0) {
-        actionHtml = `<div class="btn-catch-wrap">
-          <div class="btn-catch" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">追更</div>
-          <div class="catch-badge">+${banked}</div>
-        </div>`;
-      } else {
-        actionHtml = `<div class="btn-catch caughtup" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">✓ 已追完</div>`;
-      }
+  // 平台：取第一个
+  const primaryPlatform = (a.platforms && a.platforms[0]) || null;
+  const platformInfo = primaryPlatform ? PLATFORM_INFO[primaryPlatform.platform] : null;
+
+  // 更新频率：从 nextAirDate 推断（仅 raising 显示）
+  const updateFreq = computeUpdateFrequency(a);
+
+  // 右侧操作：追番状态
+  let actionHtml;
+  if (status === 'finished' || status === 'unreleased') {
+    // 已完结 / 未开播：显示状态 badge
+    actionHtml = `<div class="btn-status ${status === 'finished' ? 'finished' : 'unreleased'}">${statusText}</div>`;
+  } else if (inList && w) {
+    // 已追番：追更按钮 + 角标
+    if (banked > 0) {
+      actionHtml = `<div class="btn-catch-wrap">
+        <div class="btn-catch" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">追更</div>
+        <div class="catch-badge">+${banked}</div>
+      </div>`;
     } else {
-      // 未追番：+ 追番按钮
-      actionHtml = `<div class="btn-catch" onclick="event.stopPropagation();addToList('${a.tmdbId}')">+ 追番</div>`;
+      actionHtml = `<div class="btn-catch caughtup" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">✓ 已追完</div>`;
     }
+  } else {
+    // 未追番：+ 追番按钮
+    actionHtml = `<div class="btn-catch" onclick="event.stopPropagation();addToList('${a.tmdbId}')">+ 追番</div>`;
+  }
 
-    const cat = a.category || 'anime';
-    const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧' };
-    const catBadge = catLabels[cat] || cat;
-    return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">
-      <div class="card-deco"></div>
-      <div class="cover-wrap">
-        ${hasCover
-          ? `<img class="cover" src="${esc(a.cover)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
-          : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
-        <div class="cover-glow"></div>
-        <div class="cover-status ${status}">${statusText}</div>
+  const cat = a.category || 'anime';
+  const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧' };
+  const catBadge = catLabels[cat] || cat;
+  return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">
+    <div class="card-deco"></div>
+    <div class="cover-wrap">
+      ${hasCover
+        ? `<img class="cover" src="${esc(a.cover)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
+        : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
+      <div class="cover-glow"></div>
+      <div class="cover-status ${status}">${statusText}</div>
+    </div>
+    <div class="anime-info">
+      <div class="anime-name">
+        <span class="name-text">${esc(a.name || a.displayName || '')}</span>
+        ${primaryPlatform ? `<span class="go-watch-icon" title="点击查看播放平台" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">🔗</span>` : ''}
       </div>
-      <div class="anime-info">
-        <div class="anime-name">
-          <span class="name-text">${esc(a.name || a.displayName || '')}</span>
-          ${primaryPlatform ? `<span class="go-watch-icon" title="点击查看播放平台" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">🔗</span>` : ''}
-        </div>
-        <div class="anime-meta">
-          <span class="category-tag">${catBadge}</span>
-          ${platformInfo
-            ? `<span class="platform-tag">
-                <span class="platform-icon" style="background:${platformInfo.color}">${platformInfo.short}</span>
-                <span class="platform-name">${esc(platformInfo.name)}</span>
-              </span>`
-            : `<span class="platform-empty">暂无平台</span>`}
-          ${updateFreq ? `<span class="anime-schedule">${updateFreq}</span>` : ''}
-        </div>
-        <div class="anime-episode-info">
-          ${w ? `<span class="ep-current">追至${formatEpisode(w.watchedEpisode, w.watchedSeason)}</span>` : ''}
-          <span>${a.latestEpisode ? '更新至' + formatEpisode(a.latestEpisode, a.latestSeason) : '暂无更新'}</span>
-        </div>
+      <div class="anime-meta">
+        <span class="category-tag">${catBadge}</span>
+        ${platformInfo
+          ? `<span class="platform-tag">
+              <span class="platform-icon" style="background:${platformInfo.color}">${platformInfo.short}</span>
+              <span class="platform-name">${esc(platformInfo.name)}</span>
+            </span>`
+          : `<span class="platform-empty">暂无平台</span>`}
+        ${updateFreq ? `<span class="anime-schedule">${updateFreq}</span>` : ''}
       </div>
-      <div class="anime-actions">${actionHtml}</div>
-    </div>`;
-  }).join('');
+      <div class="anime-episode-info">
+        ${w ? `<span class="ep-current">追至${formatEpisode(w.watchedEpisode, w.watchedSeason)}</span>` : ''}
+        <span>${a.latestEpisode ? '更新至' + formatEpisode(a.latestEpisode, a.latestSeason) : '暂无更新'}</span>
+      </div>
+    </div>
+    <div class="anime-actions">${actionHtml}</div>
+  </div>`;
 }
 
 // 格式化集数显示（S1 E20 / E20）
@@ -1758,7 +1809,8 @@ function computeUpdateFrequency(a) {
 
 // ======================== RENDER BROWSE (list) ========================// ======================== ADD / REMOVE ========================
 function addToList(tmdbId) {
-  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  // 兼容本地剧库 + 实时搜索结果（resolveAnime 三级回退）
+  const a = resolveAnime(tmdbId);
   if (!a) return;
   if (watchlist.some(w => String(w.tmdbId) === String(tmdbId))) {
     showToast('已在追番列表中');
@@ -1769,7 +1821,7 @@ function addToList(tmdbId) {
     return;
   }
   watchlist.push({
-    tmdbId: Number(tmdbId),
+    tmdbId: tmdbId,   // 保持原类型（TMDB 数字 id 或本地字符串 id），后续均按 String() 比较
     name: a.name || a.displayName || '',
     watchedSeason: 1,
     watchedEpisode: 0,
@@ -1779,7 +1831,7 @@ function addToList(tmdbId) {
     notifyEnabled: true,
     lastNotifiedAt: '',
     lastNotifiedEpisode: 0,
-    // platforms: 保留 url 字段（来自 anime.json.platforms[].url 或空字符串）
+    // platforms: 保留 url 字段（来自 anime.json / TMDB 搜索结果的 platforms[].url 或空字符串）
     platforms: (a.platforms || []).map((p, i) => ({
       platform: p.platform,
       name: p.name || p.platform,
@@ -1788,6 +1840,27 @@ function addToList(tmdbId) {
     })),
     platform: a.platforms && a.platforms[0] ? a.platforms[0].platform : '',
     updateFrequency: '',
+    // 元数据快照：实时搜索/本地补充剧加进追番后，刷新页面仍能在 animeDb 缺失时还原封面/平台/集数
+    meta: {
+      tmdbId: tmdbId,
+      name: a.name || a.displayName || '',
+      cover: a.cover || '',
+      category: a.category || 'anime',
+      categoryLabel: a.categoryLabel || '',
+      region: a.region || '',
+      regionLabel: a.regionLabel || '',
+      latestSeason: a.latestSeason || 1,
+      latestEpisode: a.latestEpisode || 0,
+      seasonEpisodeCounts: a.seasonEpisodeCounts || {},
+      totalEpisodes: a.totalEpisodes || 0,
+      platforms: a.platforms || [],
+      overview: a.overview || '',
+      firstAirDate: a.firstAirDate || '',
+      voteAverage: a.voteAverage || 0,
+      originCountry: a.originCountry || '',
+      nextAirDate: a.nextAirDate || '',
+      updateFrequency: a.updateFrequency || '',
+    },
   });
   saveWatchlist();
   renderBrowse();
@@ -1811,7 +1884,7 @@ function toggleMoreActions(tmdbId) {
   const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
   const inList = !!w;
   const isDropped = w && w.status === 'dropped';
-  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  const a = resolveAnime(tmdbId);
   if (!a && !w) return;
 
   const div = document.createElement('div');
@@ -2167,7 +2240,7 @@ function fallbackCopy(text, successMsg) {
 function openProgress(tmdbId) {
   const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
   if (!w) return;
-  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  const a = resolveAnime(tmdbId);
   const enriched = enrichWatchlistItem(w);
   const { latestEpisode, latestSeason, currentSeason } = enriched;
 
@@ -2261,7 +2334,7 @@ function saveProgress(tmdbId) {
 
 // ======================== ANIME DETAIL ========================
 function openDetail(tmdbId) {
-  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  const a = resolveAnime(tmdbId);
   const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
   const inList = !!w;
   if (!a && !w) return;
@@ -2314,7 +2387,7 @@ function openDetail(tmdbId) {
 function getMylistStatus(w) {
   if (w.status === 'dropped') return 'dropped';
   // 用 animeDb 的最新数据（每次同步自动更新）判断番本身是否已完结
-  const a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  const a = resolveAnime(w.tmdbId);
   const latestEp = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
   const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
   // 多季且所有季都到顶 = 已完结；用 seasonEpisodeCounts
@@ -2400,9 +2473,22 @@ const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="
 // 自愈标记：enrich 时若靠名字纠正了错的 tmdbId，置位后在 render 末尾写回 localStorage
 let _watchlistIdDirty = false;
 
+// 统一解析某剧元数据：先查本地剧库(animeDb)，再查实时搜索结果(liveResults)，最后回退到追番条目自带的 meta
+// 这样实时搜到的剧加进追番后，刷新页面仍能在 animeDb 缺失时还原封面/平台/集数
+function resolveAnime(tmdbId) {
+  let a = animeDb.find((x) => String(x.tmdbId) === String(tmdbId));
+  if (a) return a;
+  a = liveResults.find((x) => String(x.tmdbId) === String(tmdbId));
+  if (a) return a;
+  const w = watchlist.find((x) => String(x.tmdbId) === String(tmdbId));
+  if (w && w.meta) return w.meta;
+  return null;
+}
+
 function enrichWatchlistItem(w) {
   // 优先按 tmdbId 精确匹配（存的就是 TMDB 的 id，后续直接对应）
   let a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  if (!a && w.meta) a = w.meta;   // 实时搜索/本地补充剧的元数据快照（刷新后仍可用）
   // 存的 tmdbId 错/缺失时，按名字兜底找到真身，并自愈写回正确 id
   if (!a && w.name) {
     a = animeDb.find(x => x.name && x.name === w.name);
@@ -2646,10 +2732,12 @@ async function pushWatchlist() {
 // 合并云端/快照数据到本机（按 tmdbId 去重，云端优先）；仅本机持久化，不回推避免回环
 function mergeWatchlist(data) {
   if (!Array.isArray(data)) return;
-  const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
-  data.forEach(cw => { if (cw && cw.tmdbId != null) localMap.set(String(cw.tmdbId), cw); });
-  watchlist = Array.from(localMap.values());
-  dedupeWatchlistByName();   // 云端/本机按 tmdbId 合并后，再按名字收口，避免同名重复
+  // 云端为准：直接用云端数据（按 tmdbId 去重），不再保留本地独有条目。
+  // 这样「我的追番」始终等于云端那份，避免旧 mock / 历史本地数据残留。
+  const map = new Map();
+  data.forEach(cw => { if (cw && cw.tmdbId != null) map.set(String(cw.tmdbId), cw); });
+  watchlist = Array.from(map.values());
+  dedupeWatchlistByName();   // 云端按 tmdbId 收口后，再按名字去重，避免同名重复
   saveWatchlistLocal();
   renderMylist();
 }
