@@ -91,6 +91,9 @@ html,body{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .deco-star{display:inline-block;color:var(--yellow);font-size:13px}
+
+  .header-settings{background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:var(--text-secondary);padding:6px 10px;border-radius:10px;transition:background .15s;-webkit-tap-highlight-color:transparent}
+  .header-settings:active{background:rgba(128,128,128,.18)}
 .deco-heart{display:inline-block;color:var(--pink);font-size:12px}
 
 .header-actions{display:flex;align-items:center;gap:6px}
@@ -1183,6 +1186,7 @@ html,body{
       <span class="deco-star">✨</span>
       <span class="header-title">追番不迷路</span>
     </div>
+    <button class="header-settings" onclick="showSourcePicker()" title="设置（数据源 / GitHub Token）" aria-label="设置">⚙️</button>
   </div>
 
   <!-- Content: Browse (list mode) -->
@@ -1279,7 +1283,7 @@ html,body{
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">📂 选择数据源</div>
+      <div class="modal-title">⚙️ 设置</div>
       <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
     </div>
     <div class="modal-body">
@@ -1612,10 +1616,10 @@ function updateBadges() {
 
 function updateMylistBadges() {
   // 我的追番 badge：按各状态统计（与 getMylistStatus 保持一致）
-  // 全部 = 排除 dropped + finished（与小程序一致）
+  // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
   const total = watchlist.length;
   const enriched = watchlist.map(enrichWatchlistItem);
-  const allCount = enriched.filter(it => it.status !== 'dropped' && it.status !== 'finished').length;
+  const allCount = enriched.filter(it => it.status !== 'dropped').length;
   const counts = {
     all: allCount,
     raising: enriched.filter(it => it.status === 'raising').length,
@@ -2386,7 +2390,9 @@ const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="
 // "enrich"：把 watchlist 的一条 + 关联的 animeDb 项合并成"后端视图"，
 // 跟小程序 processAnimeList 输出对齐（currentEpisode/latestEpisode/status/platforms 等）
 function enrichWatchlistItem(w) {
-  const a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  // 优先按 tmdbId 精确匹配；匹配失败时按名字兜底（mock 数据/历史 id 漂移仍能跟随 TMDB 最新值）
+  let a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  if (!a && w.name) a = animeDb.find(x => x.name && x.name === w.name);
   // latestEpisode 优先取 animeDb（每次同步自动更新），watchlist 兜底
   const latestEpisode = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
   const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
@@ -2434,11 +2440,10 @@ function renderMylist() {
 
   // enrich + 状态筛选 + 搜索过滤
   const enriched = watchlist.map(enrichWatchlistItem);
-  // 小程序：all = 排除 dropped + finished；raising/finished/dropped 单独 tab
-  // 这里只暴露 3 个 tab：all（追番中+已追完） / raising / caughtup（与小程序一致）
+  // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
   let filtered = enriched;
   if (currentMylistFilter === 'all') {
-    filtered = filtered.filter(it => it.status !== 'dropped' && it.status !== 'finished');
+    filtered = filtered.filter(it => it.status !== 'dropped');
   } else if (currentMylistFilter === 'raising') {
     filtered = filtered.filter(it => it.status === 'raising');
   } else if (currentMylistFilter === 'caughtup') {
