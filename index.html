@@ -1667,7 +1667,7 @@ function renderBrowse() {
       <div class="card-deco"></div>
       <div class="cover-wrap">
         ${hasCover
-          ? `<img class="cover" src="${esc(a.cover)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
+          ? `<img class="cover" src="${esc(a.cover)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
           : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
         <div class="cover-glow"></div>
         <div class="cover-status ${status}">${statusText}</div>
@@ -2308,7 +2308,7 @@ function openDetail(tmdbId) {
     <div class="modal-handle"></div>
     <div class="modal-body" style="text-align:center;padding-top:16px">
       ${hasCover
-        ? `<img class="detail-cover" src="${esc(a.cover)}" onerror="this.style.display='none'">`
+        ? `<img class="detail-cover" src="${esc(a.cover)}" loading="lazy" onerror="this.style.display='none'">`
         : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(a.name||'?').charAt(0)}</div>`}
       <div class="detail-name">${esc(a.name || a.displayName || '')}</div>
       <div class="detail-meta">
@@ -2528,7 +2528,7 @@ function renderMylist() {
       <div class="card-deco"></div>
       <div class="cover-wrap">
         ${hasCover
-          ? `<img class="cover" src="${esc(cover)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+          ? `<img class="cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
           : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
         <div class="cover-glow"></div>
         <div class="cover-status ${status}">${statusText}</div>
