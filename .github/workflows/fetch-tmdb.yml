@@ -1,8 +1,9 @@
-name: Fetch TMDB Anime
+name: Daily Sync & Deploy
 
+# 每日：拉 TMDB 番剧库 + 从 Gitee 拉用户配置 → 整合 → 部署到 Cloudflare Pages
 on:
   schedule:
-    # 每天 UTC 22:00（≈ 北京 06:00）自动抓取
+    # 每天 UTC 22:00（≈ 北京 06:00）自动运行
     - cron: '0 22 * * *'
   workflow_dispatch: {}
 
@@ -10,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  fetch:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +22,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run TMDB sync
+      - name: Run TMDB sync (生成 data/anime.json)
         env:
           TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
           TMDB_LANG: zh-CN
@@ -29,32 +30,47 @@ jobs:
           TMDB_PAGES: '2'
         run: node scripts/sync.js
 
-      - name: Commit & push data/anime.json
+      - name: Pull config from Gitee (写入 data/watchlist.json)
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_OWNER: ${{ secrets.GITEE_OWNER || 'yingyingchen123321' }}
+          GITEE_REPO: ${{ secrets.GITEE_REPO || 'zhuifan-data' }}
+          GITEE_BRANCH: ${{ secrets.GITEE_BRANCH || 'master' }}
+        run: |
+          set -e
+          mkdir -p data
+          API="https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/data/watchlist.json"
+          RESP=$(curl -s "${API}?access_token=${GITEE_TOKEN}&ref=${GITEE_BRANCH}")
+          CONTENT=$(echo "$RESP" | jq -r '.content // empty')
+          if [ -z "$CONTENT" ]; then
+            echo "[]" > data/watchlist.json
+            echo "☁️ Gitee 暂无配置，写入空数组"
+          else
+            echo "$CONTENT" | base64 -d > data/watchlist.json
+            echo "✅ 已从 Gitee 拉取配置"
+          fi
+
+      - name: Commit data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/anime.json
+          git add data/anime.json data/watchlist.json
           if git diff --cached --quiet; then
             echo "no changes"
           else
-            git commit -m "chore: sync anime.json from TMDB"
+            git commit -m "chore: sync anime + watchlist @ $(date -u +%F)"
             git push
           fi
 
-      # 自动部署到 Cloudflare Pages：番剧库(随数据更新)与页面(随 index.html 改动)始终跟随仓库最新
-      # 浏览器只访问 *.pages.dev，国内可达，无需直连 GitHub；CF 凭据来自仓库 Secret，无需登录 GitHub
-      - name: Deploy to Cloudflare Pages
+      - name: Prepare dist & deploy to Cloudflare Pages
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          WRANGLER_SEND_METRICS: 'false'
         run: |
-          npm install -g wrangler
-          mkdir -p dist
-          cp index.html dist/
-          cp -r data dist/
-          wrangler pages deploy dist \
-            --project-name=anime-coze-cyy \
-            --branch=main \
-            --commit-dirty=true \
-            --yes
+          set -e
+          DIST=dist-cf
+          rm -rf "$DIST" && mkdir -p "$DIST"
+          cp index.html "$DIST/"
+          cp -r data "$DIST/"
+          cp -r functions "$DIST/"   # 让 /api/proxy 生效
+          npx --yes wrangler@latest pages deploy "$DIST" --project-name=anime-coze-cyy --branch main --commit-dirty
