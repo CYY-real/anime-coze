@@ -45,7 +45,10 @@ function normalizeShow(detail, region) {
   const lea = detail.last_episode_to_air || null;
   const nea = detail.next_episode_to_air || null;
   const cat = (region && CATEGORY_BY_COUNTRY[region]) || 'tv';
-  const regionLabel = (region && REGION_LABEL[region]) || (detail.origin_country && detail.origin_country[0]) || '';
+  // 地区标签按"类型"区分：国漫→国漫、国产真人剧→国产剧、韩剧→韩剧
+  const regionLabel = cat === 'kdrama' ? '韩剧'
+    : cat === 'cdrama' ? '国产剧'
+    : (region === 'JP' ? '日漫' : region === 'CN' ? '国漫' : ((detail.origin_country && detail.origin_country[0]) || ''));
   const platforms = matchPlatforms(name, detail.original_name || '');
   return {
     tmdbId: detail.id,
