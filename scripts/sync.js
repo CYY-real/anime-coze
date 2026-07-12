@@ -37,6 +37,35 @@ const GITEE_BRANCH = process.env.GITEE_BRANCH || 'master';
 
 const { matchPlatforms } = require('./platformSeed');
 
+// 本地补充番剧（TMDB discover 未覆盖 / 用户指定补充）。
+// 每日同步会把 data/anime.json 整体覆盖，因此在这里追加，保证眷思量等手工剧长期稳定存在。
+// 字段与 normalize() 输出保持一致；tmdbId 用本地字符串（不与 TMDB 数字 id 冲突，前端按 String() 比较）。
+const LOCAL_EXTRA_ANIME = [
+  {
+    tmdbId: 'local-juansiliang',
+    name: '眷思量',
+    displayName: '眷思量',
+    cover: '',
+    mediaType: 'tv',
+    region: 'CN',
+    regionLabel: '国漫',
+    category: 'anime',
+    latestSeason: 2,
+    latestEpisode: 13,
+    nextAirDate: '',
+    updateFrequency: '已完结',
+    totalSeasons: 2,
+    seasonEpisodeCounts: { '1': 15, '2': 13 },
+    totalEpisodes: 28,
+    overview:
+      '国产3D古风动画。以异界仙岛「思量岛」为背景，讲述神族少年镜玄与凡人少女屠丽在岛上探寻真相、挣脱命运枷锁的成长故事。第一季2021年腾讯视频独播（15集），第二季《眷思量之风烟迭起》2024年上线（13集）。',
+    firstAirDate: '2021-06-14',
+    voteAverage: 8.6,
+    originCountry: 'CN',
+    platforms: [{ platform: 'tencent', name: '腾讯视频', url: '', isPrimary: true }],
+  },
+];
+
 if (!TMDB_TOKEN) {
   console.error('缺少 TMDB_ACCESS_TOKEN');
   process.exit(1);
@@ -153,6 +182,20 @@ async function main() {
         console.log(`+ ${preset.name} (${preset.regionLabel}) ${epNote}`);
       }
     }
+  }
+
+  // 追加本地补充番剧（避免被 TMDB 每日整体覆盖）
+  for (const extra of LOCAL_EXTRA_ANIME) {
+    const key = `${extra.tmdbId}-tv`;
+    if (seen.has(key)) continue;
+    // 若 TMDB 抓取已包含同名剧，优先用 TMDB 数据，跳过本地补充以免重复
+    if (out.some((x) => x.name === extra.name)) {
+      console.log(`- [本地补充] ${extra.name} 已被 TMDB 覆盖，跳过`);
+      continue;
+    }
+    seen.add(key);
+    out.push(extra);
+    console.log(`+ [本地补充] ${extra.name} (${extra.regionLabel})`);
   }
 
   const dataDir = path.join(__dirname, '..', 'data');
