@@ -12,6 +12,12 @@ on:
 permissions:
   contents: write
 
+# 串行化：同一时刻只跑一个 run。若定时(06:00/12:00)或手动触发重叠，
+# 后到的排队等待前一个完成，避免两次运行同时 commit/push/deploy 造成 git 冲突或重复部署。
+concurrency:
+  group: daily-sync-deploy
+  cancel-in-progress: false
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
