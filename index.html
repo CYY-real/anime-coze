@@ -1376,9 +1376,10 @@ function initBrowseTab() {
   const browseContent = document.getElementById('browseContent');
   const browseSub = document.getElementById('browseSub');
 
+  browseContent.style.display = '';
+
   if (animeDb.length > 0) { renderBrowse(); return; }
 
-  browseContent.style.display = '';
   browseSub.textContent = '正在自动加载剧库…';
   loadAnime({ url: './data/anime.json', source: 'local' });
 }
