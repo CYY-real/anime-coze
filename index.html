@@ -2160,22 +2160,18 @@ function openProgress(tmdbId) {
   </div>`;
   document.body.style.overflow = 'hidden';
   document.body.appendChild(div);
+  // 弹窗移除时恢复滚动
+  const _cleanup = () => {
+    document.body.style.overflow = '';
+    div.removeEventListener('DOMNodeRemoved', _cleanup);
+  };
+  div.addEventListener('DOMNodeRemoved', _cleanup);
   setTimeout(() => {
     const inp = document.getElementById('popupEpisode');
     if (inp) { inp.focus(); inp.select(); }
   }, 400);
 }
 
-// 弹窗移除时恢复滚动（click 事件兜底）
-document.addEventListener('click', function(e) {
-  if (e.target.closest('.modal-overlay') && e.target === e.currentTarget) {
-    setTimeout(() => {
-      if (!document.querySelector('.modal-overlay:not(.hidden)')) {
-        document.body.style.overflow = '';
-      }
-    }, 50);
-  }
-});
 
 function pickSeason(s) {
   activeSeason = s;
@@ -2194,6 +2190,7 @@ function saveProgress(tmdbId) {
   // status 不再由 saveProgress 计算，由 enrichWatchlistItem 动态算（只保留 dropped）
   if (watchlist[idx].status !== 'dropped') delete watchlist[idx].status;
   saveWatchlist();
+  document.body.style.overflow = '';
   document.getElementById('progressModal')?.remove();
   renderBrowse();
   renderMylist();
