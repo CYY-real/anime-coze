@@ -808,6 +808,19 @@ html,body{
   flex:1;padding:11px 0;font-size:13px;
   border-radius:25px;
 }
+.btn-more{
+  flex:none;padding:11px 14px;font-size:12px;
+  border-radius:25px;border:1px solid var(--bg-pill);
+  background:transparent;color:var(--text-secondary);cursor:pointer;
+}
+.more-actions{
+  padding:0 18px 14px;display:flex;flex-direction:column;gap:6px;
+}
+.more-actions .action-menu-item{
+  display:block;width:100%;padding:10px 14px;font-size:13px;
+  border:none;border-radius:12px;background:var(--bg-card-light);
+  color:var(--text);text-align:left;cursor:pointer;
+}
 
 /* ============================================
    Progress Modal（catch-modal 风格）
@@ -996,45 +1009,6 @@ html,body{
 }
 
 /* ============================================
-   Long-press Action Menu（长按操作菜单）
-   ============================================ */
-.action-menu{
-  position:fixed;left:15px;right:15px;bottom:20px;
-  max-width:530px;margin:0 auto;
-  background:#fff;border-radius:18px 18px 0 0;
-  z-index:201;
-  animation:slideUp .3s cubic-bezier(0.32,0.72,0,1);
-  box-shadow:var(--shadow-popup);
-  overflow:hidden;
-}
-.action-menu-item{
-  display:flex;align-items:center;justify-content:center;
-  padding:18px 0;
-  font-size:15px;font-weight:600;
-  border-bottom:1px solid var(--bg-pill);
-  cursor:pointer;
-  background:transparent;border-left:none;border-right:none;border-top:none;
-  width:100%;font-family:inherit;
-}
-.action-menu-item:last-child{border-bottom:none}
-.action-menu-item:active{background:#F5F0FF}
-.action-menu-item.danger{color:#FF8A8A}
-.action-menu-item.danger:active{background:#FFECEC}
-.action-menu-title{
-  font-size:15px;font-weight:700;color:var(--text-primary);
-  text-align:center;padding:14px 16px 4px;
-  background:linear-gradient(135deg,rgba(196,74,255,0.06),rgba(255,107,157,0.06));
-}
-.action-menu-sub{
-  font-size:11px;color:var(--text-secondary);
-  text-align:center;padding:0 16px 12px;
-  background:linear-gradient(135deg,rgba(196,74,255,0.06),rgba(255,107,157,0.06));
-}
-.action-menu-cancel{
-  margin-top:8px;background:#F5F0FF;color:#8B7AA8;
-}
-
-/* ============================================
    Edit Platforms Modal（编辑平台 / 链接）
    ============================================ */
 .ep-empty{
@@ -1080,14 +1054,14 @@ html,body{
   flex-shrink:0;
 }
 .ep-del-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
-.ep-name-input, .ep-url-input{
+.ep-url-input{
   width:100%;padding:7px 10px;border-radius:8px;
   border:1px solid rgba(196,74,255,0.10);
   background:#fff;color:var(--text-primary);
   font-size:12px;font-family:inherit;outline:none;
   box-sizing:border-box;
 }
-.ep-name-input:focus, .ep-url-input:focus{border-color:var(--purple)}
+.ep-url-input:focus{border-color:var(--purple)}
 .ep-url-input::placeholder{color:#C8C0D8}
 .ep-add-btn{
   width:100%;padding:10px 0;
@@ -1663,7 +1637,7 @@ function renderBrowse() {
     const cat = a.category || 'anime';
     const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧' };
     const catBadge = catLabels[cat] || cat;
-    return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')" oncontextmenu="event.preventDefault();showBrowseActionMenu('${a.tmdbId}')" ontouchstart="browseTouchStart(event,'${a.tmdbId}')" ontouchend="browseTouchEnd(event)" ontouchmove="browseTouchEnd(event)">
+    return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">
       <div class="card-deco"></div>
       <div class="cover-wrap">
         ${hasCover
@@ -1763,90 +1737,35 @@ function removeFromList(tmdbId) {
   showToast(`已移除「${a ? a.name : ''}」`);
 }
 
-// ======================== ACTION MENU（长按弹出的操作菜单） ========================
-function showActionMenu(tmdbId) {
+// ======================== 更多操作（详情弹窗内） ========================
+function toggleMoreActions(tmdbId) {
+  const el = document.getElementById('moreActions');
+  if (el) { el.remove(); return; }
   const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
-  if (!w) return;
-  const isDropped = w.status === 'dropped';
-  // 移除已存在的
-  document.getElementById('actionMenu')?.remove();
-  document.getElementById('actionMenuOverlay')?.remove();
-
-  const overlay = document.createElement('div');
-  overlay.id = 'actionMenuOverlay';
-  overlay.className = 'modal-overlay';
-  overlay.onclick = closeActionMenu;
-  document.body.appendChild(overlay);
-
-  const menu = document.createElement('div');
-  menu.id = 'actionMenu';
-  menu.className = 'action-menu';
-  menu.innerHTML = `
-    <button class="action-menu-item" onclick="closeActionMenu();openProgress('${tmdbId}')">📺 更新进度</button>
-    <button class="action-menu-item" onclick="closeActionMenu();openPlatformPopup('${tmdbId}')">🎬 平台 / 去看</button>
-    <button class="action-menu-item" onclick="closeActionMenu();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
-    <button class="action-menu-item" onclick="closeActionMenu();openDetail('${tmdbId}')">📄 查看详情</button>
-    ${isDropped
-      ? `<button class="action-menu-item" onclick="closeActionMenu();restoreFromDropped('${tmdbId}')">♻️ 恢复追番</button>`
-      : `<button class="action-menu-item" onclick="closeActionMenu();markDropped('${tmdbId}')">💔 标记弃番</button>`}
-    <button class="action-menu-item danger" onclick="closeActionMenu();confirmRemove('${tmdbId}')">🗑️ 移除追番</button>
-    <button class="action-menu-item action-menu-cancel" onclick="closeActionMenu()">取消</button>
-  `;
-  document.body.appendChild(menu);
-}
-function closeActionMenu() {
-  document.getElementById('actionMenu')?.remove();
-  document.getElementById('actionMenuOverlay')?.remove();
-}
-
-// 浏览页（添加番剧）长按操作菜单
-function showBrowseActionMenu(tmdbId) {
+  const inList = !!w;
+  const isDropped = w && w.status === 'dropped';
   const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
-  if (!a) return;
-  const inList = watchlist.some(w => String(w.tmdbId) === String(tmdbId));
-  closeActionMenu();
+  if (!a && !w) return;
 
-  const overlay = document.createElement('div');
-  overlay.id = 'actionMenuOverlay';
-  overlay.className = 'modal-overlay';
-  overlay.onclick = closeActionMenu;
-  document.body.appendChild(overlay);
-
-  const menu = document.createElement('div');
-  menu.id = 'actionMenu';
-  menu.className = 'action-menu';
-  const platforms = (a.platforms || []).map(p => p.platform).join('、') || '暂无';
-  menu.innerHTML = `
-    <div class="action-menu-title">${esc(a.name)}</div>
-    <div class="action-menu-sub">📍 ${platforms}</div>
-    ${inList
-      ? `<button class="action-menu-item" onclick="closeActionMenu();openProgress('${tmdbId}')">📺 更新进度</button>
-         <button class="action-menu-item" onclick="closeActionMenu();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
-         <button class="action-menu-item danger" onclick="closeActionMenu();removeFromList('${tmdbId}')">🗑️ 移除追番</button>`
-      : `<button class="action-menu-item" onclick="closeActionMenu();addToList('${tmdbId}')">➕ 加入追番</button>
-         <button class="action-menu-item" onclick="closeActionMenu();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>`}
-    <button class="action-menu-item" onclick="closeActionMenu();openDetail('${tmdbId}')">📄 查看详情</button>
-    <button class="action-menu-item action-menu-cancel" onclick="closeActionMenu()">取消</button>
-  `;
-  document.body.appendChild(menu);
-}
-
-// 浏览页长按支持
-let _browseTouchTimer = null;
-function browseTouchStart(e, tmdbId) {
-  clearTimeout(_browseTouchTimer);
-  _browseTouchTimer = setTimeout(() => {
-    if (navigator.vibrate) navigator.vibrate(30);
-    showBrowseActionMenu(tmdbId);
-  }, 500);
-}
-function browseTouchEnd(e) {
-  clearTimeout(_browseTouchTimer);
-}
-function confirmRemove(tmdbId) {
-  if (confirm('确定要从追番列表中移除吗？\n（这只是本地移除，不会影响番剧库）')) {
-    removeFromList(tmdbId);
+  const div = document.createElement('div');
+  div.id = 'moreActions';
+  div.className = 'more-actions';
+  if (inList) {
+    div.innerHTML = `
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openPlatformPopup('${tmdbId}')">🎬 平台 / 去看</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
+      ${isDropped
+        ? `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();restoreFromDropped('${tmdbId}')">♻️ 恢复追番</button>`
+        : `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();markDropped('${tmdbId}')">💔 标记弃番</button>`}
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">📺 更新进度</button>
+    `;
+  } else {
+    div.innerHTML = `
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">➕ 加入追番</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
+    `;
   }
+  document.getElementById('detailModal')?.querySelector('.modal')?.appendChild(div);
 }
 function markDropped(tmdbId) {
   const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
@@ -1904,7 +1823,6 @@ function editPlatforms(tmdbId) {
           </label>
           <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
         </div>
-        <input class="ep-name-input" placeholder="平台显示名（可留空用默认）" value="${esc(p.name||'')}" onchange="epChangeName(${i}, this.value)">
         <input class="ep-url-input" placeholder="去看的链接（可留空，留空则点"复制链接"）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
       </div>`;
     }).join('');
@@ -1944,14 +1862,8 @@ function epChangePlatform(rowIdx, newKey) {
   const p = w.platforms[rowIdx];
   if (!p) return;
   p.platform = newKey;
-  // 切到已知平台时，自动用品牌名作为默认 name
-  if (PLATFORM_BRAND[newKey] && !p.name) p.name = PLATFORM_BRAND[newKey].name;
+  if (PLATFORM_BRAND[newKey]) p.name = PLATFORM_BRAND[newKey].name;
   epRefreshList();
-}
-function epChangeName(rowIdx, val) {
-  const w = watchlist[window._epIdx];
-  if (!w) return;
-  if (w.platforms[rowIdx]) w.platforms[rowIdx].name = val.trim();
 }
 function epChangeUrl(rowIdx, val) {
   const w = watchlist[window._epIdx];
@@ -2024,7 +1936,6 @@ function epRefreshList() {
         </label>
         <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
       </div>
-      <input class="ep-name-input" placeholder="平台显示名（可留空用默认）" value="${esc(p.name||'')}" onchange="epChangeName(${i}, this.value)">
       <input class="ep-url-input" placeholder="去看的链接（可留空）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
     </div>`;
   }).join('');
@@ -2326,9 +2237,11 @@ function openDetail(tmdbId) {
     <div class="modal-actions">
       ${inList
         ? `<button class="btn btn-danger" onclick="document.getElementById('detailModal')?.remove();removeFromList('${tmdbId}')">移除追番</button>
-           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">更新进度</button>`
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">更新进度</button>
+           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">更多操作</button>`
         : `<button class="btn btn-cancel" onclick="document.getElementById('detailModal')?.remove()">关闭</button>
-           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">+ 加入追番</button>`}
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">+ 加入追番</button>
+           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">更多操作</button>`}
     </div>
   </div>`;
   document.body.appendChild(div);
@@ -2402,6 +2315,10 @@ const PLATFORM_BRAND = {
     name: 'B站国际', short: 'Bi', color: '#00A1D6',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
   },
+  wukong: {
+    name: '悟空', short: '悟', color: '#FF6B35',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="none" stroke="#FF6B35" stroke-width="2.5"/><path fill="#FF6B35" d="M24 12c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4m-6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="24" cy="16" r="1.5" fill="#FF6B35"/></svg>'
+  },
 };
 // 平台搜索 URL 兜底（当 platforms[i].url 为空时使用）
 const PLATFORM_SEARCH_URL = {
@@ -2410,6 +2327,7 @@ const PLATFORM_SEARCH_URL = {
   iqiyi:    'https://search.iqiyi.com/o?key=',
   youku:    'https://so.youku.com/search_video/q_',
   migu:     'https://www.migu.cn/search?keyword=',
+  wukong:   'https://www.wukong.com/search/?keyword=',
 };
 // 给未知平台兜底（"其他" 用灰色问号圆）
 const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#DFE6E9"/><text x="24" y="32" text-anchor="middle" fill="#636E72" font-size="22" font-weight="bold" font-family="sans-serif">?</text></svg>';
@@ -2515,7 +2433,7 @@ function renderMylist() {
     } else if (status === 'finished') {
       actionHtml = `<button class="btn-status finished" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看/调整">已完结</button>`;
     } else if (status === 'dropped') {
-      actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();showActionMenu('${tmdbId}')" title="操作">已弃番</button>`;
+      actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="操作">已弃番</button>`;
     } else if (status === 'caughtup') {
       actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追上</button>`;
     }
@@ -2524,7 +2442,7 @@ function renderMylist() {
       ? `<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C44AFF' stroke-width='2.5' stroke-linecap='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>" onclick="event.stopPropagation();openPlatformPopup('${tmdbId}')" title="查看播放平台">`
       : '';
     const catLabel = it.categoryLabel || '番剧';
-    return `<div class="wl-item" onclick="openDetail('${tmdbId}')" oncontextmenu="event.preventDefault();showActionMenu('${tmdbId}')" ontouchstart="wlTouchStart(event,'${tmdbId}')" ontouchend="wlTouchEnd(event)" ontouchmove="wlTouchEnd(event)">
+    return `<div class="wl-item" onclick="openDetail('${tmdbId}')">
       <div class="card-deco"></div>
       <div class="cover-wrap">
         ${hasCover
@@ -2556,22 +2474,6 @@ function renderMylist() {
       <div class="anime-actions">${actionHtml}</div>
     </div>`;
   }).join('');
-}
-
-// 移动端长按支持（touch 长按 500ms 触发操作菜单）
-let _wlTouchTimer = null;
-let _wlTouchTargetId = null;
-function wlTouchStart(e, tmdbId) {
-  _wlTouchTargetId = tmdbId;
-  clearTimeout(_wlTouchTimer);
-  _wlTouchTimer = setTimeout(() => {
-    if (navigator.vibrate) navigator.vibrate(30);
-    showActionMenu(tmdbId);
-  }, 500);
-}
-function wlTouchEnd(e) {
-  clearTimeout(_wlTouchTimer);
-  _wlTouchTargetId = null;
 }
 
 // ======================== PERSIST (LOCAL) ========================
