@@ -75,12 +75,20 @@ html,body{
 .hidden{display:none!important}
 
 /* ============================================
-   顶部三色装饰条
+   顶部 App Bar（浮起卡片，与下方内容区分层次）
    ============================================ */
-.header-bar{
-  height:3px;border-radius:2px;
+.appbar{
+  position:relative;overflow:hidden;
+  margin:0 0 16px;padding:15px 16px 14px;
+  background:var(--bg-glass);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid var(--border-soft);
+  border-radius:20px;
+  box-shadow:0 10px 28px rgba(196,74,255,.10),0 2px 8px rgba(91,206,250,.07);
+}
+.appbar::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:4px;
   background:linear-gradient(90deg,var(--pink) 0%,var(--purple) 50%,var(--blue) 100%);
-  margin:0 0 10px;opacity:.7;
 }
 
 /* ============================================
@@ -88,7 +96,7 @@ html,body{
    ============================================ */
 .header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:6px 0 4px;position:relative;z-index:auto;
+  padding:0;position:relative;z-index:1;
   background:transparent;
 }
 .header-left{display:flex;align-items:center;gap:4px}
@@ -99,8 +107,9 @@ html,body{
 }
 .deco-star{display:inline-block;color:var(--yellow);font-size:13px}
 
-  .header-settings{background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:var(--text-secondary);padding:6px 10px;border-radius:10px;transition:background .15s;-webkit-tap-highlight-color:transparent}
-  .header-settings:active{background:rgba(128,128,128,.18)}
+  .header-settings{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-pill);font-size:18px;line-height:1;cursor:pointer;color:var(--text-secondary);transition:transform .15s,background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+  .header-settings:hover{background:#fff;box-shadow:0 4px 12px rgba(196,74,255,.14)}
+  .header-settings:active{transform:scale(.94);background:rgba(128,128,128,.12)}
   .set-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--border-soft)}
   .set-section:first-child{margin-top:0;padding-top:0;border-top:none}
   .set-label{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
@@ -821,6 +830,9 @@ html,body{
   z-index:200;
   animation:fadeIn .25s;
 }
+/* 弹窗打开时锁背景滚动：position:fixed 方案，兼容 iOS Safari
+   （仅设 body overflow:hidden 在移动端无法阻止背景滑动） */
+body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modal{
   position:fixed;left:15px;right:15px;bottom:20px;
@@ -1237,16 +1249,15 @@ html,body{
 <body>
 
 <div class="container">
-  <!-- 顶部三色装饰条 -->
-  <div class="header-bar"></div>
-
-  <!-- Header -->
-  <div class="header">
-    <div class="header-left">
-      <span class="deco-star">✨</span>
-      <span class="header-title">追番不迷路</span>
+  <!-- 顶部 App Bar（浮起卡片，与下方内容区分） -->
+  <div class="appbar">
+    <div class="header">
+      <div class="header-left">
+        <span class="deco-star">✨</span>
+        <span class="header-title">追番不迷路</span>
+      </div>
+      <button class="header-settings" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
     </div>
-    <button class="header-settings" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
   </div>
 
   <!-- Content: Browse (list mode) -->
@@ -2853,11 +2864,22 @@ async function uploadWatchlist() {
 // ======================== MODAL HELPERS ========================
 // 滚动锁改为"派生状态"：只要有任意弹窗可见就锁，关闭任一个都基于实际状态还原，
 // 避免嵌套弹窗（如详情→进度）关闭时误把滚动锁永久留下导致页面无法滑动。
+let _scrollLockY = 0;
 function syncBodyScroll() {
   // 只要页面上存在任意「可见」的弹窗层就锁住背景滚动；
   // 不再逐个列举弹窗 id，避免新增弹窗（platformPopup / editPlatformsModal 等）漏锁导致背景仍可滑动。
   const anyOpen = !!document.querySelector('.modal-overlay:not(.hidden)');
-  document.body.style.overflow = anyOpen ? 'hidden' : '';
+  if (anyOpen) {
+    if (!document.body.classList.contains('modal-locked')) {
+      _scrollLockY = window.scrollY || window.pageYOffset || 0;
+      document.body.style.top = `-${_scrollLockY}px`;
+      document.body.classList.add('modal-locked');
+    }
+  } else if (document.body.classList.contains('modal-locked')) {
+    document.body.classList.remove('modal-locked');
+    document.body.style.top = '';
+    window.scrollTo(0, _scrollLockY);
+  }
 }
 // 自动同步：任意弹窗 append / remove 时重新计算滚动锁，彻底规避「漏调 syncBodyScroll」导致的背景可滑。
 const _scrollLockObserver = new MutationObserver(syncBodyScroll);
