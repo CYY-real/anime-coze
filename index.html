@@ -1229,7 +1229,7 @@ html,body{
       <!-- 搜索 -->
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input id="browseSearchInput" placeholder="搜索剧名..." oninput="debounceBrowseSearch()">
+        <input id="browseSearchInput" placeholder="搜索剧名..." oninput="debounceSearch()">
       </div>
       <div id="browseList" class="anime-list"></div>
     </div>
@@ -1243,11 +1243,7 @@ html,body{
         <div class="mylist-title">我的追番</div>
       </div>
       <div class="mylist-header-actions">
-        <button class="btn btn-secondary btn-sm" onclick="showImport()" title="从 JSON 导入追番列表">📥 导入</button>
-        <button class="btn btn-secondary btn-sm" onclick="pullFromCloud()" id="pullBtn" title="从 Gitee 仓库拉取最新的 watchlist.json 覆盖本地">⬇️ 拉取</button>
-        <button class="btn btn-primary btn-sm" onclick="syncToCloud()" id="syncBtn" title="把追番列表保存到 Gitee 仓库的 data/watchlist.json，下次换设备可同步拉取">
-          ☁️ 推送
-        </button>
+        <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="从 GitHub 重新加载追剧列表">🔄 刷新</button>
       </div>
     </div>
 
@@ -1290,33 +1286,11 @@ html,body{
     <span class="icon">➕</span>
     <span class="label">添加剧集</span>
   </a>
-  <a href="#" onclick="showSettings()">
-    <span class="icon">⚙️</span>
-    <span class="label">设置</span>
-  </a>
+
 </nav>
 
 <!-- Toast -->
 <div id="toast" class="toast" style="opacity:0"></div>
-
-<!-- Import Modal -->
-<div id="importModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('importModal')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">📥 导入追番列表</div>
-      <button class="modal-close" onclick="closeModal('importModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p class="modal-desc">粘贴从另一份配置导出的 JSON 数据</p>
-      <textarea id="importText" placeholder='[{"tmdbId":12345,"name":"葬送的芙莉莲","watchedEpisode":20,...}]'></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="closeModal('importModal')">取消</button>
-      <button class="btn btn-primary" onclick="doImport()">导入并覆盖</button>
-    </div>
-  </div>
-</div>
 
 <!-- Source Picker Modal -->
 <div id="sourceModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('sourceModal')">
@@ -1353,43 +1327,13 @@ html,body{
   </div>
 </div>
 
-<!-- Settings Modal -->
-<div id="settingsModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settingsModal')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-header">
-      <div class="modal-title">⚙️ 设置</div>
-      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p class="modal-desc">追剧列表自动同步到 GitHub（无需手动配置）</p>
 
-      <div class="settings-help">
-        追剧列表自动保存到浏览器本地，并同步到 GitHub 仓库 <code>CYY-real/anime-coze</code>，多设备共用同一浏览器即可自动合并。
-      </div>
-
-      <!-- 其他偏好 -->
-      <div class="settings-group-title" style="margin-top:14px">⚙️ 默认偏好</div>
-      <div style="margin:4px 0">
-        <div class="setting-item">
-          <label>默认阈值</label>
-          <input id="defaultThreshold" type="number" value="3" min="1" max="20">
-          <span style="font-size:12px;color:var(--text-secondary)">集（追番时新加剧集的默认提醒阈值）</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">关闭</button>
-      <button class="btn btn-primary" onclick="saveSettings();closeModal('settingsModal')">保存</button>
-    </div>
-  </div>
-</div>
 
 <script>
 // ======================== STATE ========================
 let animeDb = [];
 let watchlist = [];
-let settings = { defaultThreshold: 3, dataUrl: '', dataSource: '', lastAnimeCount: 0 };
+let settings = { dataUrl: '', dataSource: '', lastAnimeCount: 0 };
 let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
@@ -1397,10 +1341,6 @@ let activeSeason = 1;
 
 // ======================== INIT ========================
 function init() {
-  const s = localStorage.getItem('anime_coze_settings');
-  if (s) { try { Object.assign(settings, JSON.parse(s)); } catch(e) {} }
-  document.getElementById('defaultThreshold').value = settings.defaultThreshold;
-
   const saved = localStorage.getItem('anime_coze_watchlist');
   if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
   else {
@@ -1459,14 +1399,6 @@ function switchTab(tab, el) {
   }
 }
 
-// 初始化「添加番剧」tab：选择数据源 + 加载数据
-function isValidGiteeConfig() {
-  if (!settings.giteeToken || settings.giteeToken.length < 10) return false;
-  if (!settings.giteeRepo || !/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+$/.test(settings.giteeRepo)) return false;
-  if (!settings.giteeBranch) return false;
-  return true;
-}
-
 function initBrowseTab() {
   const browseContent = document.getElementById('browseContent');
   const browseSub = document.getElementById('browseSub');
@@ -1479,12 +1411,6 @@ function initBrowseTab() {
 }
 
 
-
-// 关闭添加番剧页并打开设置
-function closeTabAndOpenSettings() {
-  switchTab('mylist', document.querySelector('.bottom-nav a'));
-  showSettings();
-}
 
 // ======================== FILTERS ========================
 // 浏览页：分类/地区合并筛选
@@ -1808,7 +1734,7 @@ function addToList(tmdbId) {
     watchedEpisode: 0,
     latestSeason: a.latestSeason || 1,
     latestEpisode: a.latestEpisode || 0,
-    threshold: settings.defaultThreshold,
+    threshold: 0,
     notifyEnabled: true,
     lastNotifiedAt: '',
     lastNotifiedEpisode: 0,
@@ -2665,12 +2591,12 @@ const GH_WATCHLIST_PATH = 'data/watchlist.json';
 
 let _ghSyncTimer = null;
 
-async function pullWatchlistFromGitHub() {
+async function pullWatchlistFromGitHub(showMsg = false) {
   try {
     const url = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_WATCHLIST_PATH}`;
     const resp = await fetch(url);
-    if (resp.status === 404) return;
-    if (!resp.ok) return;
+    if (resp.status === 404) { if (showMsg) showToast('☁️ 云端还没有追剧记录'); return; }
+    if (!resp.ok) { if (showMsg) showToast('❌ 刷新失败'); return; }
     const data = await resp.json();
     if (!Array.isArray(data)) return;
     const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
@@ -2678,8 +2604,8 @@ async function pullWatchlistFromGitHub() {
     watchlist = Array.from(localMap.values());
     saveWatchlist();
     renderMylist();
-    if (data.length) showToast(`☁️ 已加载云端 ${data.length} 条追剧记录`);
-  } catch (e) { /* silent fail - 云端可能还没数据 */ }
+    if (showMsg) showToast(`🔄 已刷新，当前 ${watchlist.length} 条追剧记录`);
+  } catch (e) { if (showMsg) showToast('❌ 刷新失败'); }
 }
 
 async function pushWatchlistToGitHub() {
@@ -2720,39 +2646,10 @@ function scheduleGhSync() {
   _ghSyncTimer = setTimeout(pushWatchlistToGitHub, 3000);
 }
 
-// ======================== IMPORT ========================
-function showImport() { openModal('importModal'); }
-function doImport() {
-  const text = document.getElementById('importText').value.trim();
-  if (!text) { showToast('请粘贴 JSON 数据'); return; }
-  try {
-    const data = JSON.parse(text);
-    if (!Array.isArray(data)) throw new Error('需要数组格式');
-    watchlist = data;
-    saveWatchlist();
-    renderMylist();
-    renderBrowse();
-    closeModal('importModal');
-    document.getElementById('importText').value = '';
-    showToast(`📥 已导入 ${data.length} 条记录`);
-  } catch (e) {
-    showToast('JSON 解析失败: ' + e.message);
-  }
-}
-
-// ======================== SETTINGS ========================
-function showSettings() { openModal('settingsModal'); }
-function openSettingsAndFocus(fieldId) {
-  openModal('settingsModal');
-  setTimeout(() => {
-    const el = document.getElementById(fieldId);
-    if (el) el.focus();
-  }, 400);
-}
-function saveSettings() {
-  settings.defaultThreshold = parseInt(document.getElementById('defaultThreshold').value) || 3;
-  localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
-  showToast('✅ 设置已保存');
+// ======================== REFRESH ========================
+function refreshWatchlist() {
+  showToast('🔄 正在刷新追剧列表...');
+  pullWatchlistFromGitHub(true);
 }
 
 // ======================== MODAL HELPERS ========================
