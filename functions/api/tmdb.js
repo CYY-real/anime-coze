@@ -37,7 +37,8 @@ function matchPlatforms(name, originalName) {
 
 function normalizeShow(detail, region) {
   const name = detail.name || detail.original_name || '';
-  const cover = detail.poster_path ? `https://image.tmdb.org/t/p/w500${detail.poster_path}` : '';
+  // 封面走 Cloudflare 图片代理（image.tmdb.org 国内常被墙，统一经 /api/img 回源）
+  const cover = detail.poster_path ? `/api/img?p=/t/p/w500${detail.poster_path}` : '';
   const seasonsRaw = (detail.seasons || []).filter((s) => s.season_number > 0);
   const seasonEpisodeCounts = {};
   seasonsRaw.forEach((s) => { if (s.episode_count) seasonEpisodeCounts[s.season_number] = s.episode_count; });
