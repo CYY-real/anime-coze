@@ -1338,25 +1338,10 @@ html,body{
         <button class="source-preset" data-preset="local" onclick="pickSource('local')">
           <div class="preset-icon">🗂️</div>
           <div class="preset-info">
-            <div class="preset-name">本地文件</div>
-            <div class="preset-meta">./data/anime.json（无需联网）</div>
+            <div class="preset-name">本地文件（默认）</div>
+            <div class="preset-meta">./data/anime.json（随站点部署自动更新）</div>
           </div>
         </button>
-        <button class="source-preset" data-preset="gitee" onclick="pickSource('gitee')">
-          <div class="preset-icon">🟢</div>
-          <div class="preset-info">
-            <div class="preset-name">Gitee Raw</div>
-            <div class="preset-meta">gitee.com/{owner}/{repo}/raw/{branch}/data/anime.json</div>
-          </div>
-        </button>
-        <button class="source-preset" data-preset="github" onclick="pickSource('github')">
-          <div class="preset-icon">🐙</div>
-          <div class="preset-info">
-            <div class="preset-name">GitHub Raw</div>
-            <div class="preset-meta">github.com/{owner}/{repo}/raw/{branch}/data/anime.json</div>
-          </div>
-        </button>
-
       </div>
 
       <div style="margin-top:14px">
@@ -1382,9 +1367,9 @@ html,body{
       <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">Gitee 仓库配置与默认偏好</p>
+      <p class="modal-desc">Gitee 配置（仅用于追剧列表的云同步）</p>
 
-      <div class="settings-group-title">📦 Gitee 仓库（用于同步追番列表）</div>
+      <div class="settings-group-title">📦 Gitee 云同步</div>
 
       <div style="margin:4px 0 14px">
         <div class="setting-item">
@@ -1402,7 +1387,7 @@ html,body{
       </div>
 
       <div class="settings-help">
-        <b>数据哪里来？</b> <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成并推送到 Cloudflare Pages，可通过本地文件直接加载。
+        <b>数据哪里来？</b> <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成并部署到 Cloudflare Pages，加载本地文件即可。
       </div>
 
       <!-- 其他偏好 -->
@@ -1509,23 +1494,17 @@ function isValidGiteeConfig() {
 }
 
 function initBrowseTab() {
-  const setupRequired = document.getElementById('setupRequired');
   const browseContent = document.getElementById('browseContent');
   const browseSub = document.getElementById('browseSub');
-  const setupDesc = setupRequired.querySelector('.setup-desc');
 
   if (animeDb.length > 0) { renderBrowse(); return; }
 
-  setupRequired.style.display = 'none';
   browseContent.style.display = '';
-  browseSub.textContent = '选择数据源加载剧库';
-
-  showSourcePicker();
+  browseSub.textContent = '正在自动加载剧库…';
+  loadAnime({ url: './data/anime.json', source: 'local' });
 }
 
-function buildGiteeRawUrl() {
-  return `https://gitee.com/${settings.giteeRepo}/raw/${settings.giteeBranch || 'master'}/data/anime.json`;
-}
+
 
 // 关闭添加番剧页并打开设置
 function closeTabAndOpenSettings() {
@@ -1621,8 +1600,6 @@ function updateSourceCard(url, metaText, isError = false) {
   const source = settings.dataSource || 'custom';
   const sourceMap = {
     local: { icon: '🗂️', name: '本地文件' },
-    gitee: { icon: '🟢', name: 'Gitee Raw' },
-    github: { icon: '🐙', name: 'GitHub Raw' },
     custom: { icon: '🔗', name: '自定义 URL' },
   };
   const cfg = sourceMap[source] || sourceMap.custom;
@@ -1658,14 +1635,6 @@ function pickSource(kind) {
   let url = '';
   if (kind === 'local') {
     url = './data/anime.json';
-  } else if (kind === 'gitee') {
-    const repo = settings.giteeRepo;
-    const branch = settings.giteeBranch || 'master';
-    url = `https://gitee.com/${repo}/raw/${branch}/data/anime.json`;
-  } else if (kind === 'github') {
-    const repo = settings.giteeRepo;
-    const branch = settings.giteeBranch || 'main';
-    url = `https://raw.githubusercontent.com/${repo}/${branch}/data/anime.json`;
   }
   closeModal('sourceModal');
   loadAnime({ url, source: kind });
