@@ -1222,8 +1222,8 @@ html,body{
       </div>
       <div class="mylist-header-actions">
         <button class="btn btn-secondary btn-sm" onclick="showImport()" title="从 JSON 导入追番列表">📥 导入</button>
-        <button class="btn btn-secondary btn-sm" onclick="pullFromCloud()" id="pullBtn" title="从 GitHub 仓库拉取最新的 watchlist.json 覆盖本地">⬇️ 拉取</button>
-        <button class="btn btn-primary btn-sm" onclick="syncToCloud()" id="syncBtn" title="把追番列表保存到 GitHub 仓库的 data/watchlist.json，下次换设备可同步拉取">
+        <button class="btn btn-secondary btn-sm" onclick="pullFromCloud()" id="pullBtn" title="从 Gitee 仓库拉取最新的 watchlist.json 覆盖本地">⬇️ 拉取</button>
+        <button class="btn btn-primary btn-sm" onclick="syncToCloud()" id="syncBtn" title="把追番列表保存到 Gitee 仓库的 data/watchlist.json，下次换设备可同步拉取">
           ☁️ 推送
         </button>
       </div>
@@ -1305,7 +1305,7 @@ html,body{
       <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">选择数据源后立即加载——本地文件由 GitHub Actions 自动更新</p>
+      <p class="modal-desc">选择数据源后立即加载——本地文件由 GitHub Actions 自动更新并推送到 Gitee</p>
 
       <div class="source-presets">
         <button class="source-preset" data-preset="local" onclick="pickSource('local')">
@@ -1315,11 +1315,11 @@ html,body{
             <div class="preset-meta">./data/anime.json（无需联网）</div>
           </div>
         </button>
-        <button class="source-preset" data-preset="github" onclick="pickSource('github')">
-          <div class="preset-icon">🐙</div>
+        <button class="source-preset" data-preset="gitee" onclick="pickSource('gitee')">
+          <div class="preset-icon">🟢</div>
           <div class="preset-info">
-            <div class="preset-name">GitHub Raw</div>
-            <div class="preset-meta">raw.githubusercontent.com/{owner}/{repo}/{branch}/data/anime.json</div>
+            <div class="preset-name">Gitee Raw</div>
+            <div class="preset-meta">gitee.com/{owner}/{repo}/raw/{branch}/data/anime.json</div>
           </div>
         </button>
 
@@ -1348,29 +1348,29 @@ html,body{
       <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">GitHub 仓库配置与默认偏好</p>
+      <p class="modal-desc">Gitee 仓库配置与默认偏好</p>
 
-      <div class="settings-group-title">📦 GitHub 仓库（用于同步追番列表）</div>
+      <div class="settings-group-title">📦 Gitee 仓库（用于同步追番列表）</div>
       <div class="settings-help">
-        <b>Token 怎么拿？</b> GitHub → 右上角头像 → <b>Settings</b> → <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b>，勾选 <code>Contents</code> 读写权限。
+        <b>Token 怎么拿？</b> Gitee → 右上角头像 → <b>设置</b> → <b>私人令牌</b> → <b>生成新令牌</b>，勾选 <code>projects</code> 权限。
       </div>
       <div style="margin:4px 0 14px">
         <div class="setting-item">
-          <label>GitHub Token</label>
-          <input id="ghToken" type="text" placeholder="ghp_...">
+          <label>Gitee Token</label>
+          <input id="giteeToken" type="text" placeholder="Gitee 私人令牌">
         </div>
         <div class="setting-item">
           <label>仓库</label>
-          <input id="ghRepo" type="text" value="CYY-real/anime-coze" placeholder="格式：用户名/仓库名">
+          <input id="giteeRepo" type="text" placeholder="格式：用户名/仓库名">
         </div>
         <div class="setting-item">
           <label>分支</label>
-          <input id="ghBranch" type="text" value="main">
+          <input id="giteeBranch" type="text" value="master">
         </div>
       </div>
 
       <div class="settings-help">
-        <b>数据哪里来？</b> 番剧库 <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成，部署到 Cloudflare Pages 后可直接用「本地文件」加载，也可通过 <code>raw.githubusercontent.com</code> 加载。
+        <b>数据哪里来？</b> 番剧库 <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成并推送到 Gitee 仓库，可通过 <code>gitee.com/{owner}/{repo}/raw/{branch}/data/anime.json</code> 加载。
       </div>
 
       <!-- 其他偏好 -->
@@ -1394,7 +1394,7 @@ html,body{
 // ======================== STATE ========================
 let animeDb = [];
 let watchlist = [];
-let settings = { defaultThreshold: 3, ghToken: '', ghRepo: 'CYY-real/anime-coze', ghBranch: 'main', dataUrl: '', dataSource: '', lastAnimeCount: 0 };
+let settings = { defaultThreshold: 3, giteeToken: '', giteeRepo: '', giteeBranch: 'master', dataUrl: '', dataSource: '', lastAnimeCount: 0 };
 let currentBrowseFilter = 'all'; // 地区筛选: all / JP / CN
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
@@ -1404,9 +1404,9 @@ let activeSeason = 1;
 function init() {
   const s = localStorage.getItem('anime_coze_settings');
   if (s) { try { Object.assign(settings, JSON.parse(s)); } catch(e) {} }
-  document.getElementById('ghToken').value = settings.ghToken || '';
-  document.getElementById('ghRepo').value = settings.ghRepo || 'CYY-real/anime-coze';
-  document.getElementById('ghBranch').value = settings.ghBranch || 'main';
+  document.getElementById('giteeToken').value = settings.giteeToken || '';
+  document.getElementById('giteeRepo').value = settings.giteeRepo || '';
+  document.getElementById('giteeBranch').value = settings.giteeBranch || 'master';
   document.getElementById('defaultThreshold').value = settings.defaultThreshold;
 
   const saved = localStorage.getItem('anime_coze_watchlist');
@@ -1468,10 +1468,10 @@ function switchTab(tab, el) {
 }
 
 // 初始化「添加番剧」tab：选择数据源 + 加载数据
-function isValidGitHubConfig() {
-  if (!settings.ghToken || settings.ghToken.length < 20) return false;
-  if (!settings.ghRepo || !/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+$/.test(settings.ghRepo)) return false;
-  if (!settings.ghBranch) return false;
+function isValidGiteeConfig() {
+  if (!settings.giteeToken || settings.giteeToken.length < 10) return false;
+  if (!settings.giteeRepo || !/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+$/.test(settings.giteeRepo)) return false;
+  if (!settings.giteeBranch) return false;
   return true;
 }
 
@@ -1483,7 +1483,7 @@ function initBrowseTab() {
 
   if (animeDb.length > 0) { renderBrowse(); return; }
 
-  // 不再要求必须配 GitHub token 才能浏览——数据源直接在 source picker 里选
+  // 不再要求必须配 Token 才能浏览——数据源直接在 source picker 里选
   setupRequired.style.display = 'none';
   browseContent.style.display = '';
   browseSub.textContent = '选择数据源加载番剧库';
@@ -1491,8 +1491,8 @@ function initBrowseTab() {
   showSourcePicker();
 }
 
-function buildGitHubRawUrl() {
-  return `https://raw.githubusercontent.com/${settings.ghRepo}/${settings.ghBranch || 'main'}/data/anime.json`;
+function buildGiteeRawUrl() {
+  return `https://gitee.com/${settings.giteeRepo}/raw/${settings.giteeBranch || 'master'}/data/anime.json`;
 }
 
 // 关闭添加番剧页并打开设置
@@ -1575,7 +1575,7 @@ function updateSourceCard(url, metaText, isError = false) {
   const source = settings.dataSource || 'custom';
   const sourceMap = {
     local: { icon: '🗂️', name: '本地文件' },
-    github: { icon: '🐙', name: 'GitHub Raw' },
+    gitee: { icon: '🟢', name: 'Gitee Raw' },
     custom: { icon: '🔗', name: '自定义 URL' },
   };
   const cfg = sourceMap[source] || sourceMap.custom;
@@ -1611,10 +1611,10 @@ function pickSource(kind) {
   let url = '';
   if (kind === 'local') {
     url = './data/anime.json';
-  } else if (kind === 'github') {
-    const repo = settings.ghRepo || 'CYY-real/anime-coze';
-    const branch = settings.ghBranch || 'main';
-    url = `https://raw.githubusercontent.com/${repo}/${branch}/data/anime.json`;
+  } else if (kind === 'gitee') {
+    const repo = settings.giteeRepo;
+    const branch = settings.giteeBranch || 'master';
+    url = `https://gitee.com/${repo}/raw/${branch}/data/anime.json`;
   }
   closeModal('sourceModal');
   loadAnime({ url, source: kind });
@@ -2651,14 +2651,14 @@ function saveWatchlist() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
 }
 
-// ======================== CLOUD SYNC (GitHub API) ========================
+// ======================== CLOUD SYNC (Gitee API) ========================
 async function syncToCloud() {
-  const token = settings.ghToken;
-  const repo = settings.ghRepo;
-  const branch = settings.ghBranch || 'main';
+  const token = settings.giteeToken;
+  const repo = settings.giteeRepo;
+  const branch = settings.giteeBranch || 'master';
   if (!token || !repo) {
-    showToast('请先在设置中配置 GitHub Token 和仓库');
-    openSettingsAndFocus('ghToken');
+    showToast('请先在设置中配置 Gitee Token 和仓库');
+    openSettingsAndFocus('giteeToken');
     return;
   }
 
@@ -2674,14 +2674,12 @@ async function syncToCloud() {
     const [owner, repoName] = repo.split('/');
     if (!owner || !repoName) throw new Error('仓库格式应为 owner/repo');
     const filePath = 'data/watchlist.json';
-    const apiBase = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}`;
-    const authHeaders = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' };
+    const encodedPath = filePath.split('/').map(p => encodeURIComponent(p)).join('/');
+    const apiBase = `https://gitee.com/api/v5/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}/contents/${encodedPath}`;
 
     // 1. 读取现有文件，获取 sha（用于覆盖更新）
     let sha = null;
-    const getResp = await fetch(`${apiBase}/contents/${filePath}?ref=${encodeURIComponent(branch)}`, {
-      headers: authHeaders,
-    });
+    const getResp = await fetch(`${apiBase}?access_token=${encodeURIComponent(token)}&ref=${encodeURIComponent(branch)}`);
     if (getResp.ok) {
       const existing = await getResp.json();
       sha = existing.sha;
@@ -2690,17 +2688,18 @@ async function syncToCloud() {
       throw new Error(err.message || `GET HTTP ${getResp.status}`);
     }
 
-    // 2. 创建/更新文件（GitHub 用 PUT）
+    // 2. 创建/更新文件（Gitee 用 POST）
     const body = {
-      message: `chore: update watchlist.json @ ${new Date().toISOString().slice(0, 10)}`,
+      access_token: token,
       content: base64Content,
+      message: `update watchlist @ ${new Date().toISOString().slice(0, 10)}`,
       branch: branch,
     };
     if (sha) body.sha = sha;
 
-    const putResp = await fetch(`${apiBase}/contents/${filePath}`, {
-      method: 'PUT',
-      headers: { ...authHeaders, 'Content-Type': 'application/json' },
+    const putResp = await fetch(apiBase, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
@@ -2709,7 +2708,7 @@ async function syncToCloud() {
       throw new Error(err.message || `HTTP ${putResp.status}`);
     }
 
-    showToast(`☁️ 已推送 ${watchlist.length} 部追番到 GitHub`);
+    showToast(`☁️ 已推送 ${watchlist.length} 部追番到 Gitee`);
   } catch (e) {
     showToast('❌ 推送失败: ' + e.message.slice(0, 60));
     console.error(e);
@@ -2719,14 +2718,14 @@ async function syncToCloud() {
   }
 }
 
-// ======================== PULL FROM CLOUD（从 GitHub 拉取最新 watchlist） ========================
+// ======================== PULL FROM CLOUD（从 Gitee 拉取最新 watchlist） ========================
 async function pullFromCloud() {
-  const token = settings.ghToken;
-  const repo = settings.ghRepo;
-  const branch = settings.ghBranch || 'main';
+  const token = settings.giteeToken;
+  const repo = settings.giteeRepo;
+  const branch = settings.giteeBranch || 'master';
   if (!token || !repo) {
-    showToast('请先在设置中配置 GitHub Token 和仓库');
-    openSettingsAndFocus('ghToken');
+    showToast('请先在设置中配置 Gitee Token 和仓库');
+    openSettingsAndFocus('giteeToken');
     return;
   }
 
@@ -2738,11 +2737,10 @@ async function pullFromCloud() {
   try {
     const [owner, repoName] = repo.split('/');
     if (!owner || !repoName) throw new Error('仓库格式应为 owner/repo');
-    const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}/contents/data/watchlist.json?ref=${encodeURIComponent(branch)}`;
+    const encodedPath = 'data/watchlist.json'.split('/').map(p => encodeURIComponent(p)).join('/');
+    const apiUrl = `https://gitee.com/api/v5/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}/contents/${encodedPath}?access_token=${encodeURIComponent(token)}&ref=${encodeURIComponent(branch)}`;
 
-    const resp = await fetch(apiUrl, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
-    });
+    const resp = await fetch(apiUrl);
     if (resp.status === 404) {
       showToast('☁️ 云端还没有 watchlist.json，先点"推送"上传一份');
       return;
@@ -2752,7 +2750,7 @@ async function pullFromCloud() {
       throw new Error(err.message || `HTTP ${resp.status}`);
     }
     const data = await resp.json();
-    // GitHub API 返回的 content 是 base64 编码
+    // Gitee API 返回的 content 是 base64 编码
     const content = decodeBase64Utf8(data.content || '');
     let cloudList;
     try { cloudList = JSON.parse(content); }
@@ -2841,9 +2839,9 @@ function openSettingsAndFocus(fieldId) {
   }, 400);
 }
 function saveSettings() {
-  settings.ghToken = document.getElementById('ghToken').value.trim();
-  settings.ghRepo = document.getElementById('ghRepo').value.trim() || 'CYY-real/anime-coze';
-  settings.ghBranch = document.getElementById('ghBranch').value.trim() || 'main';
+  settings.giteeToken = document.getElementById('giteeToken').value.trim();
+  settings.giteeRepo = document.getElementById('giteeRepo').value.trim();
+  settings.giteeBranch = document.getElementById('giteeBranch').value.trim() || 'master';
   settings.defaultThreshold = parseInt(document.getElementById('defaultThreshold').value) || 3;
   localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
   showToast('✅ 设置已保存');
