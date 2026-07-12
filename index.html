@@ -1195,7 +1195,7 @@ html,body{
       <span class="deco-star">✨</span>
       <span class="header-title">追番不迷路</span>
     </div>
-    <button class="header-settings" onclick="showSettings()" title="设置（GitHub Token）" aria-label="设置">⚙️</button>
+    <button class="header-settings" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
   </div>
 
   <!-- Content: Browse (list mode) -->
@@ -1238,7 +1238,7 @@ html,body{
         <div class="mylist-title">我的追番</div>
       </div>
       <div class="mylist-header-actions">
-        <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="从 GitHub 重新加载追剧列表">🔄 刷新</button>
+        <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="从云端重新加载追剧列表">🔄 刷新</button>
       </div>
     </div>
 
@@ -1296,7 +1296,7 @@ html,body{
       <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">选择数据源后立即加载——数据由 GitHub Actions 自动更新并部署</p>
+      <p class="modal-desc">选择数据源后立即加载——数据由 GitHub Actions 自动更新并随站点部署</p>
 
       <div class="source-presets">
         <button class="source-preset" data-preset="local" onclick="pickSource('local')">
@@ -1324,7 +1324,7 @@ html,body{
   </div>
 </div>
 
-<!-- Settings Modal (仅 GitHub Token) -->
+<!-- Settings Modal -->
 <div id="settingsModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settingsModal')">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -1334,10 +1334,8 @@ html,body{
     </div>
     <div class="modal-body">
       <div class="set-section">
-        <div class="set-label">🔑 GitHub Token</div>
-        <div class="set-hint">仅存你浏览器本地，用于「保存到 GitHub」，不写进页面源码。</div>
-        <input id="ghTokenInput" class="set-input" type="password" placeholder="粘贴你的 GitHub Personal Access Token" autocomplete="off">
-        <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="saveGhToken()">保存 Token</button>
+        <div class="set-label">☁️ 云端同步</div>
+        <div class="set-hint">追剧记录自动保存到 Gitee（经 Cloudflare 代理转发，浏览器无需任何 Token）。GitHub Actions 每日把最新配置与番剧数据整合后部署到线上，次日生效。</div>
       </div>
       <div class="set-section">
         <div class="set-label">⚙️ 配置备份（JSON 文本）</div>
@@ -1370,7 +1368,7 @@ let activeSeason = 1;
 function init() {
   const saved = localStorage.getItem('anime_coze_watchlist');
   if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
-  // 载入设置（含 GitHub Token，仅存本机，实现"填一次永久用"）
+  // 载入本机设置（云端同步经 Cloudflare 代理，浏览器不保存任何 Token）
   const savedSettings = localStorage.getItem('anime_coze_settings');
   if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
   else {
@@ -1400,8 +1398,8 @@ function init() {
     saveWatchlist();
   }
   renderMylist();
-  // 从 GitHub 同步追剧列表（静默，首次不弹 toast）
-  pullWatchlistFromGitHub();
+  // 从 Gitee 同步追剧列表（静默，首次不弹 toast）
+  pullWatchlist();
   // 加载番剧库（GitHub Action 刷新的最新 TMDB 数据），让"我的追番"能实时跟随最新集数
   refreshAnimeDb();
 }
@@ -1510,7 +1508,7 @@ async function loadAnime(opts = {}) {
   }
 }
 
-// 静默刷新番剧库（GitHub Action 写入仓库的最新 TMDB 数据）。
+// 静默刷新番剧库（GitHub Action 写入仓库的最新 TMDB 数据，随站点部署到同源 ./data/anime.json）。
 // 我的追番据此实时跟随"最新集数"，而非添加时冻结的值。
 async function refreshAnimeDb() {
   try {
@@ -1576,10 +1574,8 @@ function showSourcePicker() {
   openModal('sourceModal');
 }
 
-// 打开「设置」弹窗（仅 GitHub Token）
+// 打开「设置」弹窗
 function showSettings() {
-  const ghInp = document.getElementById('ghTokenInput');
-  if (ghInp) ghInp.value = settings.ghToken || '';
   openModal('settingsModal');
 }
 
@@ -2592,83 +2588,85 @@ function renderMylist() {
 // ======================== PERSIST (LOCAL) ========================
 function saveWatchlist() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
-  scheduleGhSync();
+  scheduleSync();
 }
 function saveSettings() {
   localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
 }
 
-// ======================== GITHUB WATCHLIST SYNC ========================
-// GitHub Token 由用户在设置中填写，仅存浏览器 localStorage，不写进源码（避免公开泄露）
-const GH_OWNER = 'CYY-real';
-const GH_REPO = 'anime-coze';
-const GH_BRANCH = 'main';
-const GH_WATCHLIST_PATH = 'data/watchlist.json';
+// ======================== CLOUD WATCHLIST SYNC (Gitee via CF proxy) ========================
+// 浏览器同源调用 /api/proxy，由 Cloudflare 边缘转发到 Gitee API（避开 CORS，前端不保存任何 Token）。
+// Gitee token / 仓库写在 Cloudflare Pages 环境变量，不进前端源码。
+const GITEE_WATCHLIST_PATH = 'data/watchlist.json';
+const PROXY_BASE = '/api/proxy';
 
-let _ghSyncTimer = null;
+let _syncTimer = null;
 
-async function pullWatchlistFromGitHub(showMsg = false) {
+// 从 Gitee 拉取最新追剧记录；代理不可用时回退到站点同源快照（每日工作流镜像的 data/watchlist.json）
+async function pullWatchlist(showMsg = false) {
   try {
-    const url = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_WATCHLIST_PATH}`;
-    const resp = await fetch(url);
+    const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, { cache: 'no-store' });
     if (resp.status === 404) { if (showMsg) showToast('☁️ 云端还没有追剧记录'); return; }
-    if (!resp.ok) { if (showMsg) showToast('❌ 刷新失败'); return; }
-    const data = await resp.json();
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const text = await resp.text();
+    const data = text ? JSON.parse(text) : [];
     if (!Array.isArray(data)) return;
-    const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
-    data.forEach(cw => { localMap.set(String(cw.tmdbId), cw); });
-    watchlist = Array.from(localMap.values());
-    saveWatchlist();
-    renderMylist();
+    mergeWatchlist(data);
     if (showMsg) showToast(`🔄 已刷新，当前 ${watchlist.length} 条追剧记录`);
-  } catch (e) { if (showMsg) showToast('❌ 刷新失败'); }
+  } catch (e) {
+    if (await tryFallbackSnapshot(showMsg)) return;
+    if (showMsg) showToast('❌ 云端刷新失败，已保留本机数据');
+  }
 }
 
-async function pushWatchlistToGitHub() {
-  const token = (settings.ghToken || '').trim();
-  if (!token || token.length < 10) return;
+// 保存追剧记录到 Gitee（经代理）
+async function pushWatchlist() {
   try {
     const content = JSON.stringify(watchlist, null, 2);
-    const base64Content = btoa(unescape(encodeURIComponent(content)));
-
-    let sha = null;
-    const getUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_WATCHLIST_PATH}`;
-    const getResp = await fetch(getUrl, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
-    });
-    if (getResp.ok) {
-      const existing = await getResp.json();
-      sha = existing.sha;
-    }
-
-    const putResp = await fetch(getUrl, {
+    const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, {
       method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        Accept: 'application/vnd.github+json',
-      },
-      body: JSON.stringify({
-        message: `sync watchlist @ ${new Date().toISOString().slice(0, 10)}`,
-        content: base64Content,
-        sha: sha || undefined,
-        branch: GH_BRANCH,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: content,
     });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      console.warn('push watchlist failed', err);
+    }
   } catch (e) { /* silent */ }
 }
 
-function scheduleGhSync() {
-  clearTimeout(_ghSyncTimer);
-  _ghSyncTimer = setTimeout(pushWatchlistToGitHub, 3000);
+// 合并云端/快照数据到本机（按 tmdbId 去重，云端优先）；仅本机持久化，不回推避免回环
+function mergeWatchlist(data) {
+  if (!Array.isArray(data)) return;
+  const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
+  data.forEach(cw => { if (cw && cw.tmdbId != null) localMap.set(String(cw.tmdbId), cw); });
+  watchlist = Array.from(localMap.values());
+  saveWatchlistLocal();
+  renderMylist();
 }
 
-// 设置中的 GitHub Token 保存到本机 localStorage（不写进源码）
-function saveGhToken() {
-  const v = (document.getElementById('ghTokenInput')?.value || '').trim();
-  settings.ghToken = v;
-  saveSettings();
-  showToast(v ? '✅ GitHub Token 已保存（仅存你本机）' : '已清除 Token');
+// 代理不可用时，尝试用站点同源快照（每日工作流从 Gitee 镜像）
+async function tryFallbackSnapshot(showMsg) {
+  try {
+    const fb = await fetch('./data/watchlist.json', { cache: 'no-store' });
+    if (!fb.ok) return false;
+    const data = await fb.json();
+    if (!Array.isArray(data) || !data.length) return false;
+    mergeWatchlist(data);
+    if (showMsg) showToast(`🔄 已用站点快照刷新（${watchlist.length} 条）`);
+    return true;
+  } catch (_) { return false; }
+}
+
+// 本机保存后 3 秒自动同步到云端
+function scheduleSync() {
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(pushWatchlist, 3000);
+}
+
+// 仅本机持久化（不触发网络）
+function saveWatchlistLocal() {
+  localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
 }
 
 // 导出配置为 JSON 文本（适配手机端：不依赖文件，直接复制）
@@ -2698,7 +2696,7 @@ function fallbackCopy(ta, done) {
   if (window.getSelection) window.getSelection().removeAllRanges();
 }
 
-// 从 JSON 文本导入配置（含 ghToken），适配手机端
+// 从 JSON 文本导入配置，适配手机端
 function importConfigFromText() {
   const ta = document.getElementById('cfgTextArea');
   const raw = (ta && ta.value || '').trim();
@@ -2707,8 +2705,6 @@ function importConfigFromText() {
     const data = JSON.parse(raw);
     Object.assign(settings, data);
     saveSettings();
-    const inp = document.getElementById('ghTokenInput');
-    if (inp) inp.value = settings.ghToken || '';
     showToast('✅ 配置已导入');
   } catch (err) {
     showToast('❌ 配置 JSON 无效');
@@ -2718,7 +2714,7 @@ function importConfigFromText() {
 // ======================== REFRESH ========================
 function refreshWatchlist() {
   showToast('🔄 正在刷新追剧列表...');
-  pullWatchlistFromGitHub(true);
+  pullWatchlist(true);
 }
 
 // ======================== MODAL HELPERS ========================
