@@ -94,6 +94,15 @@ html,body{
 
   .header-settings{background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:var(--text-secondary);padding:6px 10px;border-radius:10px;transition:background .15s;-webkit-tap-highlight-color:transparent}
   .header-settings:active{background:rgba(128,128,128,.18)}
+  .set-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--border-soft)}
+  .set-section:first-child{margin-top:0;padding-top:0;border-top:none}
+  .set-label{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+  .set-hint{font-size:11px;line-height:1.5;color:var(--text-secondary);margin-bottom:10px}
+  .set-input{width:100%;box-sizing:border-box;padding:12px 13px;font-size:14px;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-card-light);color:var(--text-primary);outline:none;transition:border-color .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+  .set-input::placeholder{color:var(--text-tertiary)}
+  .set-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(196,74,255,.16)}
+  .set-textarea{width:100%;box-sizing:border-box;min-height:104px;margin-top:10px;padding:11px 12px;font-size:12px;line-height:1.55;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-card-light);color:var(--text-primary);outline:none;resize:vertical;transition:border-color .15s,box-shadow .15s}
+  .set-textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(196,74,255,.16)}
 .deco-heart{display:inline-block;color:var(--pink);font-size:12px}
 
 .header-actions{display:flex;align-items:center;gap:6px}
@@ -1186,7 +1195,7 @@ html,body{
       <span class="deco-star">✨</span>
       <span class="header-title">追番不迷路</span>
     </div>
-    <button class="header-settings" onclick="showSourcePicker()" title="设置（数据源 / GitHub Token）" aria-label="设置">⚙️</button>
+    <button class="header-settings" onclick="showSettings()" title="设置（GitHub Token）" aria-label="设置">⚙️</button>
   </div>
 
   <!-- Content: Browse (list mode) -->
@@ -1283,7 +1292,7 @@ html,body{
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">⚙️ 设置</div>
+      <div class="modal-title">📂 选择数据源</div>
       <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
     </div>
     <div class="modal-body">
@@ -1302,23 +1311,12 @@ html,body{
       <div style="margin-top:14px">
         <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">自定义 URL</div>
         <div class="setting-item" style="padding:6px 0">
-          <input id="customUrl" type="text" placeholder="粘贴任意 anime.json URL">
+          <input id="customUrl" type="text" class="set-input" placeholder="粘贴任意 anime.json URL">
         </div>
         <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="loadCustomUrl()">加载此 URL</button>
       </div>
 
-      <div style="margin-top:18px;border-top:1px solid var(--border);padding-top:14px">
-        <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">🔑 GitHub Token（仅存本机，用于“保存到 GitHub”）</div>
-        <div class="setting-item" style="padding:6px 0">
-          <input id="ghTokenInput" type="password" placeholder="粘贴你的 GitHub Personal Access Token" autocomplete="off">
-        </div>
-        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" onclick="saveGhToken()">保存 Token</button>
-          <button class="btn btn-sm" onclick="exportConfig()">导出配置</button>
-          <button class="btn btn-sm" onclick="document.getElementById('importFile').click()">导入配置</button>
-        </div>
-        <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importConfig(this.files[0])">
-      </div>
+
     </div>
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeModal('sourceModal')">取消</button>
@@ -1326,7 +1324,37 @@ html,body{
   </div>
 </div>
 
-
+<!-- Settings Modal (仅 GitHub Token) -->
+<div id="settingsModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settingsModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">⚙️ 设置</div>
+      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="set-section">
+        <div class="set-label">🔑 GitHub Token</div>
+        <div class="set-hint">仅存你浏览器本地，用于「保存到 GitHub」，不写进页面源码。</div>
+        <input id="ghTokenInput" class="set-input" type="password" placeholder="粘贴你的 GitHub Personal Access Token" autocomplete="off">
+        <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="saveGhToken()">保存 Token</button>
+      </div>
+      <div class="set-section">
+        <div class="set-label">⚙️ 配置备份（JSON 文本）</div>
+        <div class="set-hint">清缓存会丢失 Token。点「生成配置文本」导出并复制保存；需要时粘贴回来点「导入配置」即可恢复。</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="exportConfig()">生成配置文本</button>
+          <button class="btn btn-sm" id="copyCfgBtn" style="display:none" onclick="copyConfigText()">复制</button>
+        </div>
+        <textarea id="cfgTextArea" class="set-textarea" placeholder="点「生成配置文本」导出；或在此粘贴配置 JSON 后点「导入配置」"></textarea>
+        <button class="btn btn-sm btn-block" style="margin-top:8px" onclick="importConfigFromText()">导入配置</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">关闭</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ======================== STATE ========================
@@ -1356,18 +1384,18 @@ function init() {
     watchlist = [
       { tmdbId: 209867, name: '葬送的芙莉莲',       watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 28, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss2867',isPrimary:true},{platform:'tencent',name:'腾讯视频',url:''}], updateFrequency: '周更' },
       { tmdbId: 120089, name: '间谍过家家 第二季',  watchedSeason: 2, watchedEpisode: 5,  latestSeason: 2, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss42005',isPrimary:true}], updateFrequency: '周日更' },
-      { tmdbId: 215966, name: '凡人修仙传',         watchedSeason: 1, watchedEpisode: 86, latestSeason: 1, latestEpisode: 96, threshold: 5, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200r8j8vut.html',isPrimary:true}], updateFrequency: '周更' },
-      { tmdbId: 100088, name: '斗罗大陆',           watchedSeason: 1, watchedEpisode: 263,latestSeason: 1, latestEpisode: 264,threshold: 10,notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200m3nqqhp.html',isPrimary:true}], updateFrequency: '周六更' },
+      { tmdbId: 106449, name: '凡人修仙传',         watchedSeason: 1, watchedEpisode: 86, latestSeason: 1, latestEpisode: 96, threshold: 5, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200r8j8vut.html',isPrimary:true}], updateFrequency: '周更' },
+      { tmdbId: 76572,  name: '斗罗大陆',           watchedSeason: 1, watchedEpisode: 263,latestSeason: 1, latestEpisode: 264,threshold: 10,notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200m3nqqhp.html',isPrimary:true}], updateFrequency: '周六更' },
       { tmdbId: 1429,   name: '进击的巨人 最终季',  watchedSeason: 4, watchedEpisode: 28, latestSeason: 4, latestEpisode: 28, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
       { tmdbId: 85937,  name: '鬼灭之刃',           watchedSeason: 3, watchedEpisode: 11, latestSeason: 3, latestEpisode: 11, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss37172',isPrimary:true}], updateFrequency: '已完结' },
       { tmdbId: 120092, name: '孤独摇滚！',         watchedSeason: 1, watchedEpisode: 12, latestSeason: 1, latestEpisode: 12, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss41410',isPrimary:true}], updateFrequency: '已完结' },
       { tmdbId: 154654, name: '莉可丽丝',           watchedSeason: 1, watchedEpisode: 13, latestSeason: 1, latestEpisode: 13, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
       { tmdbId: 197189, name: '蓝色监狱',           watchedSeason: 1, watchedEpisode: 24, latestSeason: 1, latestEpisode: 24, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss43692',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 220678, name: '仙逆',               watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 26, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], updateFrequency: '周更' },
+      { tmdbId: 223911, name: '仙逆',               watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 26, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], updateFrequency: '周更' },
       { tmdbId: 120094, name: '摇曳露营△ 第三季',  watchedSeason: 3, watchedEpisode: 12, latestSeason: 3, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
       { tmdbId: 226126, name: '时光代理人 第二季',  watchedSeason: 2, watchedEpisode: 12, latestSeason: 2, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss44753',isPrimary:true}], updateFrequency: '已完结' },
       { tmdbId: 215968, name: '雾山五行',           watchedSeason: 1, watchedEpisode: 3,  latestSeason: 1, latestEpisode: 3,  threshold: 1, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 200167, name: '灵笼',               watchedSeason: 1, watchedEpisode: 16, latestSeason: 1, latestEpisode: 16, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'dropped',  platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 91097,  name: '灵笼',               watchedSeason: 1, watchedEpisode: 16, latestSeason: 1, latestEpisode: 16, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'dropped',  platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
     ];
     saveWatchlist();
   }
@@ -1545,9 +1573,14 @@ function showSourcePicker() {
   });
   // 预填自定义 URL
   document.getElementById('customUrl').value = settings.dataUrl || '';
+  openModal('sourceModal');
+}
+
+// 打开「设置」弹窗（仅 GitHub Token）
+function showSettings() {
   const ghInp = document.getElementById('ghTokenInput');
   if (ghInp) ghInp.value = settings.ghToken || '';
-  openModal('sourceModal');
+  openModal('settingsModal');
 }
 
 function pickSource(kind) {
@@ -2328,7 +2361,7 @@ function getMylistStatus(w) {
 }
 
 const MYLIST_STATUS_TEXT = {
-  raising: '追番中', caughtup: '已追完', finished: '已完结', dropped: '已弃番', unknown: '追番中'
+  raising: '追番中', caughtup: '已追完', finished: '已追完', dropped: '已弃番', unknown: '追番中'
 };
 
 // 平台信息（带 logo SVG + 品牌色 + 中文名 + 短字符）
@@ -2389,10 +2422,20 @@ const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="
 
 // "enrich"：把 watchlist 的一条 + 关联的 animeDb 项合并成"后端视图"，
 // 跟小程序 processAnimeList 输出对齐（currentEpisode/latestEpisode/status/platforms 等）
+// 自愈标记：enrich 时若靠名字纠正了错的 tmdbId，置位后在 render 末尾写回 localStorage
+let _watchlistIdDirty = false;
+
 function enrichWatchlistItem(w) {
-  // 优先按 tmdbId 精确匹配；匹配失败时按名字兜底（mock 数据/历史 id 漂移仍能跟随 TMDB 最新值）
+  // 优先按 tmdbId 精确匹配（存的就是 TMDB 的 id，后续直接对应）
   let a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
-  if (!a && w.name) a = animeDb.find(x => x.name && x.name === w.name);
+  // 存的 tmdbId 错/缺失时，按名字兜底找到真身，并自愈写回正确 id
+  if (!a && w.name) {
+    a = animeDb.find(x => x.name && x.name === w.name);
+    if (a && String(w.tmdbId) !== String(a.tmdbId)) {
+      w.tmdbId = a.tmdbId;       // 持久化为 TMDB 正确 id，下次起纯 id 匹配
+      _watchlistIdDirty = true;  // 标记待保存
+    }
+  }
   // latestEpisode 优先取 animeDb（每次同步自动更新），watchlist 兜底
   const latestEpisode = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
   const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
@@ -2440,6 +2483,8 @@ function renderMylist() {
 
   // enrich + 状态筛选 + 搜索过滤
   const enriched = watchlist.map(enrichWatchlistItem);
+  // 自愈：若本次纠正了错的 tmdbId，写回 localStorage（下次纯 id 匹配，不再靠名字兜底）
+  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlist(); }
   // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
   let filtered = enriched;
   if (currentMylistFilter === 'all') {
@@ -2453,6 +2498,9 @@ function renderMylist() {
   if (q) {
     filtered = filtered.filter(it => (it.name || '').toLowerCase().includes(q));
   }
+  // 排序：追番中(raising) 在前，已追完(caughtup/finished) 在后
+  const _statusOrder = { raising: 0, caughtup: 1, finished: 1, dropped: 2, unknown: 0 };
+  filtered.sort((a, b) => (_statusOrder[a.status] ?? 0) - (_statusOrder[b.status] ?? 0));
   if (filtered.length === 0) {
     const emptyMsg = q ? `没有找到包含「${q}」的追番` : '该分类下没有追番';
     list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">' + emptyMsg + '</p></div>';
@@ -2477,7 +2525,7 @@ function renderMylist() {
     const platShort = platBrand ? platBrand.short : (platform ? platform.charAt(0).toUpperCase() : '');
     const platColor = platBrand ? platBrand.color : '#8B7AA8';
     const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
-    // 右侧操作：raising/已追完+remaining>0 显示"追更"按钮 + 角标；finished 显示"已完结"；dropped 显示"已弃番"
+    // 右侧操作：raising/已追完+remaining>0 显示"追更"按钮 + 角标；caughtup/finished 统一显示"已追完"；dropped 显示"已弃番"
     let actionHtml = '';
     if (status === 'raising' || (status === 'caughtup' && remaining > 0)) {
       actionHtml = `<div class="btn-catch-wrap">
@@ -2486,11 +2534,9 @@ function renderMylist() {
         </button>
         ${remaining > 0 ? `<span class="catch-badge">${remaining}</span>` : ''}
       </div>`;
-    } else if (status === 'finished') {
-      actionHtml = `<button class="btn-status finished" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看/调整">已完结</button>`;
     } else if (status === 'dropped') {
       actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="操作">已弃番</button>`;
-    } else if (status === 'caughtup') {
+    } else if (status === 'caughtup' || status === 'finished') {
       actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追完</button>`;
     }
     // 链接 icon（点开平台弹窗）—— 如果没有 platforms 数据则不渲染
@@ -2625,34 +2671,48 @@ function saveGhToken() {
   showToast(v ? '✅ GitHub Token 已保存（仅存你本机）' : '已清除 Token');
 }
 
-// 导出配置为本地 JSON 文件（清缓存后可一键恢复，无需重新复制 token）
+// 导出配置为 JSON 文本（适配手机端：不依赖文件，直接复制）
 function exportConfig() {
-  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'anime-coze-settings.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  showToast('📤 配置已导出');
+  const text = JSON.stringify(settings, null, 2);
+  const ta = document.getElementById('cfgTextArea');
+  if (ta) ta.value = text;
+  const cp = document.getElementById('copyCfgBtn');
+  if (cp) cp.style.display = '';
+  showToast('📤 已生成配置文本，可点「复制」保存');
 }
 
-// 从本地 JSON 文件导入配置（含 ghToken）
-function importConfig(file) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result);
-      Object.assign(settings, data);
-      saveSettings();
-      const inp = document.getElementById('ghTokenInput');
-      if (inp) inp.value = settings.ghToken || '';
-      showToast('✅ 配置已导入');
-    } catch (err) {
-      showToast('❌ 配置文件无效');
-    }
-  };
-  reader.readAsText(file);
+// 复制配置文本到剪贴板
+function copyConfigText() {
+  const ta = document.getElementById('cfgTextArea');
+  if (!ta || !ta.value) return;
+  const done = () => showToast('📋 已复制配置文本');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(done).catch(() => fallbackCopy(ta, done));
+  } else {
+    fallbackCopy(ta, done);
+  }
+}
+function fallbackCopy(ta, done) {
+  ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+  try { document.execCommand('copy'); done(); } catch (e) { showToast('❌ 复制失败，请手动选择'); }
+  if (window.getSelection) window.getSelection().removeAllRanges();
+}
+
+// 从 JSON 文本导入配置（含 ghToken），适配手机端
+function importConfigFromText() {
+  const ta = document.getElementById('cfgTextArea');
+  const raw = (ta && ta.value || '').trim();
+  if (!raw) { showToast('❌ 请先粘贴配置 JSON'); return; }
+  try {
+    const data = JSON.parse(raw);
+    Object.assign(settings, data);
+    saveSettings();
+    const inp = document.getElementById('ghTokenInput');
+    if (inp) inp.value = settings.ghToken || '';
+    showToast('✅ 配置已导入');
+  } catch (err) {
+    showToast('❌ 配置 JSON 无效');
+  }
 }
 
 // ======================== REFRESH ========================
