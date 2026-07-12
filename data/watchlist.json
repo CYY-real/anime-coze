@@ -1,12 +1,1 @@
-[
-  {
-    "tmdbId": 93395,
-    "name": "凡人修仙传",
-    "watchedSeason": 1,
-    "watchedEpisode": 0,
-    "threshold": 1,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0
-  }
-]
+[  {    "tmdbId": 93395,    "name": "凡人修仙传",    "watchedSeason": 1,    "watchedEpisode": 0,    "threshold": 1,    "notifyEnabled": true,    "lastNotifiedAt": "",    "lastNotifiedEpisode": 0  }]
