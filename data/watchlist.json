@@ -3,7 +3,7 @@
     "tmdbId": 106449,
     "name": "凡人修仙传",
     "watchedSeason": 1,
-    "watchedEpisode": 180,
+    "watchedEpisode": 181,
     "latestSeason": 1,
     "latestEpisode": 96,
     "threshold": 5,
@@ -40,28 +40,6 @@
       }
     ],
     "updateFrequency": "周更"
-  },
-  {
-    "tmdbId": 91097,
-    "name": "灵笼",
-    "watchedSeason": 1,
-    "watchedEpisode": 16,
-    "latestSeason": 1,
-    "latestEpisode": 16,
-    "threshold": 3,
-    "notifyEnabled": false,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "dropped",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
   },
   {
     "tmdbId": 124003,
@@ -194,5 +172,88 @@
     ],
     "platform": "tencent",
     "updateFrequency": ""
+  },
+  {
+    "tmdbId": "127473",
+    "name": "眷思量",
+    "watchedSeason": 1,
+    "watchedEpisode": 15,
+    "latestSeason": 2,
+    "latestEpisode": 15,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "wukong",
+    "updateFrequency": "",
+    "meta": {
+      "tmdbId": "127473",
+      "name": "眷思量",
+      "cover": "/api/img?p=/t/p/w500/p6WEDdXoXutyx7rYCGTajQCWami.jpg",
+      "category": "cdrama",
+      "categoryLabel": "",
+      "region": "CN",
+      "regionLabel": "国产剧",
+      "latestSeason": 2,
+      "latestEpisode": 15,
+      "seasonEpisodeCounts": {
+        "1": 15,
+        "2": 15,
+        "3": 1
+      },
+      "totalEpisodes": 31,
+      "platforms": [],
+      "overview": "《眷思量》从主角镜玄探寻父母逝世真相的事件切入，一步步揭开思量岛上的秘密往事，同时展现了一群年轻人为了各自的人生目标努力蜕变成长、挣脱枷锁的故事。",
+      "firstAirDate": "2021-06-14",
+      "voteAverage": 8.8,
+      "originCountry": "CN",
+      "nextAirDate": "",
+      "updateFrequency": "已完结"
+    }
+  },
+  {
+    "tmdbId": "291392",
+    "name": "野狗骨头",
+    "watchedSeason": 1,
+    "watchedEpisode": 0,
+    "latestSeason": 1,
+    "latestEpisode": 13,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [],
+    "platform": "",
+    "updateFrequency": "",
+    "meta": {
+      "tmdbId": "291392",
+      "name": "野狗骨头",
+      "cover": "/api/img?p=/t/p/w500/ixwG1ECra9rSTuRCql81mkMoLVO.jpg",
+      "category": "cdrama",
+      "categoryLabel": "",
+      "region": "CN",
+      "regionLabel": "国产剧",
+      "latestSeason": 1,
+      "latestEpisode": 13,
+      "seasonEpisodeCounts": {
+        "1": 32
+      },
+      "totalEpisodes": 32,
+      "platforms": [],
+      "overview": "20世纪90年代，陈异和苗靖因父母的相识而结缘。起初陈异对苗靖充满敌意，直到一次受伤后，苗靖的善良让两人关系开始转变。然而好景不长，陈父去世、苗母消失，两家大人并未走到一起，两个孩子却不得不相依为命。来到大学，苗靖勇敢告白，陈异却被卷入纵火案，成为关键证人，为保护苗靖，他逼她离开了藤城，配合警方抓捕嫌犯。多年后，陈异经营着一家台球厅，苗靖则为了好运物流的审计工作回到藤城。两人重逢，陈异因当年纵火案，对好运老板张宾早就心存警惕，试图阻止苗靖前去工作未果。张宾的走私生意逐渐暴露，为保护苗靖，陈异只能以身入局，两人并肩作战，配合警方对抗张宾。最终，张宾及其同伙受到法律制裁。身受重伤的陈异向苗靖告白，两人终成眷属。",
+      "firstAirDate": "2026-07-05",
+      "voteAverage": 8,
+      "originCountry": "CN",
+      "nextAirDate": "2026-07-12",
+      "updateFrequency": "周更"
+    }
   }
 ]
