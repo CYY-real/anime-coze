@@ -2626,7 +2626,6 @@ function renderMylist() {
         goWatchBtn = `<button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button>`;
       }
     }
-    const catLabel = it.categoryLabel || '番剧';
     return `<div class="wl-item" onclick="openDetail('${tmdbId}')">
       <div class="card-deco"></div>
       <div class="cover-wrap">
@@ -2642,7 +2641,6 @@ function renderMylist() {
           ${linkIcon}
         </div>
         <div class="anime-meta">
-          <span class="category-tag">${esc(catLabel)}</span>
           ${platform
             ? `<span class="platform-tag">
                 <span class="platform-icon platform-icon-svg" aria-label="${esc(platLabel)}" title="${esc(platLabel)}">${platLogo}</span>
