@@ -1218,18 +1218,13 @@ html,body{
     </div>
     <!-- 已配置：搜索 + 列表 -->
     <div id="browseContent" style="display:none">
-      <!-- 分类标签 -->
-      <div class="sub-tabs" id="browseCategoryFilters">
-        <span class="sub-tab active" data-bcategory="all" onclick="switchBrowseCategory(this)">📺 全部</span>
-        <span class="sub-tab" data-bcategory="anime" onclick="switchBrowseCategory(this)">🌸 番剧</span>
-        <span class="sub-tab" data-bcategory="cdrama" onclick="switchBrowseCategory(this)">🎭 国产剧</span>
-        <span class="sub-tab" data-bcategory="kdrama" onclick="switchBrowseCategory(this)">🇰🇷 韩剧</span>
-      </div>
-      <!-- 子标签：地区筛选（仅全部/番剧下有用） -->
+      <!-- 分类/地区合并筛选 -->
       <div class="sub-tabs" id="browseFilters">
-        <span class="sub-tab active" data-bfilter="all" onclick="switchBrowseFilter(this)">🌐 全部</span>
-        <span class="sub-tab" data-bfilter="JP" onclick="switchBrowseFilter(this)">🌸 日漫</span>
-        <span class="sub-tab" data-bfilter="CN" onclick="switchBrowseFilter(this)">🎋 国漫</span>
+        <span class="sub-tab active" data-bfilter="all" onclick="switchBrowseFilter(this)">📺 全部</span>
+        <span class="sub-tab" data-bfilter="jp-anime" onclick="switchBrowseFilter(this)">🌸 日漫</span>
+        <span class="sub-tab" data-bfilter="cn-anime" onclick="switchBrowseFilter(this)">🎋 国漫</span>
+        <span class="sub-tab" data-bfilter="cdrama" onclick="switchBrowseFilter(this)">🎭 国产剧</span>
+        <span class="sub-tab" data-bfilter="kdrama" onclick="switchBrowseFilter(this)">🇰🇷 韩剧</span>
       </div>
       <!-- 搜索 -->
       <div class="search-box">
@@ -1412,8 +1407,7 @@ html,body{
 let animeDb = [];
 let watchlist = [];
 let settings = { defaultThreshold: 3, giteeToken: '', giteeRepo: '', giteeBranch: 'master', dataUrl: '', dataSource: '', lastAnimeCount: 0 };
-let currentBrowseCategory = 'all'; // 分类筛选: all / anime / cdrama / kdrama
-let currentBrowseFilter = 'all'; // 地区筛选: all / JP / CN
+let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
 let activeSeason = 1;
@@ -1513,21 +1507,7 @@ function closeTabAndOpenSettings() {
 }
 
 // ======================== FILTERS ========================
-// 浏览页：分类筛选
-function switchBrowseCategory(el) {
-  document.querySelectorAll('#browseCategoryFilters .sub-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  currentBrowseCategory = el.dataset.bcategory;
-  // 切换到 cdrama/kdrama 时自动设置地区为全选
-  if (currentBrowseCategory !== 'all' && currentBrowseCategory !== 'anime') {
-    document.querySelectorAll('#browseFilters .sub-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector('#browseFilters .sub-tab[data-bfilter="all"]').classList.add('active');
-    currentBrowseFilter = 'all';
-  }
-  renderBrowse();
-}
-
-// 浏览页：地区筛选
+// 浏览页：分类/地区合并筛选
 function switchBrowseFilter(el) {
   document.querySelectorAll('#browseFilters .sub-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -1671,17 +1651,17 @@ const PLATFORM_INFO = {
 };
 
 function updateBadges() {
-  // 浏览页分类 badge
   const all = animeDb.length;
-  const anime = animeDb.filter(a => (a.category || 'anime') === 'anime').length;
+  const jpAnime = animeDb.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP').length;
+  const cnAnime = animeDb.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN').length;
   const cdrama = animeDb.filter(a => a.category === 'cdrama').length;
   const kdrama = animeDb.filter(a => a.category === 'kdrama').length;
-  const catTabs = document.querySelectorAll('#browseCategoryFilters .sub-tab');
-  catTabs.forEach(t => {
-    const f = t.dataset.bcategory;
+  document.querySelectorAll('#browseFilters .sub-tab').forEach(t => {
+    const f = t.dataset.bfilter;
     let count = 0;
     if (f === 'all') count = all;
-    else if (f === 'anime') count = anime;
+    else if (f === 'jp-anime') count = jpAnime;
+    else if (f === 'cn-anime') count = cnAnime;
     else if (f === 'cdrama') count = cdrama;
     else if (f === 'kdrama') count = kdrama;
     let badge = t.querySelector('.tab-badge');
@@ -1690,35 +1670,8 @@ function updateBadges() {
       badge.className = 'tab-badge';
       t.appendChild(badge);
     }
-    if (count > 0) {
-      badge.style.display = '';
-      badge.textContent = count;
-    } else {
-      badge.style.display = 'none';
-    }
-  });
-  // 浏览页地区 badge
-  const jp = animeDb.filter(a => a.region === 'JP').length;
-  const cn = animeDb.filter(a => a.region === 'CN').length;
-  const regionTabs = document.querySelectorAll('#browseFilters .sub-tab');
-  regionTabs.forEach(t => {
-    const f = t.dataset.bfilter;
-    let count = 0;
-    if (f === 'all') count = all;
-    else if (f === 'JP') count = jp;
-    else if (f === 'CN') count = cn;
-    let badge = t.querySelector('.tab-badge');
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'tab-badge';
-      t.appendChild(badge);
-    }
-    if (count > 0) {
-      badge.style.display = '';
-      badge.textContent = count;
-    } else {
-      badge.style.display = 'none';
-    }
+    if (count > 0) { badge.style.display = ''; badge.textContent = count; }
+    else { badge.style.display = 'none'; }
   });
 }
 
@@ -1754,10 +1707,11 @@ function renderBrowse() {
   const q = (document.getElementById('browseSearchInput')?.value || '').trim().toLowerCase();
   let items = animeDb;
   if (q) items = items.filter(a => (a.name || '').toLowerCase().includes(q));
-  // 分类筛选
-  if (currentBrowseCategory !== 'all') items = items.filter(a => (a.category || 'anime') === currentBrowseCategory);
-  // 地区筛选
-  if (currentBrowseFilter !== 'all') items = items.filter(a => a.region === currentBrowseFilter);
+  if (currentBrowseFilter !== 'all') {
+    if (currentBrowseFilter === 'jp-anime') items = items.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP');
+    else if (currentBrowseFilter === 'cn-anime') items = items.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN');
+    else items = items.filter(a => (a.category || 'anime') === currentBrowseFilter);
+  }
 
   const list = document.getElementById('browseList');
   if (items.length === 0) {
