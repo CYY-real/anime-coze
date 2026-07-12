@@ -363,6 +363,11 @@ html,body{
   flex-shrink:0;
 }
 .platform-name{font-size:11px;color:var(--text-secondary);font-weight:500}
+.category-tag{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  background:rgba(255,159,67,0.12);color:var(--orange,#ff9f43);
+  font-size:10px;font-weight:600;margin-right:4px;
+}
 .platform-tag-pill{
   display:inline-block;padding:1px 6px;border-radius:4px;
   background:rgba(196,74,255,0.05);
@@ -949,10 +954,25 @@ html,body{
   flex-shrink:0;
 }
 .platform-item-icon svg{width:100%;height:100%;display:block}
+.platform-item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .platform-item-name{
-  flex:1;font-size:13px;font-weight:600;color:var(--text-primary);
+  font-size:13px;font-weight:600;color:var(--text-primary);
 }
-.platform-item-actions{display:flex;gap:6px}
+.platform-item-url{
+  font-size:10px;color:var(--text-tertiary);
+  font-family:monospace;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:200px;
+}
+.platform-item-actions{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.platform-action-btn.copyurl{
+  width:30px;height:30px;padding:0;border-radius:8px;
+  background:rgba(196,74,255,0.08);color:var(--purple);
+  font-size:14px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border-faint);
+}
+.platform-action-btn.copyurl:active{background:rgba(196,74,255,0.18)}
 .platform-action-btn.link{
   padding:5px 11px;border-radius:10px;
   background:linear-gradient(135deg,#FF6B9D,#C44AFF);
@@ -1186,19 +1206,26 @@ html,body{
   <!-- Content: Browse (list mode) -->
   <div id="tabBrowse" class="hidden">
     <div class="browse-header">
-      <div class="browse-title">➕ 添加番剧</div>
-      <div class="browse-sub" id="browseSub">从番剧库中选择要追的番剧</div>
+      <div class="browse-title">➕ 添加剧集</div>
+      <div class="browse-sub" id="browseSub">从剧库中选择要追的剧</div>
     </div>
     <!-- 未加载数据提示 -->
     <div class="setup-required" id="setupRequired" style="display:none">
       <div class="setup-icon">🔧</div>
       <div class="setup-title">需要先选择数据源</div>
-      <div class="setup-desc">请先选择番剧库的数据源，才能浏览并添加番剧。</div>
+      <div class="setup-desc">请先选择剧库的数据源，才能浏览并添加剧集。</div>
       <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="showSourcePicker()">选择数据源</button>
     </div>
     <!-- 已配置：搜索 + 列表 -->
     <div id="browseContent" style="display:none">
-      <!-- 子标签：地区筛选 -->
+      <!-- 分类标签 -->
+      <div class="sub-tabs" id="browseCategoryFilters">
+        <span class="sub-tab active" data-bcategory="all" onclick="switchBrowseCategory(this)">📺 全部</span>
+        <span class="sub-tab" data-bcategory="anime" onclick="switchBrowseCategory(this)">🌸 番剧</span>
+        <span class="sub-tab" data-bcategory="cdrama" onclick="switchBrowseCategory(this)">🎭 国产剧</span>
+        <span class="sub-tab" data-bcategory="kdrama" onclick="switchBrowseCategory(this)">🇰🇷 韩剧</span>
+      </div>
+      <!-- 子标签：地区筛选（仅全部/番剧下有用） -->
       <div class="sub-tabs" id="browseFilters">
         <span class="sub-tab active" data-bfilter="all" onclick="switchBrowseFilter(this)">🌐 全部</span>
         <span class="sub-tab" data-bfilter="JP" onclick="switchBrowseFilter(this)">🌸 日漫</span>
@@ -1207,7 +1234,7 @@ html,body{
       <!-- 搜索 -->
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input id="browseSearchInput" placeholder="搜索番剧名称..." oninput="debounceBrowseSearch()">
+        <input id="browseSearchInput" placeholder="搜索剧名..." oninput="debounceBrowseSearch()">
       </div>
       <div id="browseList" class="anime-list"></div>
     </div>
@@ -1243,7 +1270,7 @@ html,body{
         <span class="sub-tab-icon">🌿</span><span>已追完</span>
         <span class="tab-badge" id="badgeMylistCaughtup" style="display:none">0</span>
       </span>
-      <span class="add-anime-btn" onclick="switchTab('browse', document.querySelectorAll('.bottom-nav a')[1])" title="添加番剧">
+      <span class="add-anime-btn" onclick="switchTab('browse', document.querySelectorAll('.bottom-nav a')[1])" title="添加剧集">
         <span class="add-anime-icon">+</span>
       </span>
     </div>
@@ -1266,7 +1293,7 @@ html,body{
   </a>
   <a href="#" onclick="switchTab('browse',this)">
     <span class="icon">➕</span>
-    <span class="label">添加番剧</span>
+    <span class="label">添加剧集</span>
   </a>
   <a href="#" onclick="showSettings()">
     <span class="icon">⚙️</span>
@@ -1305,7 +1332,7 @@ html,body{
       <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">选择数据源后立即加载——本地文件由 GitHub Actions 自动更新并推送到 Gitee</p>
+      <p class="modal-desc">选择数据源后立即加载——数据由 GitHub Actions 自动更新并部署</p>
 
       <div class="source-presets">
         <button class="source-preset" data-preset="local" onclick="pickSource('local')">
@@ -1320,6 +1347,13 @@ html,body{
           <div class="preset-info">
             <div class="preset-name">Gitee Raw</div>
             <div class="preset-meta">gitee.com/{owner}/{repo}/raw/{branch}/data/anime.json</div>
+          </div>
+        </button>
+        <button class="source-preset" data-preset="github" onclick="pickSource('github')">
+          <div class="preset-icon">🐙</div>
+          <div class="preset-info">
+            <div class="preset-name">GitHub Raw</div>
+            <div class="preset-meta">github.com/{owner}/{repo}/raw/{branch}/data/anime.json</div>
           </div>
         </button>
 
@@ -1351,9 +1385,7 @@ html,body{
       <p class="modal-desc">Gitee 仓库配置与默认偏好</p>
 
       <div class="settings-group-title">📦 Gitee 仓库（用于同步追番列表）</div>
-      <div class="settings-help">
-        <b>Token 怎么拿？</b> Gitee → 右上角头像 → <b>设置</b> → <b>私人令牌</b> → <b>生成新令牌</b>，勾选 <code>projects</code> 权限。
-      </div>
+
       <div style="margin:4px 0 14px">
         <div class="setting-item">
           <label>Gitee Token</label>
@@ -1370,7 +1402,7 @@ html,body{
       </div>
 
       <div class="settings-help">
-        <b>数据哪里来？</b> 番剧库 <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成并推送到 Gitee 仓库，可通过 <code>gitee.com/{owner}/{repo}/raw/{branch}/data/anime.json</code> 加载。
+        <b>数据哪里来？</b> <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成并推送到 Cloudflare Pages，可通过本地文件直接加载。
       </div>
 
       <!-- 其他偏好 -->
@@ -1395,6 +1427,7 @@ html,body{
 let animeDb = [];
 let watchlist = [];
 let settings = { defaultThreshold: 3, giteeToken: '', giteeRepo: '', giteeBranch: 'master', dataUrl: '', dataSource: '', lastAnimeCount: 0 };
+let currentBrowseCategory = 'all'; // 分类筛选: all / anime / cdrama / kdrama
 let currentBrowseFilter = 'all'; // 地区筛选: all / JP / CN
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
@@ -1483,10 +1516,9 @@ function initBrowseTab() {
 
   if (animeDb.length > 0) { renderBrowse(); return; }
 
-  // 不再要求必须配 Token 才能浏览——数据源直接在 source picker 里选
   setupRequired.style.display = 'none';
   browseContent.style.display = '';
-  browseSub.textContent = '选择数据源加载番剧库';
+  browseSub.textContent = '选择数据源加载剧库';
 
   showSourcePicker();
 }
@@ -1502,6 +1534,20 @@ function closeTabAndOpenSettings() {
 }
 
 // ======================== FILTERS ========================
+// 浏览页：分类筛选
+function switchBrowseCategory(el) {
+  document.querySelectorAll('#browseCategoryFilters .sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentBrowseCategory = el.dataset.bcategory;
+  // 切换到 cdrama/kdrama 时自动设置地区为全选
+  if (currentBrowseCategory !== 'all' && currentBrowseCategory !== 'anime') {
+    document.querySelectorAll('#browseFilters .sub-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('#browseFilters .sub-tab[data-bfilter="all"]').classList.add('active');
+    currentBrowseFilter = 'all';
+  }
+  renderBrowse();
+}
+
 // 浏览页：地区筛选
 function switchBrowseFilter(el) {
   document.querySelectorAll('#browseFilters .sub-tab').forEach(t => t.classList.remove('active'));
@@ -1543,7 +1589,7 @@ async function loadAnime(opts = {}) {
   updateSourceCard(url, '⏳ 加载中…');
 
   const list = document.getElementById('browseList');
-  list.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在加载番剧库...</p></div>';
+    list.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在加载剧库...</p></div>';
   try {
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -1552,10 +1598,10 @@ async function loadAnime(opts = {}) {
     animeDb = data;
     updateBadges();
     renderBrowse();
-    updateSourceCard(url, `✅ ${animeDb.length} 部番剧`);
+    updateSourceCard(url, `✅ ${animeDb.length} 部剧集`);
     settings.lastAnimeCount = animeDb.length;
     localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
-    showToast(`✨ 已加载 ${animeDb.length} 部番剧`);
+    showToast(`✨ 已加载 ${animeDb.length} 部剧集`);
   } catch (e) {
     // 加载失败：保留旧数据（如果有），但显示明确错误
     list.innerHTML = '<div class="empty-state"><div class="icon">😵</div><p class="text">加载番剧库失败</p><p class="sub">' + esc(e.message) + '</p><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="initBrowseTab()">重试</button></div>';
@@ -1576,6 +1622,7 @@ function updateSourceCard(url, metaText, isError = false) {
   const sourceMap = {
     local: { icon: '🗂️', name: '本地文件' },
     gitee: { icon: '🟢', name: 'Gitee Raw' },
+    github: { icon: '🐙', name: 'GitHub Raw' },
     custom: { icon: '🔗', name: '自定义 URL' },
   };
   const cfg = sourceMap[source] || sourceMap.custom;
@@ -1615,6 +1662,10 @@ function pickSource(kind) {
     const repo = settings.giteeRepo;
     const branch = settings.giteeBranch || 'master';
     url = `https://gitee.com/${repo}/raw/${branch}/data/anime.json`;
+  } else if (kind === 'github') {
+    const repo = settings.giteeRepo;
+    const branch = settings.giteeBranch || 'main';
+    url = `https://raw.githubusercontent.com/${repo}/${branch}/data/anime.json`;
   }
   closeModal('sourceModal');
   loadAnime({ url, source: kind });
@@ -1651,12 +1702,37 @@ const PLATFORM_INFO = {
 };
 
 function updateBadges() {
-  // 浏览页 badge：显示 JP / CN 数量
+  // 浏览页分类 badge
   const all = animeDb.length;
+  const anime = animeDb.filter(a => (a.category || 'anime') === 'anime').length;
+  const cdrama = animeDb.filter(a => a.category === 'cdrama').length;
+  const kdrama = animeDb.filter(a => a.category === 'kdrama').length;
+  const catTabs = document.querySelectorAll('#browseCategoryFilters .sub-tab');
+  catTabs.forEach(t => {
+    const f = t.dataset.bcategory;
+    let count = 0;
+    if (f === 'all') count = all;
+    else if (f === 'anime') count = anime;
+    else if (f === 'cdrama') count = cdrama;
+    else if (f === 'kdrama') count = kdrama;
+    let badge = t.querySelector('.tab-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'tab-badge';
+      t.appendChild(badge);
+    }
+    if (count > 0) {
+      badge.style.display = '';
+      badge.textContent = count;
+    } else {
+      badge.style.display = 'none';
+    }
+  });
+  // 浏览页地区 badge
   const jp = animeDb.filter(a => a.region === 'JP').length;
   const cn = animeDb.filter(a => a.region === 'CN').length;
-  const tabs = document.querySelectorAll('#browseFilters .sub-tab');
-  tabs.forEach(t => {
+  const regionTabs = document.querySelectorAll('#browseFilters .sub-tab');
+  regionTabs.forEach(t => {
     const f = t.dataset.bfilter;
     let count = 0;
     if (f === 'all') count = all;
@@ -1709,12 +1785,14 @@ function renderBrowse() {
   const q = (document.getElementById('browseSearchInput')?.value || '').trim().toLowerCase();
   let items = animeDb;
   if (q) items = items.filter(a => (a.name || '').toLowerCase().includes(q));
+  // 分类筛选
+  if (currentBrowseCategory !== 'all') items = items.filter(a => (a.category || 'anime') === currentBrowseCategory);
   // 地区筛选
   if (currentBrowseFilter !== 'all') items = items.filter(a => a.region === currentBrowseFilter);
 
   const list = document.getElementById('browseList');
   if (items.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">未找到匹配的番剧</p><p class="sub">试试其他关键词或地区</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">未找到匹配的剧集</p><p class="sub">试试其他关键词或分类</p></div>';
     return;
   }
   list.innerHTML = items.map(a => {
@@ -1753,6 +1831,9 @@ function renderBrowse() {
       actionHtml = `<div class="btn-catch" onclick="event.stopPropagation();addToList('${a.tmdbId}')">+ 追番</div>`;
     }
 
+    const cat = a.category || 'anime';
+    const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧' };
+    const catBadge = catLabels[cat] || cat;
     return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')" oncontextmenu="event.preventDefault();showBrowseActionMenu('${a.tmdbId}')" ontouchstart="browseTouchStart(event,'${a.tmdbId}')" ontouchend="browseTouchEnd(event)" ontouchmove="browseTouchEnd(event)">
       <div class="card-deco"></div>
       <div class="cover-wrap">
@@ -1768,6 +1849,7 @@ function renderBrowse() {
           ${primaryPlatform ? `<span class="go-watch-icon" title="点击查看播放平台" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">🔗</span>` : ''}
         </div>
         <div class="anime-meta">
+          <span class="category-tag">${catBadge}</span>
           ${platformInfo
             ? `<span class="platform-tag">
                 <span class="platform-icon" style="background:${platformInfo.color}">${platformInfo.short}</span>
@@ -2165,24 +2247,35 @@ function openPlatformPopup(tmdbId) {
 
   // 平台列表 HTML
   // 按钮逻辑：
-  //   - 有 url → "去看"（直接打开）
-  //   - 无 url → "复制链接"（复制搜索 URL + 剧名到剪贴板）
+  //   - 有 url → 直接打开该 URL
+  //   - 无 url → 打开平台搜索页（用番名作为关键词）
+  //   - 统一文案「前往」
   const platformListHtml = validPlatforms.length === 0
-    ? '<div class="platform-empty-tip">该番暂无平台信息<br>点上方"复制搜索词"去各平台搜</div>'
+    ? '<div class="platform-empty-tip">该番暂无平台信息<br>点上方「一键搜索」去各平台搜</div>'
     : `<div class="platform-list">${validPlatforms.map(p => {
         const brand = PLATFORM_BRAND[p.platform] || null;
         const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
         const color = brand ? brand.color : '#8B7AA8';
         const pName = p.name || (brand ? brand.name : p.platform);
         const pUrl = (p.url || '').trim();
-        // 按钮：有 url 直接跳转；无 url 复制搜索 URL
-        const btnHtml = pUrl
-          ? `<button class="platform-action-btn link" onclick="window.open('${esc(pUrl)}','_blank','noopener')">去看</button>`
-          : `<button class="platform-action-btn copy" onclick="copyPlatformLink('${esc(p.platform)}','${esc(w.name || '')}')">复制链接</button>`;
+        // 统一「前往」按钮：有 url 直跳；无 url 用平台搜索 URL
+        const targetUrl = pUrl
+          || (PLATFORM_SEARCH_URL[p.platform] ? PLATFORM_SEARCH_URL[p.platform] + encodeURIComponent(w.name || '') : '');
+        const btnHtml = targetUrl
+          ? `<button class="platform-action-btn link" onclick="window.open('${esc(targetUrl)}','_blank','noopener')">前往 ›</button>`
+          : `<button class="platform-action-btn copy" disabled style="opacity:.5;cursor:not-allowed">暂不可用</button>`;
+        // 截断 URL 用于显示（最多 40 字符）
+        const urlPreview = targetUrl.length > 40 ? targetUrl.slice(0, 40) + '…' : targetUrl;
         return `<div class="platform-item">
           <span class="platform-item-icon">${logo}</span>
-          <span class="platform-item-name">${esc(pName)}</span>
-          <div class="platform-item-actions">${btnHtml}</div>
+          <div class="platform-item-body">
+            <div class="platform-item-name">${esc(pName)}</div>
+            ${targetUrl ? `<div class="platform-item-url" title="${esc(targetUrl)}">${esc(urlPreview)}</div>` : ''}
+          </div>
+          <div class="platform-item-actions">
+            ${btnHtml}
+            ${targetUrl ? `<button class="platform-action-btn copyurl" onclick="copyToClipboard('${esc(targetUrl)}','🔗 已复制链接')" title="复制链接">📋</button>` : ''}
+          </div>
         </div>`;
       }).join('')}</div>`;
 
@@ -2222,9 +2315,9 @@ function openPlatformPopup(tmdbId) {
           </div>
         </div>
       </div>
-      <button class="platform-copy-all" onclick="copyPlatformSearch('${esc(name || '')}')">
+      <button class="platform-copy-all" onclick="window.open('https://search.bilibili.com/all?keyword=' + encodeURIComponent('${esc(name || '')}'), '_blank', 'noopener')">
         <span class="platform-copy-all-icon">🔍</span>
-        <span class="platform-copy-all-text">复制搜索词到剪贴板</span>
+        <span class="platform-copy-all-text">一键搜索：${esc(name || '')}</span>
       </button>
       <div class="platform-divider"></div>
       ${platformListHtml}
@@ -2392,6 +2485,7 @@ function openDetail(tmdbId) {
       <div class="detail-name">${esc(a.name || a.displayName || '')}</div>
       <div class="detail-meta">
         <span class="cover-status ${status}" style="position:static;display:inline-block;margin-right:4px">${statusText}</span>
+        <span style="font-size:10px;font-weight:600;color:var(--orange,#ff9f43);margin-right:4px">${esc(a.categoryLabel || (a.category === 'cdrama' ? '国产剧' : a.category === 'kdrama' ? '韩剧' : '番剧'))}</span>
         ${a.regionLabel ? esc(a.regionLabel) : ''}
         ${a.latestEpisode ? ' · 更新至 E' + a.latestEpisode : ''}
         ${a.totalEpisodes ? ' · 共 ' + a.totalEpisodes + ' 集' : ''}
@@ -2508,11 +2602,15 @@ function enrichWatchlistItem(w) {
   const remaining = status === 'finished' ? 0 : Math.max(0, latestEpisode - w.watchedEpisode);
   // 更新频率
   const updateFrequency = w.updateFrequency || '';
+  const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧' };
+  const acat = (a && a.category) || 'anime';
   return {
     ...w,
     animeId: w.tmdbId,
     name: w.name,
     cover: a ? a.cover : '',
+    category: acat,
+    categoryLabel: a && a.categoryLabel ? a.categoryLabel : (catLabels[acat] || acat),
     status,
     currentEpisode: w.watchedEpisode,
     currentSeason: w.watchedSeason,
@@ -2597,6 +2695,7 @@ function renderMylist() {
     const linkIcon = platforms.length > 0
       ? `<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C44AFF' stroke-width='2.5' stroke-linecap='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>" onclick="event.stopPropagation();openPlatformPopup('${tmdbId}')" title="查看播放平台">`
       : '';
+    const catLabel = it.categoryLabel || '番剧';
     return `<div class="wl-item" onclick="openDetail('${tmdbId}')" oncontextmenu="event.preventDefault();showActionMenu('${tmdbId}')" ontouchstart="wlTouchStart(event,'${tmdbId}')" ontouchend="wlTouchEnd(event)" ontouchmove="wlTouchEnd(event)">
       <div class="card-deco"></div>
       <div class="cover-wrap">
@@ -2612,6 +2711,7 @@ function renderMylist() {
           ${linkIcon}
         </div>
         <div class="anime-meta">
+          <span class="category-tag">${esc(catLabel)}</span>
           ${platform
             ? `<span class="platform-tag">
                 <span class="platform-icon platform-icon-svg" aria-label="${esc(platLabel)}" title="${esc(platLabel)}">${platLogo}</span>
