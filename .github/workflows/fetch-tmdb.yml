@@ -5,6 +5,8 @@ on:
   schedule:
     # 每天 UTC 22:00（≈ 北京 06:00）自动运行
     - cron: '0 22 * * *'
+    # 每天 UTC 04:00（≈ 北京 12:00 中午）自动运行
+    - cron: '0 4 * * *'
   workflow_dispatch: {}
 
 permissions:
