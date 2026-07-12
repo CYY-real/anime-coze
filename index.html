@@ -1396,28 +1396,7 @@ function init() {
   // 载入本机设置（云端同步经 Cloudflare 代理，浏览器不保存任何 Token）
   const savedSettings = localStorage.getItem('anime_coze_settings');
   if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
-  // 兜底：本机无任何追番记录时（首次访问 / 旧版残留为空 / 云端尚未拉回），注入演示数据，避免首页空白
-  if (watchlist.length === 0) {
-    // 注入 mock 追番数据，方便看效果
-    // 字段说明：
-    //   - latestEpisode / latestSeason: 番剧库最新集数（用于"更新至E12"展示）
-    //   - updateFrequency: "周更" / "日更" / "已完结" 等
-    //   - platform: 主平台 key (bilibili/tencent/iqiyi/youku)
-    //   - platforms[]: 完整平台列表（用于平台弹窗）— 每条 {platform, name, url, isPrimary}
-    //   - url: 该平台"去看"链接（留空 → 降级为"复制链接"按钮）
-    watchlist = [
-      { tmdbId: 106449, name: '凡人修仙传', watchedSeason: 1, watchedEpisode: 180, latestSeason: 1, latestEpisode: 96, threshold: 5, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://v.qq.com/x/cover/mzc00200r8j8vut.html',isPrimary:true}], updateFrequency: '周更' },
-      { tmdbId: 223911, name: '仙逆', watchedSeason: 1, watchedEpisode: 130, latestSeason: 1, latestEpisode: 26, threshold: 3, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], updateFrequency: '周更' },
-      { tmdbId: 91097, name: '灵笼', watchedSeason: 1, watchedEpisode: 16, latestSeason: 1, latestEpisode: 16, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'dropped', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
-      { tmdbId: 124003, name: '完美世界', watchedSeason: 1, watchedEpisode: 241, latestSeason: 1, latestEpisode: 277, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
-      { tmdbId: 224839, name: '遮天', watchedSeason: 1, watchedEpisode: 146, latestSeason: 1, latestEpisode: 170, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
-      { tmdbId: 229192, name: '沧元图', watchedSeason: 1, watchedEpisode: 49, latestSeason: 1, latestEpisode: 85, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [], platform: '', updateFrequency: '' },
-      { tmdbId: 228429, name: '斗罗大陆Ⅱ绝世唐门', watchedSeason: 1, watchedEpisode: 0, latestSeason: 1, latestEpisode: 161, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
-      { tmdbId: 218642, name: '师兄啊师兄', watchedSeason: 1, watchedEpisode: 129, latestSeason: 1, latestEpisode: 149, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'youku',name:'优酷',url:'',isPrimary:true}], platform: 'youku', updateFrequency: '' },
-      { tmdbId: 259537, name: '剑来', watchedSeason: 1, watchedEpisode: 0, latestSeason: 2, latestEpisode: 27, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
-    ];
-    saveWatchlistLocal();
-  }
+  // 不再注入 mock 演示数据——首次访问显示空状态提示，pullWatchlist 会从 Gitee 拉取真实数据
   renderMylist();
   // 从 Gitee 同步追剧列表（静默，首次不弹 toast）
   pullWatchlist();
@@ -2760,13 +2739,13 @@ async function pushWatchlist(block = true) {
 // 合并云端/快照数据到本机（按 tmdbId 去重，云端优先）；仅本机持久化，不回推避免回环
 function mergeWatchlist(data) {
   if (!Array.isArray(data)) return;
+  // 云端为准：直接用云端数据替换本机（按 tmdbId 去重），清除 mock 残留 / 历史脏数据。
+  // 安全网：云端返回空数组时不覆盖（避免云端空数据清空本机）。
+  if (!Array.isArray(data) || data.length === 0) return;
   const map = new Map();
-  // 1) 先放入本机现有数据（含离线/同步故障期间新增的条目），确保不丢
-  watchlist.forEach(lw => { if (lw && lw.tmdbId != null) map.set(String(lw.tmdbId), lw); });
-  // 2) 再用云端覆盖同名项（跨设备更新优先）；云端没有的本机项保留
   data.forEach(cw => { if (cw && cw.tmdbId != null) map.set(String(cw.tmdbId), cw); });
   watchlist = Array.from(map.values());
-  dedupeWatchlistByName();   // 云端按 tmdbId 收口后，再按名字去重，避免同名重复
+  dedupeWatchlistByName();
   saveWatchlistLocal();
   renderMylist();
 }
