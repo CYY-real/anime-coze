@@ -90,7 +90,8 @@ function inferUpdateFrequency(detail) {
 
 function normalize(it, region) {
   const name = it.name || it.original_name || '';
-  const cover = it.poster_path ? `https://image.tmdb.org/t/p/w500${it.poster_path}` : '';
+  // 封面走 Cloudflare 图片代理（image.tmdb.org 国内常被墙，统一经 /api/img 回源）
+  const cover = it.poster_path ? `/api/img?p=/t/p/w500${it.poster_path}` : '';
   const seasonsRaw = (it.seasons || []).filter((s) => s.season_number > 0);
   const seasonEpisodeCounts = {};
   seasonsRaw.forEach((s) => {
