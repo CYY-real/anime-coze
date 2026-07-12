@@ -34,7 +34,7 @@ jobs:
         env:
           TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
           TMDB_LANG: zh-CN
-          TMDB_REGIONS: JP,CN
+          TMDB_REGIONS: JP,CN,KR
           TMDB_PAGES: '2'
         run: node scripts/sync.js
 
