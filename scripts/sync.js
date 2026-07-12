@@ -25,7 +25,7 @@ if (typeof fetch === 'undefined') {
 const TMDB_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 const TMDB_BASE = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 const LANG = process.env.TMDB_LANG || 'zh-CN';
-const REGIONS = (process.env.TMDB_REGIONS || 'JP,CN').split(',').filter(Boolean);
+const REGIONS = (process.env.TMDB_REGIONS || 'JP,CN,KR').split(',').filter(Boolean);
 const GENRE_ANIMATION = 16;
 const PAGES = parseInt(process.env.TMDB_PAGES) || 2;
 
@@ -83,11 +83,6 @@ async function tmdbGet(p, params = {}) {
   return { ok: resp.ok, status: resp.status, body };
 }
 
-// 分类：日漫 / 国漫 都归为 anime，前端按 category + region(JP/CN) 区分
-function regionToCategory() {
-  return 'anime';
-}
-
 // TMDB 无"更新频率"字段，按是否有下一集粗略推断
 function inferUpdateFrequency(detail) {
   return detail.next_episode_to_air ? '周更' : '已完结';
@@ -104,6 +99,25 @@ function normalize(it, region) {
   const totalSeasons = it.number_of_seasons || seasonsRaw.length || 1;
   const lea = it.last_episode_to_air || null;
   const nea = it.next_episode_to_air || null;
+
+  // 分类：按 genres 是否含动画(16) 与地区推断，避免真人国产剧/韩剧被错标为"国漫/番剧"
+  const genreIds = (it.genres || []).map((g) => g.id);
+  const isAnimation = genreIds.includes(GENRE_ANIMATION);
+  let category, regionLabel;
+  if (region === 'KR') {
+    category = 'kdrama';
+    regionLabel = '韩剧';
+  } else if (isAnimation) {
+    category = 'anime';
+    regionLabel = region === 'JP' ? '日漫' : region === 'CN' ? '国漫' : '动画';
+  } else if (region === 'CN') {
+    category = 'cdrama';
+    regionLabel = '国产剧';
+  } else {
+    category = 'jdrama';
+    regionLabel = '日剧';
+  }
+
   return {
     tmdbId: it.id,
     name,
@@ -111,8 +125,8 @@ function normalize(it, region) {
     cover,
     mediaType: 'tv',
     region,
-    regionLabel: region === 'JP' ? '日漫' : region === 'CN' ? '国漫' : region,
-    category: regionToCategory(region),
+    regionLabel,
+    category,
     latestSeason: lea && lea.season_number ? lea.season_number : totalSeasons,
     latestEpisode: lea && lea.episode_number ? lea.episode_number : 0,
     nextAirDate: nea && nea.air_date ? nea.air_date : '',
@@ -136,52 +150,53 @@ async function main() {
   let skippedDetailFail = 0;
   let skippedDup = 0;
 
-  for (const region of REGIONS) {
+  // 合并单条（含同名去重：保留 latestEpisode 更高的一条）
+  function ingest(preset) {
+    if (!preset || !preset.tmdbId || !preset.name) { skippedNoName++; return; }
+    const key = `${preset.tmdbId}-tv`;
+    if (seen.has(key)) { skippedDup++; return; }
+    const nm = preset.name;
+    if (nameIndex.has(nm)) {
+      const idx = nameIndex.get(nm);
+      if (preset.latestEpisode > out[idx].latestEpisode) {
+        out[idx] = preset;   // 用更完整的替换已存的同名条目
+        seen.add(key);
+      }
+      skippedDup++;
+      return;
+    }
+    seen.add(key);
+    nameIndex.set(nm, out.length);
+    out.push(preset);
+    const epNote = preset.latestEpisode
+      ? `更新至 S${preset.latestSeason}E${preset.latestEpisode}`
+      : '（尚未开播）';
+    console.log(`+ ${preset.name} (${preset.regionLabel}) ${epNote}`);
+  }
+
+  // 双通道抓取：animationOnly=true 保留日漫/国漫完整覆盖；false 全量补充真人国产剧/韩剧/日剧
+  async function fetchRegion(region, animationOnly) {
     for (let p = 1; p <= PAGES; p++) {
-      const resp = await tmdbGet('/discover/tv', {
-        language: LANG,
-        page: p,
-        with_genres: GENRE_ANIMATION,
-        with_origin_country: region,
-        sort_by: 'popularity.desc',
-      });
+      const params = { language: LANG, page: p, with_origin_country: region, sort_by: 'popularity.desc' };
+      if (animationOnly) params.with_genres = GENRE_ANIMATION;
+      const resp = await tmdbGet('/discover/tv', params);
       if (!resp.ok) {
-        console.warn(`[discover] ${region} page ${p} 失败: ${resp.status}`);
+        console.warn(`[discover] ${region}${animationOnly ? '(动画)' : '(全量)'} page ${p} 失败: ${resp.status}`);
         continue;
       }
       const items = (resp.body && resp.body.results) || [];
       for (const it of items) {
         if (!it || !it.id) continue;
         const detailResp = await tmdbGet(`/tv/${it.id}`, { language: LANG });
-        if (!detailResp.ok) {
-          skippedDetailFail++;
-          continue;
-        }
-        const detail = detailResp.body;
-        const preset = normalize(detail, region);
-        if (!preset.name) { skippedNoName++; continue; }
-        const key = `${preset.tmdbId}-tv`;
-        if (seen.has(key)) { skippedDup++; continue; }
-        // 同名去重：TMDB 偶有同一番剧多个 id（如凡人修仙传 106449 / 285479），保留 latestEpisode 更高（更完整）的一条
-        const nm = preset.name;
-        if (nameIndex.has(nm)) {
-          const idx = nameIndex.get(nm);
-          if (preset.latestEpisode > out[idx].latestEpisode) {
-            out[idx] = preset;   // 用更完整的替换已存的同名条目
-            seen.add(key);
-          }
-          skippedDup++;
-          continue;
-        }
-        seen.add(key);
-        nameIndex.set(nm, out.length);
-        out.push(preset);
-        const epNote = preset.latestEpisode
-          ? `更新至 S${preset.latestSeason}E${preset.latestEpisode}`
-          : '（尚未开播）';
-        console.log(`+ ${preset.name} (${preset.regionLabel}) ${epNote}`);
+        if (!detailResp.ok) { skippedDetailFail++; continue; }
+        ingest(normalize(detailResp.body, region));
       }
     }
+  }
+
+  for (const region of REGIONS) {
+    await fetchRegion(region, true);   // 动画通道：保日漫/国漫覆盖
+    await fetchRegion(region, false);  // 全量通道：补真人国产剧/韩剧/日剧
   }
 
   // 追加本地补充番剧（避免被 TMDB 每日整体覆盖）
