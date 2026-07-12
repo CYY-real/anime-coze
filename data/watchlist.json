@@ -1,294 +1,45 @@
 [
   {
-    "tmdbId": 209867,
-    "name": "葬送的芙莉莲",
-    "watchedSeason": 1,
-    "watchedEpisode": 20,
-    "latestSeason": 1,
-    "latestEpisode": 28,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "https://www.bilibili.com/bangumi/play/ss2867",
-        "isPrimary": true
-      },
-      {
-        "platform": "tencent",
-        "name": "腾讯视频",
-        "url": ""
-      }
-    ],
-    "updateFrequency": "周更"
-  },
-  {
-    "tmdbId": 120089,
-    "name": "间谍过家家 第二季",
-    "watchedSeason": 2,
-    "watchedEpisode": 5,
-    "latestSeason": 2,
-    "latestEpisode": 12,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "https://www.bilibili.com/bangumi/play/ss42005",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "周日更"
-  },
-  {
     "tmdbId": 106449,
     "name": "凡人修仙传",
     "watchedSeason": 1,
-    "watchedEpisode": 86,
+    "watchedEpisode": 180,
     "latestSeason": 1,
     "latestEpisode": 96,
     "threshold": 5,
     "notifyEnabled": true,
     "lastNotifiedAt": "",
     "lastNotifiedEpisode": 0,
-    "status": "raising",
     "platforms": [
       {
-        "platform": "tencent",
-        "name": "腾讯视频",
-        "url": "https://v.qq.com/x/cover/mzc00200r8j8vut.html",
+        "platform": "bilibili",
+        "name": "哔哩哔哩",
+        "url": "https://www.6789kb.com/play/11502-3-180.html?share_token=972371A7-0040-446D-979C-6F67122C3024",
         "isPrimary": true
       }
     ],
     "updateFrequency": "周更"
   },
   {
-    "tmdbId": 76572,
-    "name": "斗罗大陆",
-    "watchedSeason": 1,
-    "watchedEpisode": 263,
-    "latestSeason": 1,
-    "latestEpisode": 264,
-    "threshold": 10,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "tencent",
-        "name": "腾讯视频",
-        "url": "https://v.qq.com/x/cover/mzc00200m3nqqhp.html",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "周六更"
-  },
-  {
-    "tmdbId": 1429,
-    "name": "进击的巨人 最终季",
-    "watchedSeason": 4,
-    "watchedEpisode": 28,
-    "latestSeason": 4,
-    "latestEpisode": 28,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
-    "tmdbId": 85937,
-    "name": "鬼灭之刃",
-    "watchedSeason": 3,
-    "watchedEpisode": 11,
-    "latestSeason": 3,
-    "latestEpisode": 11,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "https://www.bilibili.com/bangumi/play/ss37172",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
-    "tmdbId": 120092,
-    "name": "孤独摇滚！",
-    "watchedSeason": 1,
-    "watchedEpisode": 12,
-    "latestSeason": 1,
-    "latestEpisode": 12,
-    "threshold": 3,
-    "notifyEnabled": false,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "https://www.bilibili.com/bangumi/play/ss41410",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
-    "tmdbId": 154654,
-    "name": "莉可丽丝",
-    "watchedSeason": 1,
-    "watchedEpisode": 13,
-    "latestSeason": 1,
-    "latestEpisode": 13,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
-    "tmdbId": 197189,
-    "name": "蓝色监狱",
-    "watchedSeason": 1,
-    "watchedEpisode": 24,
-    "latestSeason": 1,
-    "latestEpisode": 24,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "https://www.bilibili.com/bangumi/play/ss43692",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
     "tmdbId": 223911,
     "name": "仙逆",
     "watchedSeason": 1,
-    "watchedEpisode": 20,
+    "watchedEpisode": 130,
     "latestSeason": 1,
     "latestEpisode": 26,
     "threshold": 3,
     "notifyEnabled": true,
     "lastNotifiedAt": "",
     "lastNotifiedEpisode": 0,
-    "status": "raising",
     "platforms": [
       {
         "platform": "tencent",
         "name": "腾讯视频",
-        "url": "",
+        "url": "https://www.rrwei.com/rrwplay/1697-1-131.html?share_token=E2A395FB-BDCF-4C4E-85D9-F54EBD6DDE89",
         "isPrimary": true
       }
     ],
     "updateFrequency": "周更"
-  },
-  {
-    "tmdbId": 120094,
-    "name": "摇曳露营△ 第三季",
-    "watchedSeason": 3,
-    "watchedEpisode": 12,
-    "latestSeason": 3,
-    "latestEpisode": 12,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
-    "tmdbId": 226126,
-    "name": "时光代理人 第二季",
-    "watchedSeason": 2,
-    "watchedEpisode": 12,
-    "latestSeason": 2,
-    "latestEpisode": 12,
-    "threshold": 3,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "https://www.bilibili.com/bangumi/play/ss44753",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
-  },
-  {
-    "tmdbId": 215968,
-    "name": "雾山五行",
-    "watchedSeason": 1,
-    "watchedEpisode": 3,
-    "latestSeason": 1,
-    "latestEpisode": 3,
-    "threshold": 1,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "status": "raising",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": "",
-        "isPrimary": true
-      }
-    ],
-    "updateFrequency": "已完结"
   },
   {
     "tmdbId": 91097,
@@ -311,5 +62,130 @@
       }
     ],
     "updateFrequency": "已完结"
+  },
+  {
+    "tmdbId": 124003,
+    "name": "完美世界",
+    "watchedSeason": 1,
+    "watchedEpisode": 241,
+    "latestSeason": 1,
+    "latestEpisode": 277,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "tencent",
+    "updateFrequency": ""
+  },
+  {
+    "tmdbId": 224839,
+    "name": "遮天",
+    "watchedSeason": 1,
+    "watchedEpisode": 146,
+    "latestSeason": 1,
+    "latestEpisode": 170,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "tencent",
+    "updateFrequency": ""
+  },
+  {
+    "tmdbId": 229192,
+    "name": "沧元图",
+    "watchedSeason": 1,
+    "watchedEpisode": 49,
+    "latestSeason": 1,
+    "latestEpisode": 85,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [],
+    "platform": "",
+    "updateFrequency": ""
+  },
+  {
+    "tmdbId": 228429,
+    "name": "斗罗大陆Ⅱ绝世唐门",
+    "watchedSeason": 1,
+    "watchedEpisode": 0,
+    "latestSeason": 1,
+    "latestEpisode": 161,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "tencent",
+    "updateFrequency": ""
+  },
+  {
+    "tmdbId": 218642,
+    "name": "师兄啊师兄",
+    "watchedSeason": 1,
+    "watchedEpisode": 129,
+    "latestSeason": 1,
+    "latestEpisode": 149,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [
+      {
+        "platform": "youku",
+        "name": "优酷",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "youku",
+    "updateFrequency": ""
+  },
+  {
+    "tmdbId": 259537,
+    "name": "剑来",
+    "watchedSeason": 1,
+    "watchedEpisode": 0,
+    "latestSeason": 2,
+    "latestEpisode": 27,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "tencent",
+    "updateFrequency": ""
   }
 ]
