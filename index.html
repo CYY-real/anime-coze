@@ -1362,27 +1362,10 @@ html,body{
       <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">Gitee 配置（仅用于追剧列表的云同步）</p>
-
-      <div class="settings-group-title">📦 Gitee 云同步</div>
-
-      <div style="margin:4px 0 14px">
-        <div class="setting-item">
-          <label>Gitee Token</label>
-          <input id="giteeToken" type="text" placeholder="Gitee 私人令牌">
-        </div>
-        <div class="setting-item">
-          <label>仓库</label>
-          <input id="giteeRepo" type="text" placeholder="格式：用户名/仓库名">
-        </div>
-        <div class="setting-item">
-          <label>分支</label>
-          <input id="giteeBranch" type="text" value="master">
-        </div>
-      </div>
+      <p class="modal-desc">追剧列表自动同步到 GitHub（无需手动配置）</p>
 
       <div class="settings-help">
-        <b>数据哪里来？</b> <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成并部署到 Cloudflare Pages，加载本地文件即可。
+        追剧列表自动保存到浏览器本地，并同步到 GitHub 仓库 <code>CYY-real/anime-coze</code>，多设备共用同一浏览器即可自动合并。
       </div>
 
       <!-- 其他偏好 -->
@@ -1406,7 +1389,7 @@ html,body{
 // ======================== STATE ========================
 let animeDb = [];
 let watchlist = [];
-let settings = { defaultThreshold: 3, giteeToken: '', giteeRepo: '', giteeBranch: 'master', dataUrl: '', dataSource: '', lastAnimeCount: 0 };
+let settings = { defaultThreshold: 3, dataUrl: '', dataSource: '', lastAnimeCount: 0 };
 let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
@@ -1416,9 +1399,6 @@ let activeSeason = 1;
 function init() {
   const s = localStorage.getItem('anime_coze_settings');
   if (s) { try { Object.assign(settings, JSON.parse(s)); } catch(e) {} }
-  document.getElementById('giteeToken').value = settings.giteeToken || '';
-  document.getElementById('giteeRepo').value = settings.giteeRepo || '';
-  document.getElementById('giteeBranch').value = settings.giteeBranch || 'master';
   document.getElementById('defaultThreshold').value = settings.defaultThreshold;
 
   const saved = localStorage.getItem('anime_coze_watchlist');
@@ -1451,8 +1431,8 @@ function init() {
   }
   renderMylist();
 
-  // 不在启动时自动加载番剧数据。
-  // 番剧库只在用户进入「添加番剧」时按需加载。
+  // 从 GitHub 同步追剧列表（静默，首次不弹 toast）
+  pullWatchlistFromGitHub();
 }
 
 // ======================== TOAST ========================
@@ -2672,164 +2652,72 @@ function wlTouchEnd(e) {
 // ======================== PERSIST (LOCAL) ========================
 function saveWatchlist() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
+  scheduleGhSync();
 }
 
-// ======================== CLOUD SYNC (Gitee API) ========================
-async function syncToCloud() {
-  const token = settings.giteeToken;
-  const repo = settings.giteeRepo;
-  const branch = settings.giteeBranch || 'master';
-  if (!token || !repo) {
-    showToast('请先在设置中配置 Gitee Token 和仓库');
-    openSettingsAndFocus('giteeToken');
-    return;
-  }
+// ======================== GITHUB WATCHLIST SYNC ========================
+// GH_TOKEN 由 GitHub Actions 在部署时替换，无需手动配置
+const GH_TOKEN = '__GH_TOKEN__';
+const GH_OWNER = 'CYY-real';
+const GH_REPO = 'anime-coze';
+const GH_BRANCH = 'main';
+const GH_WATCHLIST_PATH = 'data/watchlist.json';
 
-  const btn = document.getElementById('syncBtn');
-  const orig = btn.textContent;
-  btn.textContent = '⏳ 同步中...';
-  btn.disabled = true;
+let _ghSyncTimer = null;
 
+async function pullWatchlistFromGitHub() {
+  try {
+    const url = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_WATCHLIST_PATH}`;
+    const resp = await fetch(url);
+    if (resp.status === 404) return;
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (!Array.isArray(data)) return;
+    const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
+    data.forEach(cw => { localMap.set(String(cw.tmdbId), cw); });
+    watchlist = Array.from(localMap.values());
+    saveWatchlist();
+    renderMylist();
+    if (data.length) showToast(`☁️ 已加载云端 ${data.length} 条追剧记录`);
+  } catch (e) { /* silent fail - 云端可能还没数据 */ }
+}
+
+async function pushWatchlistToGitHub() {
+  if (!GH_TOKEN || GH_TOKEN === '__GH_TOKEN__' || GH_TOKEN.length < 10) return;
   try {
     const content = JSON.stringify(watchlist, null, 2);
     const base64Content = btoa(unescape(encodeURIComponent(content)));
 
-    const [owner, repoName] = repo.split('/');
-    if (!owner || !repoName) throw new Error('仓库格式应为 owner/repo');
-    const filePath = 'data/watchlist.json';
-    const encodedPath = filePath.split('/').map(p => encodeURIComponent(p)).join('/');
-    const apiBase = `https://gitee.com/api/v5/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}/contents/${encodedPath}`;
-
-    // 1. 读取现有文件，获取 sha（用于覆盖更新）
     let sha = null;
-    const getResp = await fetch(`${apiBase}?access_token=${encodeURIComponent(token)}&ref=${encodeURIComponent(branch)}`);
+    const getUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_WATCHLIST_PATH}`;
+    const getResp = await fetch(getUrl, {
+      headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github+json' },
+    });
     if (getResp.ok) {
       const existing = await getResp.json();
       sha = existing.sha;
-    } else if (getResp.status !== 404) {
-      const err = await getResp.json().catch(() => ({}));
-      throw new Error(err.message || `GET HTTP ${getResp.status}`);
     }
 
-    // 2. 创建/更新文件（Gitee 用 POST）
-    const body = {
-      access_token: token,
-      content: base64Content,
-      message: `update watchlist @ ${new Date().toISOString().slice(0, 10)}`,
-      branch: branch,
-    };
-    if (sha) body.sha = sha;
-
-    const putResp = await fetch(apiBase, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+    const putResp = await fetch(getUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${GH_TOKEN}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/vnd.github+json',
+      },
+      body: JSON.stringify({
+        message: `sync watchlist @ ${new Date().toISOString().slice(0, 10)}`,
+        content: base64Content,
+        sha: sha || undefined,
+        branch: GH_BRANCH,
+      }),
     });
-
-    if (!putResp.ok) {
-      const err = await putResp.json().catch(() => ({}));
-      throw new Error(err.message || `HTTP ${putResp.status}`);
-    }
-
-    showToast(`☁️ 已推送 ${watchlist.length} 部追番到 Gitee`);
-  } catch (e) {
-    showToast('❌ 推送失败: ' + e.message.slice(0, 60));
-    console.error(e);
-  } finally {
-    btn.textContent = orig;
-    btn.disabled = false;
-  }
+  } catch (e) { /* silent */ }
 }
 
-// ======================== PULL FROM CLOUD（从 Gitee 拉取最新 watchlist） ========================
-async function pullFromCloud() {
-  const token = settings.giteeToken;
-  const repo = settings.giteeRepo;
-  const branch = settings.giteeBranch || 'master';
-  if (!token || !repo) {
-    showToast('请先在设置中配置 Gitee Token 和仓库');
-    openSettingsAndFocus('giteeToken');
-    return;
-  }
-
-  const btn = document.getElementById('pullBtn');
-  const orig = btn.textContent;
-  btn.textContent = '⏳ 拉取中...';
-  btn.disabled = true;
-
-  try {
-    const [owner, repoName] = repo.split('/');
-    if (!owner || !repoName) throw new Error('仓库格式应为 owner/repo');
-    const encodedPath = 'data/watchlist.json'.split('/').map(p => encodeURIComponent(p)).join('/');
-    const apiUrl = `https://gitee.com/api/v5/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}/contents/${encodedPath}?access_token=${encodeURIComponent(token)}&ref=${encodeURIComponent(branch)}`;
-
-    const resp = await fetch(apiUrl);
-    if (resp.status === 404) {
-      showToast('☁️ 云端还没有 watchlist.json，先点"推送"上传一份');
-      return;
-    }
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(err.message || `HTTP ${resp.status}`);
-    }
-    const data = await resp.json();
-    // Gitee API 返回的 content 是 base64 编码
-    const content = decodeBase64Utf8(data.content || '');
-    let cloudList;
-    try { cloudList = JSON.parse(content); }
-    catch (e) { throw new Error('云端 watchlist.json 格式无效（不是 JSON 数组）'); }
-    if (!Array.isArray(cloudList)) throw new Error('云端内容不是数组');
-
-    // 数量比对 + 二次确认
-    const localCount = watchlist.length;
-    const cloudCount = cloudList.length;
-    let mode = 'overwrite';
-    if (localCount > 0 && localCount !== cloudCount) {
-      const choice = prompt(
-        `⚠️ 数量不一致：本地 ${localCount} 部 vs 云端 ${cloudCount} 部\n\n` +
-        `输入 1 = 覆盖（用云端替换本地）\n` +
-        `输入 2 = 合并（按 tmdbId 去重，云端优先）\n` +
-        `输入 0 = 取消`,
-        '1'
-      );
-      if (choice === null || choice === '0') { showToast('已取消'); return; }
-      mode = choice === '2' ? 'merge' : 'overwrite';
-    }
-
-    if (mode === 'overwrite') {
-      watchlist = cloudList;
-    } else {
-      const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
-      cloudList.forEach(cw => { localMap.set(String(cw.tmdbId), cw); });
-      watchlist = Array.from(localMap.values());
-    }
-
-    saveWatchlist();
-    renderMylist();
-    renderBrowse();
-    const msg = mode === 'overwrite'
-      ? `⬇️ 已覆盖为云端 ${cloudList.length} 部`
-      : `⬇️ 已合并，本地 ${watchlist.length} 部（云端 ${cloudCount} + 本地独有 ${watchlist.length - cloudCount}）`;
-    showToast(msg);
-  } catch (e) {
-    showToast('❌ 拉取失败: ' + e.message.slice(0, 60));
-    console.error(e);
-  } finally {
-    btn.textContent = orig;
-    btn.disabled = false;
-  }
-}
-
-// base64 解码（支持 UTF-8 中文）
-function decodeBase64Utf8(b64) {
-  try {
-    const binary = atob(b64.replace(/\s+/g, ''));
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return new TextDecoder('utf-8').decode(bytes);
-  } catch (e) {
-    return atob(b64);
-  }
+function scheduleGhSync() {
+  clearTimeout(_ghSyncTimer);
+  _ghSyncTimer = setTimeout(pushWatchlistToGitHub, 3000);
 }
 
 // ======================== IMPORT ========================
@@ -2862,9 +2750,6 @@ function openSettingsAndFocus(fieldId) {
   }, 400);
 }
 function saveSettings() {
-  settings.giteeToken = document.getElementById('giteeToken').value.trim();
-  settings.giteeRepo = document.getElementById('giteeRepo').value.trim();
-  settings.giteeBranch = document.getElementById('giteeBranch').value.trim() || 'master';
   settings.defaultThreshold = parseInt(document.getElementById('defaultThreshold').value) || 3;
   localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
   showToast('✅ 设置已保存');
