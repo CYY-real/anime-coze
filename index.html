@@ -1756,7 +1756,7 @@ function browseCard(a) {
     <div class="card-deco"></div>
     <div class="cover-wrap">
       ${hasCover
-        ? `<img class="cover" src="${esc(a.cover)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
+        ? `<img class="cover" src="${esc(proxyCover(a.cover))}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
         : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
       <div class="cover-glow"></div>
       <div class="cover-status ${status}">${statusText}</div>
@@ -1794,9 +1794,11 @@ function formatEpisode(ep, season) {
 // 计算更新频率文案
 function computeUpdateFrequency(a) {
   if (a.nextAirDate) {
-    // 简化：根据 nextAirDate 推算距今天数
-    const next = new Date(a.nextAirDate);
-    const today = new Date();
+    // 按本地零点解析 nextAirDate：日期串 'YYYY-MM-DD' 直接 new Date 会被当 UTC 零点，
+    // 在 GMT+8 傍晚会把"今天"误算成过去(返回 null 而回退到 updateFrequency)，
+    // 故补 'T00:00:00' 并按本地零点归零 today
+    const next = new Date(a.nextAirDate + 'T00:00:00');
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     const days = Math.round((next - today) / 86400000);
     if (days < 0) return null;
     if (days === 0) return '今日更新';
@@ -2175,7 +2177,7 @@ function openPlatformPopup(tmdbId) {
       <div class="platform-card">
         <div class="platform-card-cover">
           ${hasCover
-            ? `<img src="${esc(cover)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+            ? `<img src="${esc(proxyCover(cover))}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
             : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
           <div class="platform-card-status ${status}">${statusText}</div>
         </div>
@@ -2354,7 +2356,7 @@ function openDetail(tmdbId) {
     <div class="modal-handle"></div>
     <div class="modal-body" style="text-align:center;padding-top:16px">
       ${hasCover
-        ? `<img class="detail-cover" src="${esc(cover)}" loading="lazy" onerror="this.style.display='none'">`
+        ? `<img class="detail-cover" src="${esc(proxyCover(cover))}" loading="lazy" onerror="this.style.display='none'">`
         : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(name||'?').charAt(0)}</div>`}
       <div class="detail-name">${esc(name)}</div>
       <div class="detail-meta">
@@ -2474,6 +2476,15 @@ const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="
 let _watchlistIdDirty = false;
 
 // 统一解析某剧元数据：先查本地剧库(animeDb)，再查实时搜索结果(liveResults)，最后回退到追番条目自带的 meta
+// 封面代理：image.tmdb.org 在国内常被墙/不稳定，统一改走 Cloudflare 边缘代理 /api/img，
+// 浏览器只访问 anime-coze-cyy.pages.dev（国内可达），由 CF 回源拉图。
+function proxyCover(url) {
+  if (!url) return '';
+  if (url.startsWith('/api/img') || url.startsWith('data:') || url.startsWith('./') || url.startsWith('/')) return url;
+  if (url.includes('image.tmdb.org')) return '/api/img?u=' + encodeURIComponent(url);
+  return url;
+}
+
 // 这样实时搜到的剧加进追番后，刷新页面仍能在 animeDb 缺失时还原封面/平台/集数
 function resolveAnime(tmdbId) {
   let a = animeDb.find((x) => String(x.tmdbId) === String(tmdbId));
@@ -2620,7 +2631,7 @@ function renderMylist() {
       <div class="card-deco"></div>
       <div class="cover-wrap">
         ${hasCover
-          ? `<img class="cover" src="${esc(cover)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+          ? `<img class="cover" src="${esc(proxyCover(cover))}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
           : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
         <div class="cover-glow"></div>
         <div class="cover-status ${status}">${statusText}</div>
