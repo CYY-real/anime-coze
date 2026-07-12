@@ -1,5 +1,12 @@
 const PLATFORM_KEYS = ['bilibili', 'tencent', 'iqiyi', 'youku'];
 
+const NAME_MAP = {
+  bilibili: '哔哩哔哩',
+  tencent: '腾讯视频',
+  iqiyi: '爱奇艺',
+  youku: '优酷',
+};
+
 const SEED = {
   '葬送的芙莉莲': ['bilibili'],
   '咒术回战': ['bilibili'],
@@ -124,7 +131,7 @@ function matchPlatforms(name, originalName) {
   for (const c of candidates) {
     const hit = NORM_SEED[c] || ALIAS[c];
     if (hit && hit.length) {
-      return hit.map((platform) => ({ platform, url: '' }));
+      return hit.map((platform) => ({ platform, name: NAME_MAP[platform] || platform, url: '' }));
     }
   }
   const SEED_KEYS = Object.keys(NORM_SEED);
@@ -133,11 +140,11 @@ function matchPlatforms(name, originalName) {
     for (const sk of SEED_KEYS) {
       if (c.includes(sk) || sk.includes(c)) {
         const hit = NORM_SEED[sk];
-        if (hit && hit.length) return hit.map((platform) => ({ platform, url: '' }));
+        if (hit && hit.length) return hit.map((platform) => ({ platform, name: NAME_MAP[platform] || platform, url: '' }));
       }
     }
   }
   return [];
 }
 
-module.exports = { matchPlatforms, SEED, PLATFORM_KEYS };
+module.exports = { matchPlatforms, SEED, PLATFORM_KEYS, NAME_MAP };
