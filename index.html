@@ -1468,7 +1468,8 @@ function switchTab(tab, el) {
   document.body.style.overflow = '';
   // 修复 background-clip:text 渐变在 display:none→显示后不重绘（标题变非渐变）的问题
   document.querySelectorAll('.mylist-title,.browse-title').forEach(t => {
-    t.style.display = 'none'; void t.offsetWidth; t.style.display = '';
+    t.style.display = 'none';
+    requestAnimationFrame(() => requestAnimationFrame(() => { t.style.display = ''; }));
   });
 
   if (tab === 'mylist') {
