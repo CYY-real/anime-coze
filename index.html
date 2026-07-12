@@ -223,6 +223,12 @@ html,body{
   background:var(--bg-soft);color:var(--text-soft);
   box-shadow:none;
 }
+/* 已添加：添加页置灰后的禁用态 */
+.btn-catch.added{
+  background:rgba(150,150,160,0.15);color:var(--text-secondary);
+  box-shadow:none;cursor:default;
+}
+.btn-catch.added:active{transform:none;opacity:1}
 
 /* 状态操作按钮：已完结 / 未开播（独立，不与「去追番」粉紫形成对比） */
 .btn-status{
@@ -322,6 +328,10 @@ html,body{
   user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .anime-card:active{transform:scale(0.985);opacity:.95}
+/* 已添加到「我的番剧」：添加页置灰 */
+.anime-card.in-list{filter:grayscale(.85);opacity:.6}
+.anime-card.in-list:active{transform:none;opacity:.6}
+.anime-card.in-list .cover-glow{box-shadow:inset 0 0 10px rgba(150,150,160,0.2)}
 .anime-card .card-deco{
   position:absolute;top:-15px;right:-15px;
   width:60px;height:60px;border-radius:50%;
@@ -1714,15 +1724,8 @@ function browseCard(a) {
     // 已完结 / 未开播：显示状态 badge
     actionHtml = `<div class="btn-status ${status === 'finished' ? 'finished' : 'unreleased'}">${statusText}</div>`;
   } else if (inList && w) {
-    // 已追番：追更按钮 + 角标
-    if (banked > 0) {
-      actionHtml = `<div class="btn-catch-wrap">
-        <div class="btn-catch" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">追更</div>
-        <div class="catch-badge">+${banked}</div>
-      </div>`;
-    } else {
-      actionHtml = `<div class="btn-catch caughtup" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">✓ 已追完</div>`;
-    }
+    // 已追番：添加页整体置灰，操作区改为「已添加」禁用态
+    actionHtml = `<div class="btn-catch added">已添加</div>`;
   } else {
     // 未追番：+ 追番按钮
     actionHtml = `<div class="btn-catch" onclick="event.stopPropagation();addToList('${a.tmdbId}')">+ 追番</div>`;
@@ -1731,7 +1734,7 @@ function browseCard(a) {
   const cat = a.category || 'anime';
   const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧', jdrama: '日剧' };
   const catBadge = catLabels[cat] || cat;
-  return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">
+  return `<div class="anime-card${inList ? ' in-list' : ''}" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">
     <div class="card-deco"></div>
     <div class="cover-wrap">
       ${hasCover
