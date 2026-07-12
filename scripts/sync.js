@@ -101,7 +101,8 @@ function normalize(it, region) {
 
 async function main() {
   const out = [];
-  const seen = new Set();
+  const seen = new Set();          // tmdbId 去重
+  const nameIndex = new Map();     // name -> 在 out 中的下标，用于同名保留更完整的一条
   let skippedNoName = 0;
   let skippedDetailFail = 0;
   let skippedDup = 0;
@@ -132,7 +133,19 @@ async function main() {
         if (!preset.name) { skippedNoName++; continue; }
         const key = `${preset.tmdbId}-tv`;
         if (seen.has(key)) { skippedDup++; continue; }
+        // 同名去重：TMDB 偶有同一番剧多个 id（如凡人修仙传 106449 / 285479），保留 latestEpisode 更高（更完整）的一条
+        const nm = preset.name;
+        if (nameIndex.has(nm)) {
+          const idx = nameIndex.get(nm);
+          if (preset.latestEpisode > out[idx].latestEpisode) {
+            out[idx] = preset;   // 用更完整的替换已存的同名条目
+            seen.add(key);
+          }
+          skippedDup++;
+          continue;
+        }
         seen.add(key);
+        nameIndex.set(nm, out.length);
         out.push(preset);
         const epNote = preset.latestEpisode
           ? `更新至 S${preset.latestSeason}E${preset.latestEpisode}`
