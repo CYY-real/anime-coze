@@ -651,6 +651,7 @@ html,body{
    ============================================ */
 .browse-header{margin:8px 0 8px}
 .browse-title{
+  display:inline-block;
   font-size:18px;font-weight:800;letter-spacing:.5px;
   background:linear-gradient(135deg,var(--pink),var(--purple));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
@@ -1466,11 +1467,6 @@ function switchTab(tab, el) {
   document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
   document.getElementById('tabMylist').classList.toggle('hidden', tab !== 'mylist');
   document.body.style.overflow = '';
-  // 修复 background-clip:text 渐变在 display:none→显示后不重绘（标题变非渐变）的问题
-  document.querySelectorAll('.mylist-title,.browse-title').forEach(t => {
-    t.style.display = 'none';
-    requestAnimationFrame(() => requestAnimationFrame(() => { t.style.display = ''; }));
-  });
 
   if (tab === 'mylist') {
     renderMylist();
