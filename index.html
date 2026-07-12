@@ -2254,10 +2254,10 @@ function openDetail(tmdbId) {
 // 状态判定：按小程序 processAnimeList 逻辑，但只看 watchlist + animeDb
 function getMylistStatus(w) {
   if (w.status === 'dropped') return 'dropped';
-  // 用 watchlist 自带 latestEpisode（无则用 animeDb 兜底）判断番本身是否已完结
+  // 用 animeDb 的最新数据（每次同步自动更新）判断番本身是否已完结
   const a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
-  const latestEp = (w.latestEpisode != null) ? w.latestEpisode : (a ? a.latestEpisode || 0 : 0);
-  const latestSeason = w.latestSeason || (a ? a.latestSeason || 1 : 1);
+  const latestEp = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
+  const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
   // 多季且所有季都到顶 = 已完结；用 seasonEpisodeCounts
   if (a && a.seasonEpisodeCounts) {
     const totalS = a.totalSeasons || 1;
@@ -2339,9 +2339,9 @@ const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="
 // 跟小程序 processAnimeList 输出对齐（currentEpisode/latestEpisode/status/platforms 等）
 function enrichWatchlistItem(w) {
   const a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
-  // latestEpisode 优先取 watchlist 自带（mock 数据里已经填了），否则取 animeDb
-  const latestEpisode = (w.latestEpisode != null) ? w.latestEpisode : (a ? a.latestEpisode || 0 : 0);
-  const latestSeason = w.latestSeason || (a ? a.latestSeason || 1 : 1);
+  // latestEpisode 优先取 animeDb（每次同步自动更新），watchlist 兜底
+  const latestEpisode = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
+  const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
   // 平台列表：watchlist 优先，animeDb 兜底
   const platforms = (w.platforms && w.platforms.length) ? w.platforms : (a && a.platforms ? a.platforms : []);
   const primaryPlatform = platforms.find(p => p.isPrimary) || platforms[0] || null;
