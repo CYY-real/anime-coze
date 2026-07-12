@@ -1741,7 +1741,6 @@ function browseCard(a) {
         ? `<img class="cover" src="${esc(proxyCover(a.cover))}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
         : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
       <div class="cover-glow"></div>
-      <div class="cover-status ${status}">${statusText}</div>
     </div>
     <div class="anime-info">
       <div class="anime-name">
