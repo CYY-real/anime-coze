@@ -1466,6 +1466,10 @@ function switchTab(tab, el) {
   document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
   document.getElementById('tabMylist').classList.toggle('hidden', tab !== 'mylist');
   document.body.style.overflow = '';
+  // 修复 background-clip:text 渐变在 display:none→显示后不重绘（标题变非渐变）的问题
+  document.querySelectorAll('.mylist-title,.browse-title').forEach(t => {
+    t.style.display = 'none'; void t.offsetWidth; t.style.display = '';
+  });
 
   if (tab === 'mylist') {
     renderMylist();
