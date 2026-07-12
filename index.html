@@ -1392,7 +1392,7 @@ function init() {
   const saved = localStorage.getItem('anime_coze_watchlist');
   if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
   // 同名去重（清理历史遗留的重复番剧，如库里两个"凡人修仙传"导致的双条目）
-  if (dedupeWatchlistByName()) saveWatchlist();
+  if (dedupeWatchlistByName()) saveWatchlistLocal();
   // 载入本机设置（云端同步经 Cloudflare 代理，浏览器不保存任何 Token）
   const savedSettings = localStorage.getItem('anime_coze_settings');
   if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
@@ -1416,7 +1416,7 @@ function init() {
       { tmdbId: 218642, name: '师兄啊师兄', watchedSeason: 1, watchedEpisode: 129, latestSeason: 1, latestEpisode: 149, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'youku',name:'优酷',url:'',isPrimary:true}], platform: 'youku', updateFrequency: '' },
       { tmdbId: 259537, name: '剑来', watchedSeason: 1, watchedEpisode: 0, latestSeason: 2, latestEpisode: 27, threshold: 0, notifyEnabled: true, lastNotifiedAt: '', lastNotifiedEpisode: 0, platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], platform: 'tencent', updateFrequency: '' },
     ];
-    saveWatchlist();
+    saveWatchlistLocal();
   }
   renderMylist();
   // 从 Gitee 同步追剧列表（静默，首次不弹 toast）
@@ -2545,7 +2545,7 @@ function renderMylist() {
   // enrich + 状态筛选 + 搜索过滤
   const enriched = watchlist.map(enrichWatchlistItem);
   // 自愈：若本次纠正了错的 tmdbId，写回 localStorage（下次纯 id 匹配，不再靠名字兜底）
-  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlist(); }
+  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlistLocal(); }
   // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
   let filtered = enriched;
   if (currentMylistFilter === 'all') {
@@ -2651,9 +2651,11 @@ function renderMylist() {
 }
 
 // ======================== PERSIST (LOCAL) ========================
+// 用户单条操作（加/删/改进度/弃番/编辑平台等）保存：本机持久化 + 立即上传 Gitee，
+// 上传期间整页加载动画锁定，结果返回前不可继续操作。
 function saveWatchlist() {
-  localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
-  scheduleSync();
+  saveWatchlistLocal();
+  pushWatchlist(true);
 }
 // 按名字去重追番列表（番剧库偶有同名不同 tmdbId 的条目，避免"我的列表"出现重复番剧）
 // 同名多条时保留：在库内(有正确 tmdbId) 且 latestEpisode 更高的一条
@@ -2707,7 +2709,21 @@ async function pullWatchlist(showMsg = false) {
 }
 
 // 保存追剧记录到 Gitee（经代理）
-async function pushWatchlist() {
+let _uploadingToGitee = false;   // 上传 Gitee 进行中标志（防重入 + 整页锁定）
+// 整页锁定遮罩开关（上传 Gitee 期间禁止继续操作）
+function setUploadLock(on) {
+  const overlay = document.getElementById('uploadBlockOverlay');
+  if (overlay) overlay.classList.toggle('hidden', !on);
+}
+
+// 上传本机追番列表到 Gitee（经 /api/proxy）。
+// block=true（默认）：整页加载动画 + 锁定，结果返回前不可操作；防重入。
+async function pushWatchlist(block = true) {
+  if (block) {
+    if (_uploadingToGitee) return;   // 上一次上传未结束，忽略重复触发
+    _uploadingToGitee = true;
+    setUploadLock(true);
+  }
   try {
     const content = JSON.stringify(watchlist, null, 2);
     const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, {
@@ -2726,6 +2742,8 @@ async function pushWatchlist() {
   } catch (e) {
     console.warn('push watchlist error', e);
     showToast('⚠️ 同步 Gitee 失败，已保留本机');
+  } finally {
+    if (block) { setUploadLock(false); _uploadingToGitee = false; }
   }
 }
 
@@ -2765,7 +2783,7 @@ function markSynced() {
 // 本机保存后 3 秒自动同步到云端
 function scheduleSync() {
   clearTimeout(_syncTimer);
-  _syncTimer = setTimeout(pushWatchlist, 3000);
+  _syncTimer = setTimeout(() => pushWatchlist(true), 3000);
 }
 
 // 仅本机持久化（不触发网络）
@@ -2828,21 +2846,15 @@ function refreshWatchlist() {
 // ======================== UPLOAD (兜底) ========================
 // 手动把本机最新追剧列表上传到 Gitee（经 /api/proxy）。
 // 用于自动 3 秒同步未触发、或想立刻强制覆盖云端时的兜底。
-let _uploadingToGitee = false;
 async function uploadWatchlist() {
-  if (_uploadingToGitee) return;            // 防止重复点击
-  _uploadingToGitee = true;
+  if (_uploadingToGitee) return;            // 已有上传在进行，避免重复点击
   const btn = document.getElementById('uploadBtn');
   const prevText = btn ? btn.textContent : '';
   if (btn) { btn.disabled = true; btn.textContent = '⏳ 上传中'; }
-  const overlay = document.getElementById('uploadBlockOverlay');
-  if (overlay) overlay.classList.remove('hidden');   // 整页锁定，禁止继续操作
   try {
-    await pushWatchlist();                  // 内部已含成功/失败 toast
+    await pushWatchlist(true);              // 内部处理整页锁定/解锁 + 成功失败 toast
   } finally {
-    if (overlay) overlay.classList.add('hidden');    // 返回结果后才解锁
     if (btn) { btn.disabled = false; btn.textContent = prevText; }
-    _uploadingToGitee = false;
   }
 }
 
