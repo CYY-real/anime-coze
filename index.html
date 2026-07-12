@@ -2737,11 +2737,12 @@ async function pushWatchlist(block = true) {
     } else {
       const err = await resp.json().catch(() => ({}));
       console.warn('push watchlist failed', err);
-      showToast('⚠️ 同步 Gitee 失败，已保留本机');
+      const detail = (err && err.error) ? String(err.error).slice(0, 32) : `HTTP ${resp.status}`;
+      showToast(`⚠️ 同步 Gitee 失败（${detail}），已保留本机`);
     }
   } catch (e) {
     console.warn('push watchlist error', e);
-    showToast('⚠️ 同步 Gitee 失败，已保留本机');
+    showToast('⚠️ 同步 Gitee 失败（网络），已保留本机');
   } finally {
     if (block) { setUploadLock(false); _uploadingToGitee = false; }
   }
@@ -2750,9 +2751,10 @@ async function pushWatchlist(block = true) {
 // 合并云端/快照数据到本机（按 tmdbId 去重，云端优先）；仅本机持久化，不回推避免回环
 function mergeWatchlist(data) {
   if (!Array.isArray(data)) return;
-  // 云端为准：直接用云端数据（按 tmdbId 去重），不再保留本地独有条目。
-  // 这样「我的追番」始终等于云端那份，避免旧 mock / 历史本地数据残留。
   const map = new Map();
+  // 1) 先放入本机现有数据（含离线/同步故障期间新增的条目），确保不丢
+  watchlist.forEach(lw => { if (lw && lw.tmdbId != null) map.set(String(lw.tmdbId), lw); });
+  // 2) 再用云端覆盖同名项（跨设备更新优先）；云端没有的本机项保留
   data.forEach(cw => { if (cw && cw.tmdbId != null) map.set(String(cw.tmdbId), cw); });
   watchlist = Array.from(map.values());
   dedupeWatchlistByName();   // 云端按 tmdbId 收口后，再按名字去重，避免同名重复
