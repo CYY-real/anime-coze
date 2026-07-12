@@ -1720,7 +1720,7 @@ function browseCard(a) {
   const status = getStatusForAnime(a);
   const statusText = STATUS_TEXT[status];
   const banked = a.latestEpisode && w ? a.latestEpisode - w.watchedEpisode : 0;
-  const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'));
+  const hasCover = a.cover && (a.cover.startsWith('http://') || a.cover.startsWith('https://') || a.cover.startsWith('/api/img?p=') || a.cover.startsWith('/api/img?u=') || a.cover.startsWith('data:'));
 
   // 平台：取第一个
   const primaryPlatform = (a.platforms && a.platforms[0]) || null;
@@ -2342,7 +2342,7 @@ function openDetail(tmdbId) {
   if (!a && !w) return;
   const name = a ? (a.name || a.displayName || '') : (w ? w.name : '');
   const cover = a ? a.cover : (w ? w.cover : '');
-  const hasCover = cover && (cover.startsWith('http') || cover.startsWith('data:'));
+  const hasCover = cover && (cover.startsWith('http://') || cover.startsWith('https://') || cover.startsWith('/api/img?p=') || cover.startsWith('/api/img?u=') || cover.startsWith('data:'));
   const status = a ? getStatusForAnime(a) : (w.status || 'raising');
   const statusText = STATUS_TEXT[status] || '追番中';
   const platforms = (a ? a.platforms : w ? w.platforms : []) || [];
@@ -2540,7 +2540,7 @@ function enrichWatchlistItem(w) {
     platformName: primaryPlatform ? (primaryPlatform.name || primaryPlatform.platform) : '',
     updateFrequency,
     // 封面是否可用
-    hasCover: !!(a && a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'))),
+    hasCover: !!(a && a.cover && (a.cover.startsWith('http') || a.cover.startsWith('/api/img') || a.cover.startsWith('data:'))),
   };
 }
 
