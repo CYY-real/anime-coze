@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "s001",
+    "userId": "oABC123...",
+    "remindEnabled": true,
+    "remindThreshold": 3,
+    "sortType": "default",
+    "customOrder": [],
+    "subscribeRemaining": 10,
+    "createAt": "2026-06-01T00:00:00Z",
+    "updateAt": "2026-07-10T12:00:00Z"
+  }
+]

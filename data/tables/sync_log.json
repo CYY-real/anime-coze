@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "sl001",
+    "runId": "timer_l5x_abc123",
+    "dailyKey": "syncFromGitee_2026-07-11",
+    "date": "2026-07-11",
+    "type": "syncFromGitee",
+    "triggerType": "timer",
+    "page": 0,
+    "pageSize": 20,
+    "total": 200,
+    "written": 200,
+    "added": 0,
+    "updated": 200,
+    "coverRehosted": 200,
+    "progress": "200/200",
+    "pages": 1,
+    "finished": true,
+    "status": "success",
+    "createTime": "2026-07-11T00:00:00Z",
+    "updatedAt": "2026-07-11T00:05:00Z"
+  }
+]

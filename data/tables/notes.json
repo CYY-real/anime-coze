@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "n001",
+    "userId": "oABC123...",
+    "animeId": "a1b2c3d4",
+    "animeName": "葬送的芙莉莲",
+    "cover": "https://gitee.com/xxx/anime-covers/raw/master/covers/12345.jpg",
+    "type": "episode",
+    "episode": 15,
+    "text": "这集打戏太强了！",
+    "images": [],
+    "date": "2026-06-28",
+    "createAt": "2026-06-28T12:00:00Z",
+    "updateAt": "2026-06-28T12:00:00Z"
+  }
+]

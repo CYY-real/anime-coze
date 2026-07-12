@@ -1,0 +1,71 @@
+name: Fetch TMDB Anime Data
+
+on:
+  schedule:
+    - cron: '0 0,12 * * *'
+  workflow_dispatch:
+    inputs:
+      pages:
+        description: '每个地区抓取页数'
+        required: false
+        default: '2'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      GITEE_ACCESS_TOKEN: ${{ secrets.GITEE_ACCESS_TOKEN }}
+      GITEE_OWNER: ${{ secrets.GITEE_OWNER }}
+      GITEE_REPO: ${{ secrets.GITEE_REPO }}
+      GITEE_BRANCH: master
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run sync
+        run: node scripts/sync.js
+        env:
+          TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
+          TMDB_PAGES: ${{ github.event.inputs.pages || '2' }}
+          GITEE_ACCESS_TOKEN: ${{ secrets.GITEE_ACCESS_TOKEN }}
+          GITEE_OWNER: ${{ secrets.GITEE_OWNER }}
+          GITEE_REPO: ${{ secrets.GITEE_REPO }}
+
+      - name: Pull anime.json from Gitee if local is empty
+        run: |
+          if [ ! -s data/anime.json ]; then
+            echo "data/anime.json 为空，尝试从 Gitee API 拉取..."
+            API_URL="https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO}/contents/data/anime.json?ref=${GITEE_BRANCH}&access_token=${GITEE_ACCESS_TOKEN}"
+            RESP=$(curl -sf "$API_URL")
+            if [ $? -eq 0 ]; then
+              echo "$RESP" | python3 -c "
+import sys,json,base64
+d=json.load(sys.stdin)
+raw=d.get('content','').replace(chr(10),'')
+decoded=base64.b64decode(raw).decode('utf-8')
+with open('data/anime.json','w') as f:
+  f.write(decoded)
+print('已写入 ' + str(len(decoded)) + ' 字节')
+"
+            else
+              echo "从 Gitee 拉取失败，跳过"
+            fi
+          else
+            echo "data/anime.json 已有内容 ($(wc -c < data/anime.json) 字节)"
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/anime.json
+          if git diff --cached --quiet; then
+            echo "没有变化，跳过提交"
+          else
+            git commit -m "chore: update anime.json $(date +%Y-%m-%d)"
+            git push
+          fi

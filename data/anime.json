@@ -1,0 +1,28 @@
+[
+  {
+    "tmdbId": "12345",
+    "name": "葬送的芙莉莲",
+    "displayName": "葬送的芙莉莲",
+    "cover": "https://gitee.com/xxx/anime-covers/raw/master/covers/12345.jpg",
+    "mediaType": "tv",
+    "region": "JP",
+    "regionLabel": "日漫",
+    "latestSeason": 1,
+    "latestEpisode": 28,
+    "totalSeasons": 1,
+    "seasonEpisodeCounts": {
+      "1": 28
+    },
+    "totalEpisodes": 0,
+    "overview": "",
+    "firstAirDate": "2024-03-22",
+    "voteAverage": 0,
+    "originCountry": "",
+    "platforms": [
+      {
+        "name": "bilibili",
+        "link": "https://www.bilibili.com/bangumi/play/ss12345"
+      }
+    ]
+  }
+]

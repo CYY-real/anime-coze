@@ -1,0 +1,11 @@
+[
+  {
+    "_id": "f001",
+    "openid": "oABC123...",
+    "content": "希望能增加按评分排序的功能",
+    "contact": "微信ID",
+    "type": "suggest",
+    "status": "pending",
+    "createAt": "2026-07-01T08:00:00Z"
+  }
+]

@@ -1,0 +1,2874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>追番不迷路 - 配置</title>
+<style>
+/* ============================================
+   🎀 追番不迷路 - 二次元梦幻风格设计系统
+   （移植自原小程序 rpx/2 = px）
+   ============================================ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --pink:#FF6B9D;
+  --pink2:#FF8FB0;
+  --purple:#C44AFF;
+  --blue:#5BCEFA;
+  --green:#00D4AA;
+  --green2:#5CE1C3;
+  --green3:#2BD9B0;
+  --green4:#00B894;
+  --orange:#FF8C00;
+  --yellow:#FFD166;
+  --red:#FF8A8A;
+  --red2:#FFB0B0;
+  --text-primary:#3D2B5E;
+  --text-secondary:#8B7AA8;
+  --text-tertiary:#A8A0B8;
+  --text-faint:#B8B0C8;
+  --text-ghost:#C8C0D8;
+  --text-soft:#B0A8C4;
+  --bg-pink:#FFF0F5;
+  --bg-pink2:#F8F0FF;
+  --bg-purple:#F5E6FF;
+  --bg-blue:#E8F4FF;
+  --bg-pill:#F5F0FF;
+  --bg-card-light:#F8F5FF;
+  --bg-card-softer:#FAF8FF;
+  --bg-placeholder:#F2F0F6;
+  --bg-soft:#F1EDF8;
+  --bg-red-soft:#FFECEC;
+  --border-faint:rgba(196,74,255,0.08);
+  --border-soft:rgba(196,74,255,0.12);
+  --border-mid:rgba(196,74,255,0.20);
+  --border-faint2:rgba(196,74,255,0.15);
+  --shadow-btn:0 4px 16px rgba(255,107,157,0.35);
+  --shadow-card:0 3px 12px rgba(196,74,255,0.07),0 1px 4px rgba(255,107,157,0.03);
+  --shadow-card-hover:0 4px 16px rgba(196,74,255,0.10),0 1px 4px rgba(255,107,157,0.05);
+  --shadow-popup:0 -4px 20px rgba(30,10,50,0.20);
+  --bg-glass:rgba(255,255,255,0.78);
+  --bg-glass-soft:rgba(255,255,255,0.65);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+html,body{
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC","Noto Sans SC",sans-serif;
+  background:linear-gradient(180deg,var(--bg-pink) 0%,var(--bg-purple) 30%,var(--bg-blue) 70%,var(--bg-pink) 100%);
+  background-attachment:fixed;
+  color:var(--text-primary);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-bottom:calc(60px + var(--safe-bottom));
+}
+
+.container{max-width:560px;margin:0 auto;padding:8px 12px 0}
+.hidden{display:none!important}
+
+/* ============================================
+   顶部三色装饰条
+   ============================================ */
+.header-bar{
+  height:3px;border-radius:2px;
+  background:linear-gradient(90deg,var(--pink) 0%,var(--purple) 50%,var(--blue) 100%);
+  margin:0 0 10px;opacity:.7;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 0 4px;position:relative;z-index:auto;
+  background:transparent;
+}
+.header-left{display:flex;align-items:center;gap:4px}
+.header-title{
+  font-size:20px;font-weight:800;letter-spacing:1px;
+  background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.deco-star{display:inline-block;color:var(--yellow);font-size:13px}
+.deco-heart{display:inline-block;color:var(--pink);font-size:12px}
+
+.header-actions{display:flex;align-items:center;gap:6px}
+
+/* ============================================
+   Sub Tabs（对齐小程序）
+   ============================================ */
+.sub-tabs{
+  display:flex;align-items:center;gap:7px;
+  margin:8px 0 10px;flex-wrap:nowrap;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.sub-tab{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:7px 12px;border-radius:12px;
+  font-size:13px;font-weight:500;color:var(--text-secondary);
+  background:rgba(255,255,255,0.65);
+  border:1px solid var(--border-faint);
+  transition:all .2s;flex-shrink:0;cursor:pointer;
+}
+.sub-tab.active{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;border-color:transparent;
+  box-shadow:0 2px 6px rgba(255,107,157,0.30);
+}
+.sub-tab-icon{font-size:12px;line-height:1}
+.tab-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:rgba(255,255,255,0.35);color:var(--purple);
+  font-size:10px;font-weight:700;line-height:1;
+}
+.sub-tab.active .tab-badge{background:rgba(255,255,255,0.3);color:#fff}
+
+.add-anime-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 2px 7px rgba(255,107,157,0.30);
+  flex-shrink:0;margin-left:auto;cursor:pointer;border:none;
+  color:#fff;font-size:18px;font-weight:700;line-height:1;
+}
+.add-anime-btn:active{transform:scale(0.94)}
+
+/* ============================================
+   Buttons（对齐小程序）
+   ============================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 16px;border-radius:25px;
+  border:none;font-size:13px;font-weight:700;cursor:pointer;
+  transition:all .15s;white-space:nowrap;gap:4px;
+  font-family:inherit;letter-spacing:.5px;
+}
+.btn:active{transform:scale(0.97);opacity:.9}
+.btn-primary{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;box-shadow:0 4px 16px rgba(255,107,157,0.30);
+}
+.btn-secondary{
+  background:rgba(255,255,255,0.7);color:var(--purple);
+  border:1px solid var(--border-soft);
+}
+.btn-cancel{
+  background:var(--bg-pill);color:var(--text-secondary);
+  border:none;box-shadow:none;
+}
+.btn-cancel:active{background:#E8E0F5}
+.btn-danger{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;
+}
+.btn-confirm{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  box-shadow:0 3px 10px rgba(255,107,157,0.30);
+}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:20px}
+.btn-xs{padding:4px 10px;font-size:11px;border-radius:15px}
+.btn-ghost{
+  background:transparent;color:var(--text-secondary);
+  border:1px solid var(--text-ghost);
+}
+.btn-icon{
+  width:36px;height:36px;border-radius:50%;
+  padding:0;font-size:18px;
+}
+.btn-block{width:100%;padding:12px 0;font-size:14px;border-radius:25px}
+
+/* ============================================
+   Catch Button（追更按钮，对齐小程序）
+   ============================================ */
+.btn-catch{
+  display:flex;align-items:center;justify-content:center;
+  width:54px;height:28px;border-radius:14px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 2px 6px rgba(255,107,157,0.25);
+  color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;
+  transition:all .15s;
+}
+.btn-catch:active{transform:scale(0.93);opacity:.85}
+.btn-catch.caughtup{
+  background:linear-gradient(135deg,var(--green3),var(--green4));
+  box-shadow:0 2px 6px rgba(0,212,170,0.28);
+}
+.btn-catch.finished{
+  background:var(--bg-soft);color:var(--text-soft);
+  box-shadow:none;
+}
+
+/* 状态操作按钮：已完结 / 未开播（独立，不与「去追番」粉紫形成对比） */
+.btn-status{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:28px;padding:0 12px;border-radius:14px;
+  font-size:12px;font-weight:700;line-height:1;
+}
+.btn-status.finished,.btn-status.unreleased{
+  background:var(--bg-soft);color:var(--text-soft);
+}
+
+.btn-catch-wrap{display:flex;align-items:center;position:relative}
+.catch-badge{
+  position:absolute;top:-7px;right:-7px;
+  display:flex;align-items:center;justify-content:center;
+  min-width:18px;height:16px;padding:0 5px;border-radius:8px;
+  background:var(--orange);color:#fff;
+  font-size:10px;font-weight:700;line-height:1;
+  box-shadow:0 1px 4px rgba(255,140,0,0.35);
+}
+
+/* ============================================
+   Search
+   ============================================ */
+.search-box{position:relative;margin:6px 0 10px}
+.search-box input{
+  width:100%;padding:9px 14px 9px 36px;border-radius:20px;
+  border:1px solid var(--border-faint);background:var(--bg-glass);
+  color:var(--text-primary);font-size:13px;outline:none;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-family:inherit;
+}
+.search-box input:focus{border-color:rgba(196,74,255,0.30)}
+.search-box input::placeholder{color:var(--text-ghost)}
+.search-box .search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  font-size:14px;opacity:.5;pointer-events:none;
+}
+
+/* ============================================
+   Loading
+   ============================================ */
+.loading{text-align:center;padding:50px 16px}
+.spinner{
+  display:inline-block;width:28px;height:28px;
+  border:3px solid rgba(196,74,255,0.15);
+  border-top-color:var(--purple);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================
+   Empty State（对齐小程序 acg-empty）
+   ============================================ */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;
+  padding:60px 16px;
+}
+.empty-state .icon{
+  font-size:48px;margin-bottom:12px;opacity:.5;
+}
+.empty-state .text{
+  font-size:14px;color:var(--text-soft);font-weight:600;
+}
+.empty-state .sub{
+  font-size:12px;color:var(--text-faint);margin-top:4px;
+}
+
+/* ============================================
+   Anime Card（列表模式 - 对齐小程序）
+   ============================================ */
+.anime-list{
+  display:flex;flex-direction:column;gap:10px;
+  padding-bottom:12px;
+}
+.anime-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:var(--shadow-card);
+  position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+  cursor:pointer;
+  /* 长按时不触发文本选择 / 系统菜单 */
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.anime-card:active{transform:scale(0.985);opacity:.95}
+.anime-card .card-deco{
+  position:absolute;top:-15px;right:-15px;
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,107,157,0.05),rgba(196,74,255,0.03));
+  pointer-events:none;
+}
+
+.cover-wrap{
+  position:relative;width:70px;height:90px;
+  border-radius:9px;overflow:hidden;flex-shrink:0;
+}
+.cover{
+  width:100%;height:100%;object-fit:cover;display:block;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+}
+.cover-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  font-size:28px;font-weight:800;
+  color:rgba(196,74,255,0.30);
+}
+.cover-glow{
+  position:absolute;inset:0;border-radius:9px;
+  box-shadow:inset 0 0 10px rgba(255,107,157,0.15);
+  pointer-events:none;
+}
+
+/* 状态徽章 - 封面左上角 */
+.cover-status{
+  position:absolute;top:4px;left:4px;
+  padding:2px 7px;border-radius:6px;
+  font-size:10px;font-weight:600;color:#fff;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  line-height:1.3;
+}
+.cover-status.raising{background:linear-gradient(135deg,rgba(255,107,157,0.85),rgba(255,107,157,0.7))}
+.cover-status.caughtup{background:linear-gradient(135deg,rgba(0,212,170,0.85),rgba(0,212,170,0.7))}
+.cover-status.finished{background:linear-gradient(135deg,rgba(184,176,200,0.85),rgba(184,176,200,0.7))}
+.cover-status.dropped{background:linear-gradient(135deg,rgba(255,138,138,0.85),rgba(255,138,138,0.7))}
+.cover-status.unreleased{background:linear-gradient(135deg,rgba(180,180,200,0.85),rgba(180,180,200,0.7))}
+
+/* 信息区 */
+.anime-info{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+  gap:4px;justify-content:center;
+}
+.anime-name{
+  display:flex;align-items:center;gap:4px;min-width:0;
+  font-size:14px;font-weight:700;color:var(--text-primary);
+  line-height:1.3;
+}
+.anime-name .name-text{
+  min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.go-watch-icon{
+  flex-shrink:0;font-size:11px;opacity:.5;cursor:pointer;
+  transition:opacity .15s;
+}
+.go-watch-icon:hover{opacity:1}
+
+.anime-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.platform-tag{
+  display:inline-flex;align-items:center;gap:4px;
+}
+.platform-icon{
+  width:16px;height:16px;border-radius:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;color:#fff;font-weight:700;line-height:1;
+  flex-shrink:0;
+}
+.platform-name{font-size:11px;color:var(--text-secondary);font-weight:500}
+.platform-tag-pill{
+  display:inline-block;padding:1px 6px;border-radius:4px;
+  background:rgba(196,74,255,0.05);
+  color:var(--text-secondary);font-size:10px;font-weight:500;
+}
+.platform-empty{
+  font-size:10px;color:var(--text-tertiary);
+  background:var(--bg-placeholder);border-radius:4px;
+  padding:2px 6px;line-height:1.4;
+}
+.region-tag{
+  padding:1px 6px;border-radius:4px;
+  font-size:10px;font-weight:600;
+}
+.region-tag.jp{background:rgba(255,107,157,0.10);color:var(--pink)}
+.region-tag.cn{background:rgba(0,212,170,0.10);color:#009977}
+
+.anime-episode-info{
+  font-size:11px;color:var(--text-tertiary);
+  display:flex;flex-direction:column;gap:2px;line-height:1.4;
+}
+.ep-current{color:var(--purple);font-weight:700}
+.anime-schedule{font-size:11px;color:var(--text-faint);font-weight:500}
+
+/* 右侧操作 */
+.anime-actions{
+  flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+}
+
+/* ============================================
+   Watchlist Item（我的追番列表 — 仿小程序 .anime-card）
+   rpx→px: 1rpx=0.5px（750rpx 设计稿）
+   ============================================ */
+.wl-item{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-radius:12px;padding:10px;
+  margin-bottom:10px;
+  box-shadow:0 3px 12px rgba(196,74,255,0.07),0 1px 4px rgba(255,107,157,0.03);
+  border:1px solid rgba(255,255,255,0.9);
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:transform .15s;
+  /* 长按时不触发文本选择 (iOS Safari / Android Chrome 默认会高亮周围文本),
+     同时阻止 iOS 长按弹出系统菜单 (复制/分享) */
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.wl-item:active{transform:scale(0.985);opacity:0.95}
+.wl-item .card-deco{
+  position:absolute;top:-15px;right:-15px;
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,107,157,0.05),rgba(196,74,255,0.03));
+  pointer-events:none;
+}
+
+/* 封面区 */
+.wl-item .cover-wrap{
+  position:relative;flex-shrink:0;
+  width:70px;height:90px;border-radius:9px;overflow:hidden;
+}
+.wl-item .cover{
+  width:100%;height:100%;display:block;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  object-fit:cover;
+}
+.wl-item .cover-placeholder{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  font-size:28px;font-weight:800;color:rgba(196,74,255,0.30);
+}
+.wl-item .cover-glow{
+  position:absolute;inset:0;border-radius:9px;
+  box-shadow:inset 0 0 10px rgba(255,107,157,0.15);pointer-events:none;
+}
+/* 封面状态角标 */
+.wl-item .cover-status{
+  position:absolute;top:4px;left:4px;
+  padding:2px 7px;border-radius:6px;
+  font-size:10px;font-weight:600;color:#fff;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.wl-item .cover-status.raising{background:linear-gradient(135deg,rgba(255,107,157,0.85),rgba(255,107,157,0.7))}
+.wl-item .cover-status.caughtup{background:linear-gradient(135deg,rgba(0,212,170,0.85),rgba(0,212,170,0.7))}
+.wl-item .cover-status.finished{background:linear-gradient(135deg,rgba(184,176,200,0.85),rgba(184,176,200,0.7))}
+.wl-item .cover-status.dropped{background:linear-gradient(135deg,rgba(255,138,138,0.85),rgba(255,138,138,0.7))}
+
+/* 信息区 */
+.wl-item .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.wl-item .anime-name{
+  display:flex;align-items:center;gap:4px;min-width:0;
+  font-size:15px;font-weight:700;color:var(--text-primary);
+}
+.wl-item .anime-name .name-text{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.wl-item .go-watch-icon{
+  flex-shrink:0;width:11px;height:11px;cursor:pointer;opacity:0.7;
+}
+.wl-item .go-watch-icon:hover{opacity:1}
+.wl-item .go-watch-icon:active{opacity:0.55}
+
+/* 平台 tag + 更新频率 */
+.wl-item .anime-meta{
+  display:flex;align-items:center;gap:7px;
+}
+.wl-item .platform-tag{
+  display:inline-flex;align-items:center;gap:4px;
+}
+.wl-item .platform-icon{
+  width:18px;height:18px;border-radius:4px;
+}
+.wl-item .platform-icon-svg{display:flex;align-items:center;justify-content:center;padding:2px}
+.wl-item .platform-icon-svg svg{width:100%;height:100%;display:block}
+.wl-item .platform-icon-tencent,
+.wl-item .platform-icon-youku,
+.wl-item .platform-icon-iqiyi{width:13px;height:13px}
+.wl-item .platform-name{font-size:11px;color:#8B7AA8;font-weight:500}
+.wl-item .platform-empty{
+  font-size:11px;color:#A8A0B8;background:#F2F0F6;
+  border-radius:4px;padding:2px 6px;line-height:1.4;flex-shrink:0;
+}
+.wl-item .anime-schedule{font-size:11px;color:#B8B0C8}
+
+/* 集数信息 */
+.wl-item .anime-episode-info{
+  font-size:11px;color:#A8A0B8;display:flex;flex-direction:column;gap:2px;
+}
+.wl-item .ep-current{color:#C44AFF;font-weight:700}
+
+/* 右侧操作区 */
+.wl-item .anime-actions{
+  flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+}
+.wl-item .btn-catch-wrap{
+  display:flex;align-items:center;position:relative;
+}
+.wl-item .btn-catch{
+  display:flex;align-items:center;justify-content:center;
+  width:54px;height:28px;border-radius:14px;
+  background:linear-gradient(135deg,#FF6B9D,#C44AFF);
+  box-shadow:0 2px 6px rgba(255,107,157,0.25);
+  border:none;cursor:pointer;
+}
+.wl-item .btn-catch:active{transform:scale(0.93);opacity:0.85}
+.wl-item .catch-label{font-size:12px;color:#fff;font-weight:700}
+.wl-item .catch-badge{
+  position:absolute;top:-7px;right:-7px;
+  display:flex;align-items:center;justify-content:center;
+  min-width:20px;height:16px;padding:0 5px;
+  border-radius:8px;background:#FF8C00;color:#fff;
+  font-size:10px;font-weight:700;
+  box-shadow:0 1px 4px rgba(255,140,0,0.35);
+}
+.wl-item .btn-status{
+  flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;
+  min-width:62px;height:28px;padding:0 10px;border-radius:14px;
+  font-size:12px;font-weight:700;box-sizing:border-box;
+  border:none;cursor:pointer;
+}
+.wl-item .btn-status:active{transform:scale(0.94);opacity:0.85}
+.wl-item .btn-status.caughtup{
+  background:linear-gradient(135deg,#2BD9B0,#00B894);color:#fff;
+  box-shadow:0 2px 6px rgba(0,212,170,0.28);
+}
+.wl-item .btn-status.finished{background:#F1EDF8;color:#B0A8C4}
+.wl-item .btn-status.dropped{background:#FFECEC;color:#FF8A8A}
+
+/* 旧的内联控件（不再使用，保留以防兼容） */
+.wl-item .controls{display:none}
+.remove-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:none;background:rgba(255,138,138,0.12);
+  color:var(--red);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+.remove-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
+
+/* ============================================
+   My List Header
+   注：用户要求"不置顶，跟内容一起滚走"——所以不加 sticky/fixed。
+   保持普通文档流即可。
+   ============================================ */
+.mylist-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:8px 0 10px;gap:10px;
+  position:relative;z-index:auto;
+}
+.mylist-header-left{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.mylist-deco-star{font-size:14px}
+.mylist-title{
+  font-size:18px;font-weight:800;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;letter-spacing:.5px;
+}
+.mylist-sub{
+  font-size:11px;color:var(--text-secondary);
+  display:flex;align-items:center;gap:5px;margin-top:2px;
+}
+.mylist-dot{color:var(--text-ghost);font-weight:700}
+.mylist-header-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* ============================================
+   Browse Header & Setup Required
+   ============================================ */
+.browse-header{margin:8px 0 8px}
+.browse-title{
+  font-size:18px;font-weight:800;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.browse-sub{
+  font-size:11px;color:var(--text-secondary);margin-top:2px;
+}
+.setup-required{
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  padding:40px 20px;margin:20px 0;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:var(--shadow-card);
+}
+.setup-required .setup-icon{font-size:42px;margin-bottom:8px;opacity:.7}
+.setup-required .setup-title{
+  font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:6px;
+}
+.setup-required .setup-desc{
+  font-size:12px;color:var(--text-secondary);line-height:1.5;
+  max-width:320px;
+}
+
+/* ============================================
+   Toggle Switch
+   ============================================ */
+.toggle-wrap{display:flex;align-items:center;gap:5px;margin-left:auto}
+.toggle{position:relative;width:36px;height:20px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .slider{
+  position:absolute;inset:0;cursor:pointer;border-radius:10px;
+  background:#D0C8E0;transition:.2s;
+}
+.toggle .slider::before{
+  content:'';position:absolute;left:2px;top:2px;
+  width:16px;height:16px;border-radius:50%;background:#fff;
+  transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,0.1);
+}
+.toggle input:checked+.slider{background:linear-gradient(135deg,var(--pink),var(--purple))}
+.toggle input:checked+.slider::before{transform:translateX(16px)}
+.toggle-label{font-size:11px;color:var(--text-secondary)}
+
+/* ============================================
+   Episode badge (catch count)
+   ============================================ */
+.ep-badge{
+  display:inline-flex;align-items:center;gap:2px;
+  padding:2px 6px;border-radius:6px;
+  font-size:10px;font-weight:700;line-height:1.2;
+}
+.ep-badge.banked{background:#FFE9F1;color:#E8427F}
+.ep-badge.caughtup{background:#E6F8EE;color:#1F9D57}
+
+/* ============================================
+   Source Card (可点击的数据源选择器)
+   ============================================ */
+.source-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;margin:4px 0 10px;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:var(--shadow-card);
+  cursor:pointer;transition:transform .15s;
+}
+.source-card:active{transform:scale(0.985)}
+.source-card .source-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+}
+.source-card .source-info{flex:1;min-width:0}
+.source-card .source-label{
+  font-size:13px;font-weight:700;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.source-card .source-meta{
+  font-size:10px;color:var(--text-secondary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-top:1px;
+}
+.source-card .source-arrow{
+  color:var(--text-ghost);font-size:20px;font-weight:300;
+  flex-shrink:0;
+}
+.source-card.loaded .source-icon{
+  background:linear-gradient(135deg,var(--green),var(--green4));
+}
+.source-card.loaded .source-meta{color:var(--green);font-weight:600}
+
+/* ============================================
+   Source Presets (数据源预设)
+   ============================================ */
+.source-presets{
+  display:flex;flex-direction:column;gap:8px;
+}
+.source-preset{
+  display:flex;align-items:center;gap:12px;
+  padding:12px;
+  background:var(--bg-card-light);
+  border:1px solid var(--border-faint);
+  border-radius:14px;cursor:pointer;
+  transition:all .15s;text-align:left;
+  font-family:inherit;color:inherit;width:100%;
+}
+.source-preset:active{background:#EFE8FA;transform:scale(0.98)}
+.source-preset.active{
+  background:linear-gradient(135deg,rgba(255,107,157,0.08),rgba(196,74,255,0.08));
+  border-color:rgba(196,74,255,0.3);
+}
+.preset-icon{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+}
+.preset-info{flex:1;min-width:0}
+.preset-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+.preset-meta{font-size:10px;color:var(--text-secondary);margin-top:1px;word-break:break-all}
+
+/* ============================================
+   Bottom Nav
+   ============================================ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(56px + var(--safe-bottom));padding-bottom:var(--safe-bottom);
+  background:#fff;border-top:1px solid rgba(196,74,255,0.06);
+  display:flex;z-index:100;
+  box-shadow:0 -2px 20px rgba(196,74,255,0.06);
+}
+.bottom-nav a{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1px;
+  color:var(--text-ghost);text-decoration:none;
+  font-size:10px;font-weight:600;transition:color .15s;
+  cursor:pointer;
+}
+.bottom-nav a.active{color:var(--pink)}
+.bottom-nav a .icon{font-size:22px;line-height:1}
+.bottom-nav a .label{transition:color .15s}
+
+/* ============================================
+   Toast
+   ============================================ */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  padding:10px 20px;border-radius:16px;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.9);
+  font-size:13px;font-weight:600;color:var(--text-primary);
+  z-index:999;box-shadow:var(--shadow-card);
+  transition:opacity .3s;white-space:nowrap;pointer-events:none;
+  max-width:80vw;
+}
+
+/* ============================================
+   Modal - 底部抽屉风格（对齐小程序）
+   ============================================ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(30,10,50,0.45);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  z-index:200;
+  animation:fadeIn .25s;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  position:fixed;left:15px;right:15px;bottom:20px;
+  background:#fff;border-radius:18px 18px 0 0;
+  padding:0;width:auto;max-width:530px;margin:0 auto;
+  max-height:75vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  animation:slideUp .3s cubic-bezier(0.32,0.72,0,1);
+  box-shadow:var(--shadow-popup);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+.modal-handle{
+  width:40px;height:4px;border-radius:2px;
+  background:#E8E0F5;margin:8px auto 0;
+}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px 10px;
+  border-bottom:1px solid var(--bg-pill);
+  flex-shrink:0;
+}
+.modal-title{font-size:16px;font-weight:700;color:var(--text-primary)}
+.modal-close{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--bg-pill);font-size:14px;
+  color:var(--text-ghost);font-weight:600;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;line-height:1;
+}
+.modal-close:active{background:#E8E0F5;color:var(--text-tertiary)}
+.modal-body{
+  padding:14px 18px;overflow-y:auto;
+  flex:1;min-height:0;
+}
+.modal-desc{
+  font-size:12px;color:var(--text-secondary);
+  text-align:center;margin:0 0 12px;
+}
+.modal textarea{
+  width:100%;min-height:140px;padding:12px;
+  border-radius:14px;
+  border:1px solid var(--border-faint);
+  background:var(--bg-card-light);
+  color:var(--text-primary);font-size:12px;
+  font-family:monospace;resize:vertical;outline:none;line-height:1.5;
+}
+.modal textarea:focus{border-color:rgba(196,74,255,0.25)}
+
+.modal-actions{
+  display:flex;gap:10px;padding:10px 18px 18px;
+  flex-shrink:0;border-top:1px solid var(--bg-pill);
+}
+.modal-actions .btn{
+  flex:1;padding:11px 0;font-size:13px;
+  border-radius:25px;
+}
+
+/* ============================================
+   Progress Modal（catch-modal 风格）
+   ============================================ */
+.progress-body{text-align:center;padding:8px 0 0}
+.progress-hint{
+  font-size:12px;color:var(--text-secondary);margin-bottom:14px;
+}
+.progress-input-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;margin:8px 0;
+}
+.progress-input-wrap{
+  background:var(--bg-card-light);border-radius:14px;
+  padding:10px 18px;border:1px solid #E8E0F5;
+}
+.progress-input{
+  width:90px;font-size:32px;font-weight:800;
+  text-align:center;color:var(--purple);
+  background:transparent;border:none;outline:none;
+  font-family:inherit;
+}
+.progress-suffix{
+  font-size:14px;font-weight:600;color:var(--text-primary);
+}
+.progress-reminder{
+  display:block;text-align:center;
+  font-size:11px;color:var(--text-faint);
+  margin:6px 0 8px;
+}
+.progress-catchup{
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 0;margin-top:8px;
+  background:linear-gradient(135deg,rgba(255,107,157,0.06),rgba(196,74,255,0.06));
+  border-radius:14px;font-size:13px;
+  color:var(--purple);font-weight:600;
+  cursor:pointer;border:none;width:100%;
+  font-family:inherit;
+}
+.progress-catchup:active{
+  background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(196,74,255,0.12));
+}
+
+/* 季选择 chip */
+.season-row{
+  display:flex;flex-wrap:wrap;gap:7px;
+  margin-bottom:12px;justify-content:center;
+}
+.season-chip{
+  font-size:12px;font-weight:600;
+  padding:6px 14px;border-radius:15px;
+  color:#6D4BBC;
+  background:rgba(109,75,188,0.08);
+  border:1px solid transparent;cursor:pointer;
+  transition:all .15s;
+  font-family:inherit;
+}
+.season-chip.active{
+  color:#fff;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 2px 7px rgba(196,74,255,0.25);
+}
+
+/* ============================================
+   Platform Popup（仿小程序 platform-popup）
+   ============================================ */
+.platform-card{
+  display:flex;gap:10px;padding:10px;
+  margin-bottom:10px;
+  background:linear-gradient(135deg,rgba(255,107,157,0.04),rgba(196,74,255,0.04));
+  border-radius:10px;
+}
+.platform-card-cover{
+  position:relative;width:60px;height:80px;
+  border-radius:7px;overflow:hidden;flex-shrink:0;
+}
+.platform-card-cover img,
+.platform-card-cover .cover-placeholder{
+  width:100%;height:100%;display:block;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  object-fit:cover;
+}
+.platform-card-cover .cover-placeholder{
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:800;color:rgba(196,74,255,0.25);
+}
+.platform-card-status{
+  position:absolute;top:3px;left:3px;
+  padding:2px 5px;border-radius:4px;
+  font-size:9px;font-weight:600;color:#fff;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.platform-card-status.raising{background:rgba(255,107,157,0.8)}
+.platform-card-status.caughtup{background:rgba(0,212,170,0.8)}
+.platform-card-status.finished{background:rgba(184,176,200,0.8)}
+.platform-card-status.dropped{background:rgba(255,138,138,0.8)}
+.platform-card-info{
+  flex:1;display:flex;flex-direction:column;
+  justify-content:center;gap:4px;min-width:0;
+}
+.platform-card-title{
+  font-size:14px;font-weight:700;color:var(--text-primary);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.platform-card-meta{display:flex;align-items:center;gap:5px}
+.platform-card-platform-icon{
+  width:14px;height:14px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;padding:1px;
+  flex-shrink:0;
+}
+.platform-card-platform-icon svg{width:100%;height:100%;display:block}
+.platform-card-platform-name{font-size:11px;color:#8B7AA8}
+.platform-card-schedule{font-size:11px;color:#B8B0C8}
+.platform-card-episode{font-size:11px;color:#A8A0B8}
+
+.platform-copy-all{
+  display:flex;align-items:center;justify-content:center;
+  gap:5px;padding:11px 0;
+  background:linear-gradient(135deg,rgba(255,107,157,0.06),rgba(196,74,255,0.06));
+  border-radius:10px;margin-bottom:10px;
+  cursor:pointer;border:none;width:100%;
+  font-family:inherit;
+}
+.platform-copy-all:active{
+  background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(196,74,255,0.12));
+}
+.platform-copy-all-icon{font-size:13px}
+.platform-copy-all-text{font-size:13px;font-weight:600;color:#C44AFF}
+
+.platform-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(196,74,255,0.1),transparent);
+  margin-bottom:8px;
+}
+.platform-list{display:flex;flex-direction:column;gap:4px}
+.platform-item{
+  display:flex;align-items:center;gap:7px;
+  padding:10px 9px;border-radius:10px;
+  background:#FAF8FF;
+}
+.platform-item-icon{
+  width:22px;height:22px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;padding:2px;
+  flex-shrink:0;
+}
+.platform-item-icon svg{width:100%;height:100%;display:block}
+.platform-item-name{
+  flex:1;font-size:13px;font-weight:600;color:var(--text-primary);
+}
+.platform-item-actions{display:flex;gap:6px}
+.platform-action-btn.link{
+  padding:5px 11px;border-radius:10px;
+  background:linear-gradient(135deg,#FF6B9D,#C44AFF);
+  font-size:12px;color:#fff;font-weight:600;
+  border:none;cursor:pointer;font-family:inherit;
+}
+.platform-action-btn.link:active{transform:scale(0.94);opacity:0.85}
+/* 无 url 时的"复制链接"按钮 — 用次级配色避免和"去看"撞 */
+.platform-action-btn.copy{
+  padding:5px 11px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(196,74,255,0.10),rgba(255,107,157,0.08));
+  color:#C44AFF;
+  font-size:12px;font-weight:600;
+  border:1px solid rgba(196,74,255,0.18);cursor:pointer;font-family:inherit;
+}
+.platform-action-btn.copy:active{transform:scale(0.94);opacity:0.7}
+.platform-empty-tip{
+  text-align:center;padding:14px 10px;
+  font-size:12px;color:#B0B0C0;
+  background:#FAF8FF;border-radius:10px;
+}
+
+/* ============================================
+   Long-press Action Menu（长按操作菜单）
+   ============================================ */
+.action-menu{
+  position:fixed;left:15px;right:15px;bottom:20px;
+  max-width:530px;margin:0 auto;
+  background:#fff;border-radius:18px 18px 0 0;
+  z-index:201;
+  animation:slideUp .3s cubic-bezier(0.32,0.72,0,1);
+  box-shadow:var(--shadow-popup);
+  overflow:hidden;
+}
+.action-menu-item{
+  display:flex;align-items:center;justify-content:center;
+  padding:18px 0;
+  font-size:15px;font-weight:600;
+  border-bottom:1px solid var(--bg-pill);
+  cursor:pointer;
+  background:transparent;border-left:none;border-right:none;border-top:none;
+  width:100%;font-family:inherit;
+}
+.action-menu-item:last-child{border-bottom:none}
+.action-menu-item:active{background:#F5F0FF}
+.action-menu-item.danger{color:#FF8A8A}
+.action-menu-item.danger:active{background:#FFECEC}
+.action-menu-title{
+  font-size:15px;font-weight:700;color:var(--text-primary);
+  text-align:center;padding:14px 16px 4px;
+  background:linear-gradient(135deg,rgba(196,74,255,0.06),rgba(255,107,157,0.06));
+}
+.action-menu-sub{
+  font-size:11px;color:var(--text-secondary);
+  text-align:center;padding:0 16px 12px;
+  background:linear-gradient(135deg,rgba(196,74,255,0.06),rgba(255,107,157,0.06));
+}
+.action-menu-cancel{
+  margin-top:8px;background:#F5F0FF;color:#8B7AA8;
+}
+
+/* ============================================
+   Edit Platforms Modal（编辑平台 / 链接）
+   ============================================ */
+.ep-empty{
+  text-align:center;padding:18px 0;
+  font-size:12px;color:#B0A0C0;
+  background:#FAF8FF;border-radius:10px;
+}
+.ep-row{
+  background:#FAF8FF;border-radius:12px;
+  padding:10px;margin-bottom:8px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.ep-row-head{
+  display:flex;align-items:center;gap:6px;
+}
+.ep-row-icon{
+  width:22px;height:22px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;padding:2px;
+  flex-shrink:0;
+}
+.ep-row-icon svg{width:100%;height:100%;display:block}
+.ep-platform-select{
+  flex:1;min-width:0;
+  padding:6px 8px;border-radius:8px;
+  border:1px solid rgba(196,74,255,0.12);
+  background:#fff;color:var(--text-primary);
+  font-size:12px;font-weight:600;font-family:inherit;outline:none;
+}
+.ep-platform-select:focus{border-color:var(--purple)}
+.ep-primary-label{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:11px;color:var(--text-secondary);
+  padding:4px 8px;border-radius:8px;
+  background:rgba(196,74,255,0.06);cursor:pointer;
+  flex-shrink:0;
+}
+.ep-primary-label input{accent-color:var(--purple)}
+.ep-del-btn{
+  width:24px;height:24px;border-radius:50%;
+  border:none;background:rgba(255,138,138,0.12);
+  color:#FF8A8A;font-size:12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ep-del-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
+.ep-name-input, .ep-url-input{
+  width:100%;padding:7px 10px;border-radius:8px;
+  border:1px solid rgba(196,74,255,0.10);
+  background:#fff;color:var(--text-primary);
+  font-size:12px;font-family:inherit;outline:none;
+  box-sizing:border-box;
+}
+.ep-name-input:focus, .ep-url-input:focus{border-color:var(--purple)}
+.ep-url-input::placeholder{color:#C8C0D8}
+.ep-add-btn{
+  width:100%;padding:10px 0;
+  background:linear-gradient(135deg,rgba(196,74,255,0.06),rgba(255,107,157,0.06));
+  border:1px dashed rgba(196,74,255,0.25);
+  border-radius:10px;
+  font-size:13px;font-weight:600;color:#C44AFF;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:inherit;margin-top:4px;
+}
+.ep-add-btn:active{background:linear-gradient(135deg,rgba(196,74,255,0.12),rgba(255,107,157,0.12))}
+
+/* ============================================
+   Detail Modal
+   ============================================ */
+.detail-cover{
+  width:120px;height:170px;border-radius:12px;
+  object-fit:cover;margin:0 auto 8px;display:block;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+}
+.detail-name{font-size:16px;font-weight:700;text-align:center;margin-bottom:2px}
+.detail-meta{font-size:12px;color:var(--text-secondary);text-align:center}
+.detail-overview{
+  margin:10px 0;font-size:12px;color:var(--text-secondary);
+  text-align:left;line-height:1.5;
+  max-height:80px;overflow-y:auto;
+}
+.detail-platforms{
+  display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:8px 0;
+}
+.detail-platform-tag{
+  padding:2px 10px;border-radius:10px;
+  background:rgba(196,74,255,0.06);
+  color:var(--purple);font-size:11px;font-weight:600;
+}
+
+/* ============================================
+   Settings Modal
+   ============================================ */
+.setting-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border-faint);
+}
+.setting-item:last-child{border:none}
+.setting-item label{
+  font-size:13px;font-weight:600;color:var(--text-primary);
+  white-space:nowrap;min-width:80px;
+}
+.setting-item input[type=number],.setting-item input[type=text]{
+  flex:1;padding:8px 12px;border-radius:10px;
+  border:1px solid var(--border-faint);
+  background:var(--bg-card-light);
+  color:var(--text-primary);font-size:13px;
+  text-align:center;outline:none;
+  max-width:100px;font-family:inherit;
+}
+.setting-item input[type=text]{
+  text-align:left;max-width:none;
+  font-family:monospace;font-size:12px;
+}
+.setting-item input:focus{border-color:rgba(196,74,255,0.25)}
+.setting-item .status-text{font-size:12px;color:var(--green);font-weight:600}
+
+.settings-group-title{
+  font-size:12px;font-weight:700;color:var(--purple);
+  letter-spacing:.3px;margin:8px 0 6px;
+}
+.settings-help{
+  font-size:11px;color:var(--text-secondary);line-height:1.6;
+  padding:8px 10px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(196,74,255,0.05),rgba(255,107,157,0.05));
+  border:1px solid var(--border-faint);
+  margin:4px 0 8px;
+}
+.settings-help b{color:var(--purple);font-weight:700}
+.settings-help code{
+  font-family:monospace;font-size:10px;
+  background:rgba(196,74,255,0.1);color:var(--purple);
+  padding:1px 4px;border-radius:3px;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar{width:0;height:0}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media(min-width:600px){
+  .container{max-width:640px;padding:8px 16px 0}
+  .modal{left:30px;right:30px;bottom:40px}
+  .anime-card{padding:12px;gap:12px}
+  .cover-wrap{width:80px;height:108px}
+  .anime-name{font-size:15px}
+  .btn-catch{width:60px;height:32px;font-size:13px}
+  .header-title{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 顶部三色装饰条 -->
+  <div class="header-bar"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span class="deco-star">✨</span>
+      <span class="header-title">追番不迷路</span>
+    </div>
+  </div>
+
+  <!-- Content: Browse (list mode) -->
+  <div id="tabBrowse" class="hidden">
+    <div class="browse-header">
+      <div class="browse-title">➕ 添加番剧</div>
+      <div class="browse-sub" id="browseSub">从番剧库中选择要追的番剧</div>
+    </div>
+    <!-- 未加载数据提示 -->
+    <div class="setup-required" id="setupRequired" style="display:none">
+      <div class="setup-icon">🔧</div>
+      <div class="setup-title">需要先选择数据源</div>
+      <div class="setup-desc">请先选择番剧库的数据源，才能浏览并添加番剧。</div>
+      <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="showSourcePicker()">选择数据源</button>
+    </div>
+    <!-- 已配置：搜索 + 列表 -->
+    <div id="browseContent" style="display:none">
+      <!-- 子标签：地区筛选 -->
+      <div class="sub-tabs" id="browseFilters">
+        <span class="sub-tab active" data-bfilter="all" onclick="switchBrowseFilter(this)">🌐 全部</span>
+        <span class="sub-tab" data-bfilter="JP" onclick="switchBrowseFilter(this)">🌸 日漫</span>
+        <span class="sub-tab" data-bfilter="CN" onclick="switchBrowseFilter(this)">🎋 国漫</span>
+      </div>
+      <!-- 搜索 -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input id="browseSearchInput" placeholder="搜索番剧名称..." oninput="debounceBrowseSearch()">
+      </div>
+      <div id="browseList" class="anime-list"></div>
+    </div>
+  </div>
+
+  <!-- Content: My List -->
+  <div id="tabMylist">
+    <div class="mylist-header">
+      <div class="mylist-header-left">
+        <span class="mylist-deco-star">✨</span>
+        <div class="mylist-title">我的追番</div>
+      </div>
+      <div class="mylist-header-actions">
+        <button class="btn btn-secondary btn-sm" onclick="showImport()" title="从 JSON 导入追番列表">📥 导入</button>
+        <button class="btn btn-secondary btn-sm" onclick="pullFromCloud()" id="pullBtn" title="从 GitHub 仓库拉取最新的 watchlist.json 覆盖本地">⬇️ 拉取</button>
+        <button class="btn btn-primary btn-sm" onclick="syncToCloud()" id="syncBtn" title="把追番列表保存到 GitHub 仓库的 data/watchlist.json，下次换设备可同步拉取">
+          ☁️ 推送
+        </button>
+      </div>
+    </div>
+
+    <!-- My list status filters（仿小程序：全部 / 追番中 / 已追完） -->
+    <div class="sub-tabs" id="mylistFilters">
+      <span class="sub-tab active" data-mfilter="all" onclick="switchMylistFilter(this)">
+        <span class="sub-tab-icon">📋</span><span>全部</span>
+        <span class="tab-badge" id="badgeMylistAll" style="display:none">0</span>
+      </span>
+      <span class="sub-tab" data-mfilter="raising" onclick="switchMylistFilter(this)">
+        <span class="sub-tab-icon">🌸</span><span>追番中</span>
+        <span class="tab-badge" id="badgeMylistRaising" style="display:none">0</span>
+      </span>
+      <span class="sub-tab" data-mfilter="caughtup" onclick="switchMylistFilter(this)">
+        <span class="sub-tab-icon">🌿</span><span>已追完</span>
+        <span class="tab-badge" id="badgeMylistCaughtup" style="display:none">0</span>
+      </span>
+      <span class="add-anime-btn" onclick="switchTab('browse', document.querySelectorAll('.bottom-nav a')[1])" title="添加番剧">
+        <span class="add-anime-icon">+</span>
+      </span>
+    </div>
+
+    <!-- My list search -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="mylistSearchInput" placeholder="在我的追番中搜索..." oninput="renderMylist()">
+    </div>
+    <div id="mylistList" class="anime-list"></div>
+  </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="#" class="active" onclick="switchTab('mylist',this)">
+    <span class="icon">⭐</span>
+    <span class="label">我的追番</span>
+  </a>
+  <a href="#" onclick="switchTab('browse',this)">
+    <span class="icon">➕</span>
+    <span class="label">添加番剧</span>
+  </a>
+  <a href="#" onclick="showSettings()">
+    <span class="icon">⚙️</span>
+    <span class="label">设置</span>
+  </a>
+</nav>
+
+<!-- Toast -->
+<div id="toast" class="toast" style="opacity:0"></div>
+
+<!-- Import Modal -->
+<div id="importModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('importModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📥 导入追番列表</div>
+      <button class="modal-close" onclick="closeModal('importModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">粘贴从另一份配置导出的 JSON 数据</p>
+      <textarea id="importText" placeholder='[{"tmdbId":12345,"name":"葬送的芙莉莲","watchedEpisode":20,...}]'></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal('importModal')">取消</button>
+      <button class="btn btn-primary" onclick="doImport()">导入并覆盖</button>
+    </div>
+  </div>
+</div>
+
+<!-- Source Picker Modal -->
+<div id="sourceModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('sourceModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📂 选择数据源</div>
+      <button class="modal-close" onclick="closeModal('sourceModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">选择数据源后立即加载——本地文件由 GitHub Actions 自动更新</p>
+
+      <div class="source-presets">
+        <button class="source-preset" data-preset="local" onclick="pickSource('local')">
+          <div class="preset-icon">🗂️</div>
+          <div class="preset-info">
+            <div class="preset-name">本地文件</div>
+            <div class="preset-meta">./data/anime.json（无需联网）</div>
+          </div>
+        </button>
+        <button class="source-preset" data-preset="github" onclick="pickSource('github')">
+          <div class="preset-icon">🐙</div>
+          <div class="preset-info">
+            <div class="preset-name">GitHub Raw</div>
+            <div class="preset-meta">raw.githubusercontent.com/{owner}/{repo}/{branch}/data/anime.json</div>
+          </div>
+        </button>
+
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">自定义 URL</div>
+        <div class="setting-item" style="padding:6px 0">
+          <input id="customUrl" type="text" placeholder="粘贴任意 anime.json URL">
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top:8px" onclick="loadCustomUrl()">加载此 URL</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal('sourceModal')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settingsModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">⚙️ 设置</div>
+      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">GitHub 仓库配置与默认偏好</p>
+
+      <div class="settings-group-title">📦 GitHub 仓库（用于同步追番列表）</div>
+      <div class="settings-help">
+        <b>Token 怎么拿？</b> GitHub → 右上角头像 → <b>Settings</b> → <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b>，勾选 <code>Contents</code> 读写权限。
+      </div>
+      <div style="margin:4px 0 14px">
+        <div class="setting-item">
+          <label>GitHub Token</label>
+          <input id="ghToken" type="text" placeholder="ghp_...">
+        </div>
+        <div class="setting-item">
+          <label>仓库</label>
+          <input id="ghRepo" type="text" value="CYY-real/anime-coze" placeholder="格式：用户名/仓库名">
+        </div>
+        <div class="setting-item">
+          <label>分支</label>
+          <input id="ghBranch" type="text" value="main">
+        </div>
+      </div>
+
+      <div class="settings-help">
+        <b>数据哪里来？</b> 番剧库 <code>data/anime.json</code> 由 GitHub Actions 定时拉取 TMDB 生成，部署到 Cloudflare Pages 后可直接用「本地文件」加载，也可通过 <code>raw.githubusercontent.com</code> 加载。
+      </div>
+
+      <!-- 其他偏好 -->
+      <div class="settings-group-title" style="margin-top:14px">⚙️ 默认偏好</div>
+      <div style="margin:4px 0">
+        <div class="setting-item">
+          <label>默认阈值</label>
+          <input id="defaultThreshold" type="number" value="3" min="1" max="20">
+          <span style="font-size:12px;color:var(--text-secondary)">集（追番时新加剧集的默认提醒阈值）</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">关闭</button>
+      <button class="btn btn-primary" onclick="saveSettings();closeModal('settingsModal')">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ======================== STATE ========================
+let animeDb = [];
+let watchlist = [];
+let settings = { defaultThreshold: 3, ghToken: '', ghRepo: 'CYY-real/anime-coze', ghBranch: 'main', dataUrl: '', dataSource: '', lastAnimeCount: 0 };
+let currentBrowseFilter = 'all'; // 地区筛选: all / JP / CN
+let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
+let searchTimer;
+let activeSeason = 1;
+
+// ======================== INIT ========================
+function init() {
+  const s = localStorage.getItem('anime_coze_settings');
+  if (s) { try { Object.assign(settings, JSON.parse(s)); } catch(e) {} }
+  document.getElementById('ghToken').value = settings.ghToken || '';
+  document.getElementById('ghRepo').value = settings.ghRepo || 'CYY-real/anime-coze';
+  document.getElementById('ghBranch').value = settings.ghBranch || 'main';
+  document.getElementById('defaultThreshold').value = settings.defaultThreshold;
+
+  const saved = localStorage.getItem('anime_coze_watchlist');
+  if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
+  else {
+    // 首次访问：注入 mock 追番数据，方便看效果
+    // 字段说明：
+    //   - latestEpisode / latestSeason: 番剧库最新集数（用于"更新至E12"展示）
+    //   - updateFrequency: "周更" / "日更" / "已完结" 等
+    //   - platform: 主平台 key (bilibili/tencent/iqiyi/youku)
+    //   - platforms[]: 完整平台列表（用于平台弹窗）— 每条 {platform, name, url, isPrimary}
+    //   - url: 该平台"去看"链接（留空 → 降级为"复制链接"按钮）
+    watchlist = [
+      { tmdbId: 209867, name: '葬送的芙莉莲',       watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 28, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss2867',isPrimary:true},{platform:'tencent',name:'腾讯视频',url:''}], updateFrequency: '周更' },
+      { tmdbId: 120089, name: '间谍过家家 第二季',  watchedSeason: 2, watchedEpisode: 5,  latestSeason: 2, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss42005',isPrimary:true}], updateFrequency: '周日更' },
+      { tmdbId: 215966, name: '凡人修仙传',         watchedSeason: 1, watchedEpisode: 86, latestSeason: 1, latestEpisode: 96, threshold: 5, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200r8j8vut.html',isPrimary:true}], updateFrequency: '周更' },
+      { tmdbId: 100088, name: '斗罗大陆',           watchedSeason: 1, watchedEpisode: 263,latestSeason: 1, latestEpisode: 264,threshold: 10,notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'https://v.qq.com/x/cover/mzc00200m3nqqhp.html',isPrimary:true}], updateFrequency: '周六更' },
+      { tmdbId: 1429,   name: '进击的巨人 最终季',  watchedSeason: 4, watchedEpisode: 28, latestSeason: 4, latestEpisode: 28, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 85937,  name: '鬼灭之刃',           watchedSeason: 3, watchedEpisode: 11, latestSeason: 3, latestEpisode: 11, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss37172',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 120092, name: '孤独摇滚！',         watchedSeason: 1, watchedEpisode: 12, latestSeason: 1, latestEpisode: 12, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss41410',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 154654, name: '莉可丽丝',           watchedSeason: 1, watchedEpisode: 13, latestSeason: 1, latestEpisode: 13, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 197189, name: '蓝色监狱',           watchedSeason: 1, watchedEpisode: 24, latestSeason: 1, latestEpisode: 24, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss43692',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 220678, name: '仙逆',               watchedSeason: 1, watchedEpisode: 20, latestSeason: 1, latestEpisode: 26, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'tencent',name:'腾讯视频',url:'',isPrimary:true}], updateFrequency: '周更' },
+      { tmdbId: 120094, name: '摇曳露营△ 第三季',  watchedSeason: 3, watchedEpisode: 12, latestSeason: 3, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 226126, name: '时光代理人 第二季',  watchedSeason: 2, watchedEpisode: 12, latestSeason: 2, latestEpisode: 12, threshold: 3, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'https://www.bilibili.com/bangumi/play/ss44753',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 215968, name: '雾山五行',           watchedSeason: 1, watchedEpisode: 3,  latestSeason: 1, latestEpisode: 3,  threshold: 1, notifyEnabled: true,  lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'raising', platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+      { tmdbId: 200167, name: '灵笼',               watchedSeason: 1, watchedEpisode: 16, latestSeason: 1, latestEpisode: 16, threshold: 3, notifyEnabled: false, lastNotifiedAt: '', lastNotifiedEpisode: 0, status: 'dropped',  platforms: [{platform:'bilibili',name:'哔哩哔哩',url:'',isPrimary:true}], updateFrequency: '已完结' },
+    ];
+    saveWatchlist();
+  }
+  renderMylist();
+
+  // 不在启动时自动加载番剧数据。
+  // 番剧库只在用户进入「添加番剧」时按需加载。
+}
+
+// ======================== TOAST ========================
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.style.opacity = '0', 2200);
+}
+
+// ======================== TAB SWITCH ========================
+function switchTab(tab, el) {
+  document.querySelectorAll('.bottom-nav a').forEach(a => a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
+  document.getElementById('tabMylist').classList.toggle('hidden', tab !== 'mylist');
+  document.body.style.overflow = '';
+
+  if (tab === 'mylist') {
+    renderMylist();
+  } else if (tab === 'browse') {
+    initBrowseTab();
+  }
+}
+
+// 初始化「添加番剧」tab：选择数据源 + 加载数据
+function isValidGitHubConfig() {
+  if (!settings.ghToken || settings.ghToken.length < 20) return false;
+  if (!settings.ghRepo || !/^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_.-]+$/.test(settings.ghRepo)) return false;
+  if (!settings.ghBranch) return false;
+  return true;
+}
+
+function initBrowseTab() {
+  const setupRequired = document.getElementById('setupRequired');
+  const browseContent = document.getElementById('browseContent');
+  const browseSub = document.getElementById('browseSub');
+  const setupDesc = setupRequired.querySelector('.setup-desc');
+
+  if (animeDb.length > 0) { renderBrowse(); return; }
+
+  // 不再要求必须配 GitHub token 才能浏览——数据源直接在 source picker 里选
+  setupRequired.style.display = 'none';
+  browseContent.style.display = '';
+  browseSub.textContent = '选择数据源加载番剧库';
+
+  showSourcePicker();
+}
+
+function buildGitHubRawUrl() {
+  return `https://raw.githubusercontent.com/${settings.ghRepo}/${settings.ghBranch || 'main'}/data/anime.json`;
+}
+
+// 关闭添加番剧页并打开设置
+function closeTabAndOpenSettings() {
+  switchTab('mylist', document.querySelector('.bottom-nav a'));
+  showSettings();
+}
+
+// ======================== FILTERS ========================
+// 浏览页：地区筛选
+function switchBrowseFilter(el) {
+  document.querySelectorAll('#browseFilters .sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentBrowseFilter = el.dataset.bfilter;
+  renderBrowse();
+}
+
+// 我的追番：状态筛选
+function switchMylistFilter(el) {
+  document.querySelectorAll('#mylistFilters .sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentMylistFilter = el.dataset.mfilter;
+  renderMylist();
+}
+
+// ======================== SEARCH ========================
+function debounceSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const mylistVisible = !document.getElementById('tabMylist').classList.contains('hidden');
+    if (mylistVisible) renderMylist();
+    else renderBrowse();
+  }, 200);
+}
+
+// ======================== LOAD ANIME JSON ========================
+// 加载 anime.json（供 source picker / 手动 URL 复用）
+//  接受参数：{ url?, source? }  至少传一个
+async function loadAnime(opts = {}) {
+  const url = (opts.url || settings.dataUrl || '').trim();
+  if (!url) { showToast('请先选择数据源'); return; }
+  // 写入设置
+  settings.dataUrl = url;
+  settings.dataSource = opts.source || settings.dataSource || 'custom';
+  localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
+
+  // 更新 source card 显示
+  updateSourceCard(url, '⏳ 加载中…');
+
+  const list = document.getElementById('browseList');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在加载番剧库...</p></div>';
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    if (!Array.isArray(data)) throw new Error('数据格式异常（需为 JSON 数组）');
+    animeDb = data;
+    updateBadges();
+    renderBrowse();
+    updateSourceCard(url, `✅ ${animeDb.length} 部番剧`);
+    settings.lastAnimeCount = animeDb.length;
+    localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
+    showToast(`✨ 已加载 ${animeDb.length} 部番剧`);
+  } catch (e) {
+    // 加载失败：保留旧数据（如果有），但显示明确错误
+    list.innerHTML = '<div class="empty-state"><div class="icon">😵</div><p class="text">加载番剧库失败</p><p class="sub">' + esc(e.message) + '</p><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="initBrowseTab()">重试</button></div>';
+    updateSourceCard(url, '❌ ' + e.message.slice(0, 40), true);
+    showToast('❌ 加载失败：' + e.message.slice(0, 40));
+  }
+}
+
+// 更新 source card 状态展示
+function updateSourceCard(url, metaText, isError = false) {
+  const card = document.getElementById('sourceCard');
+  const icon = document.getElementById('sourceIcon');
+  const label = document.getElementById('sourceLabel');
+  const meta = document.getElementById('sourceMeta');
+  if (!card) return;
+
+  const source = settings.dataSource || 'custom';
+  const sourceMap = {
+    local: { icon: '🗂️', name: '本地文件' },
+    github: { icon: '🐙', name: 'GitHub Raw' },
+    custom: { icon: '🔗', name: '自定义 URL' },
+  };
+  const cfg = sourceMap[source] || sourceMap.custom;
+  icon.textContent = cfg.icon;
+  label.textContent = cfg.name;
+
+  if (url) {
+    meta.textContent = metaText || url;
+    card.classList.add('loaded');
+  } else {
+    meta.textContent = '点此选择或粘贴 anime.json URL';
+    card.classList.remove('loaded');
+  }
+  if (isError) {
+    meta.style.color = 'var(--red)';
+  } else {
+    meta.style.color = '';
+  }
+}
+
+// 显示数据源选择器
+function showSourcePicker() {
+  // 高亮当前选中的预设
+  document.querySelectorAll('.source-preset').forEach(b => {
+    b.classList.toggle('active', b.dataset.preset === (settings.dataSource || 'custom'));
+  });
+  // 预填自定义 URL
+  document.getElementById('customUrl').value = settings.dataUrl || '';
+  openModal('sourceModal');
+}
+
+function pickSource(kind) {
+  let url = '';
+  if (kind === 'local') {
+    url = './data/anime.json';
+  } else if (kind === 'github') {
+    const repo = settings.ghRepo || 'CYY-real/anime-coze';
+    const branch = settings.ghBranch || 'main';
+    url = `https://raw.githubusercontent.com/${repo}/${branch}/data/anime.json`;
+  }
+  closeModal('sourceModal');
+  loadAnime({ url, source: kind });
+}
+
+// 加载自定义 URL
+function loadCustomUrl() {
+  const url = document.getElementById('customUrl').value.trim();
+  if (!url) { showToast('请粘贴 URL'); return; }
+  closeModal('sourceModal');
+  loadAnime({ url, source: 'custom' });
+}
+
+// ======================== STATUS ========================
+function getStatusForAnime(a) {
+  if (!a.latestEpisode || a.latestEpisode === 0) return 'unreleased';
+  if (a.totalEpisodes && a.latestEpisode >= a.totalEpisodes) return 'finished';
+  return 'raising';
+}
+
+const STATUS_TEXT = {
+  raising: '追番中', caughtup: '已追完', finished: '已完结',
+  dropped: '已弃番', unreleased: '未开播'
+};
+
+// 平台品牌色（来自原小程序 utils/platform.wxs）
+const PLATFORM_INFO = {
+  bilibili: { name: '哔哩哔哩', short: 'B', color: '#FB7299' },
+  tencent:  { name: '腾讯视频', short: '腾', color: '#FF7028' },
+  iqiyi:    { name: '爱奇艺',   short: '奇', color: '#00BE06' },
+  youku:    { name: '优酷',     short: '优', color: '#1492FF' },
+  migu:     { name: '咪咕',     short: 'M', color: '#FF4F4F' },
+  bilibili_intl: { name: 'B站国际', short: 'B', color: '#FB7299' },
+};
+
+function updateBadges() {
+  // 浏览页 badge：显示 JP / CN 数量
+  const all = animeDb.length;
+  const jp = animeDb.filter(a => a.region === 'JP').length;
+  const cn = animeDb.filter(a => a.region === 'CN').length;
+  const tabs = document.querySelectorAll('#browseFilters .sub-tab');
+  tabs.forEach(t => {
+    const f = t.dataset.bfilter;
+    let count = 0;
+    if (f === 'all') count = all;
+    else if (f === 'JP') count = jp;
+    else if (f === 'CN') count = cn;
+    let badge = t.querySelector('.tab-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'tab-badge';
+      t.appendChild(badge);
+    }
+    if (count > 0) {
+      badge.style.display = '';
+      badge.textContent = count;
+    } else {
+      badge.style.display = 'none';
+    }
+  });
+}
+
+function updateMylistBadges() {
+  // 我的追番 badge：按各状态统计（与 getMylistStatus 保持一致）
+  // 全部 = 排除 dropped + finished（与小程序一致）
+  const total = watchlist.length;
+  const enriched = watchlist.map(enrichWatchlistItem);
+  const allCount = enriched.filter(it => it.status !== 'dropped' && it.status !== 'finished').length;
+  const counts = {
+    all: allCount,
+    raising: enriched.filter(it => it.status === 'raising').length,
+    caughtup: enriched.filter(it => it.status === 'caughtup' || it.status === 'finished').length,
+  };
+  const tabs = document.querySelectorAll('#mylistFilters .sub-tab');
+  tabs.forEach(t => {
+    const f = t.dataset.mfilter;
+    const c = counts[f] || 0;
+    const badge = t.querySelector('.tab-badge');
+    if (badge) {
+      if (c > 0) {
+        badge.style.display = '';
+        badge.textContent = c;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  });
+}
+
+// ======================== RENDER BROWSE (list) ========================
+function renderBrowse() {
+  const q = (document.getElementById('browseSearchInput')?.value || '').trim().toLowerCase();
+  let items = animeDb;
+  if (q) items = items.filter(a => (a.name || '').toLowerCase().includes(q));
+  // 地区筛选
+  if (currentBrowseFilter !== 'all') items = items.filter(a => a.region === currentBrowseFilter);
+
+  const list = document.getElementById('browseList');
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">未找到匹配的番剧</p><p class="sub">试试其他关键词或地区</p></div>';
+    return;
+  }
+  list.innerHTML = items.map(a => {
+    const inList = watchlist.some(w => String(w.tmdbId) === String(a.tmdbId));
+    const w = inList ? watchlist.find(w => String(w.tmdbId) === String(a.tmdbId)) : null;
+    const status = getStatusForAnime(a);
+    const statusText = STATUS_TEXT[status];
+    const banked = a.latestEpisode && w ? a.latestEpisode - w.watchedEpisode : 0;
+    const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'));
+
+    // 平台：取第一个
+    const primaryPlatform = (a.platforms && a.platforms[0]) || null;
+    const platformInfo = primaryPlatform ? PLATFORM_INFO[primaryPlatform.platform] : null;
+
+    // 更新频率：从 nextAirDate 推断（仅 raising 显示）
+    const updateFreq = computeUpdateFrequency(a);
+
+    // 右侧操作：追番状态
+    let actionHtml;
+    if (status === 'finished' || status === 'unreleased') {
+      // 已完结 / 未开播：显示状态 badge
+      actionHtml = `<div class="btn-status ${status === 'finished' ? 'finished' : 'unreleased'}">${statusText}</div>`;
+    } else if (inList && w) {
+      // 已追番：追更按钮 + 角标
+      const isCaughtup = banked <= 0;
+      if (banked > 0) {
+        actionHtml = `<div class="btn-catch-wrap">
+          <div class="btn-catch" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">追更</div>
+          <div class="catch-badge">+${banked}</div>
+        </div>`;
+      } else {
+        actionHtml = `<div class="btn-catch caughtup" onclick="event.stopPropagation();openProgress('${a.tmdbId}')">✓ 已追完</div>`;
+      }
+    } else {
+      // 未追番：+ 追番按钮
+      actionHtml = `<div class="btn-catch" onclick="event.stopPropagation();addToList('${a.tmdbId}')">+ 追番</div>`;
+    }
+
+    return `<div class="anime-card" onclick="event.stopPropagation();openDetail('${a.tmdbId}')" oncontextmenu="event.preventDefault();showBrowseActionMenu('${a.tmdbId}')" ontouchstart="browseTouchStart(event,'${a.tmdbId}')" ontouchend="browseTouchEnd(event)" ontouchmove="browseTouchEnd(event)">
+      <div class="card-deco"></div>
+      <div class="cover-wrap">
+        ${hasCover
+          ? `<img class="cover" src="${esc(a.cover)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
+          : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
+        <div class="cover-glow"></div>
+        <div class="cover-status ${status}">${statusText}</div>
+      </div>
+      <div class="anime-info">
+        <div class="anime-name">
+          <span class="name-text">${esc(a.name || a.displayName || '')}</span>
+          ${primaryPlatform ? `<span class="go-watch-icon" title="点击查看播放平台" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">🔗</span>` : ''}
+        </div>
+        <div class="anime-meta">
+          ${platformInfo
+            ? `<span class="platform-tag">
+                <span class="platform-icon" style="background:${platformInfo.color}">${platformInfo.short}</span>
+                <span class="platform-name">${esc(platformInfo.name)}</span>
+              </span>`
+            : `<span class="platform-empty">暂无平台</span>`}
+          ${updateFreq ? `<span class="anime-schedule">${updateFreq}</span>` : ''}
+        </div>
+        <div class="anime-episode-info">
+          ${w ? `<span class="ep-current">追至${formatEpisode(w.watchedEpisode, w.watchedSeason)}</span>` : ''}
+          <span>${a.latestEpisode ? '更新至' + formatEpisode(a.latestEpisode, a.latestSeason) : '暂无更新'}</span>
+        </div>
+      </div>
+      <div class="anime-actions">${actionHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+// 格式化集数显示（S1 E20 / E20）
+function formatEpisode(ep, season) {
+  if (season && season > 1) return ` S${season} E${ep} `;
+  return ` E${ep} `;
+}
+
+// 计算更新频率文案
+function computeUpdateFrequency(a) {
+  if (a.nextAirDate) {
+    // 简化：根据 nextAirDate 推算距今天数
+    const next = new Date(a.nextAirDate);
+    const today = new Date();
+    const days = Math.round((next - today) / 86400000);
+    if (days < 0) return null;
+    if (days === 0) return '今日更新';
+    if (days === 1) return '明日更新';
+    if (days <= 7) return `${days}天后更新`;
+  }
+  if (a.updateFrequency) return a.updateFrequency + '更新';
+  return null;
+}
+
+// ======================== RENDER BROWSE (list) ========================// ======================== ADD / REMOVE ========================
+function addToList(tmdbId) {
+  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!a) return;
+  if (watchlist.some(w => String(w.tmdbId) === String(tmdbId))) {
+    showToast('已在追番列表中');
+    return;
+  }
+  watchlist.push({
+    tmdbId: Number(tmdbId),
+    name: a.name || a.displayName || '',
+    watchedSeason: 1,
+    watchedEpisode: 0,
+    latestSeason: a.latestSeason || 1,
+    latestEpisode: a.latestEpisode || 0,
+    threshold: settings.defaultThreshold,
+    notifyEnabled: true,
+    lastNotifiedAt: '',
+    lastNotifiedEpisode: 0,
+    // platforms: 保留 url 字段（来自 anime.json.platforms[].url 或空字符串）
+    platforms: (a.platforms || []).map((p, i) => ({
+      platform: p.platform,
+      name: p.name || p.platform,
+      url: p.url || '',
+      isPrimary: p.isPrimary || i === 0,
+    })),
+    platform: a.platforms && a.platforms[0] ? a.platforms[0].platform : '',
+    updateFrequency: '',
+  });
+  saveWatchlist();
+  renderBrowse();
+  renderMylist();
+  showToast(`✨ 已添加「${a.name}」`);
+}
+
+function removeFromList(tmdbId) {
+  const a = watchlist.find(w => String(w.tmdbId) === String(tmdbId));
+  watchlist = watchlist.filter(w => String(w.tmdbId) !== String(tmdbId));
+  saveWatchlist();
+  renderBrowse();
+  renderMylist();
+  showToast(`已移除「${a ? a.name : ''}」`);
+}
+
+// ======================== ACTION MENU（长按弹出的操作菜单） ========================
+function showActionMenu(tmdbId) {
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!w) return;
+  const isDropped = w.status === 'dropped';
+  // 移除已存在的
+  document.getElementById('actionMenu')?.remove();
+  document.getElementById('actionMenuOverlay')?.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'actionMenuOverlay';
+  overlay.className = 'modal-overlay';
+  overlay.onclick = closeActionMenu;
+  document.body.appendChild(overlay);
+
+  const menu = document.createElement('div');
+  menu.id = 'actionMenu';
+  menu.className = 'action-menu';
+  menu.innerHTML = `
+    <button class="action-menu-item" onclick="closeActionMenu();openProgress('${tmdbId}')">📺 更新进度</button>
+    <button class="action-menu-item" onclick="closeActionMenu();openPlatformPopup('${tmdbId}')">🎬 平台 / 去看</button>
+    <button class="action-menu-item" onclick="closeActionMenu();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
+    <button class="action-menu-item" onclick="closeActionMenu();openDetail('${tmdbId}')">📄 查看详情</button>
+    ${isDropped
+      ? `<button class="action-menu-item" onclick="closeActionMenu();restoreFromDropped('${tmdbId}')">♻️ 恢复追番</button>`
+      : `<button class="action-menu-item" onclick="closeActionMenu();markDropped('${tmdbId}')">💔 标记弃番</button>`}
+    <button class="action-menu-item danger" onclick="closeActionMenu();confirmRemove('${tmdbId}')">🗑️ 移除追番</button>
+    <button class="action-menu-item action-menu-cancel" onclick="closeActionMenu()">取消</button>
+  `;
+  document.body.appendChild(menu);
+}
+function closeActionMenu() {
+  document.getElementById('actionMenu')?.remove();
+  document.getElementById('actionMenuOverlay')?.remove();
+}
+
+// 浏览页（添加番剧）长按操作菜单
+function showBrowseActionMenu(tmdbId) {
+  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!a) return;
+  const inList = watchlist.some(w => String(w.tmdbId) === String(tmdbId));
+  closeActionMenu();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'actionMenuOverlay';
+  overlay.className = 'modal-overlay';
+  overlay.onclick = closeActionMenu;
+  document.body.appendChild(overlay);
+
+  const menu = document.createElement('div');
+  menu.id = 'actionMenu';
+  menu.className = 'action-menu';
+  const platforms = (a.platforms || []).map(p => p.platform).join('、') || '暂无';
+  menu.innerHTML = `
+    <div class="action-menu-title">${esc(a.name)}</div>
+    <div class="action-menu-sub">📍 ${platforms}</div>
+    ${inList
+      ? `<button class="action-menu-item" onclick="closeActionMenu();openProgress('${tmdbId}')">📺 更新进度</button>
+         <button class="action-menu-item" onclick="closeActionMenu();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
+         <button class="action-menu-item danger" onclick="closeActionMenu();removeFromList('${tmdbId}')">🗑️ 移除追番</button>`
+      : `<button class="action-menu-item" onclick="closeActionMenu();addToList('${tmdbId}')">➕ 加入追番</button>
+         <button class="action-menu-item" onclick="closeActionMenu();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>`}
+    <button class="action-menu-item" onclick="closeActionMenu();openDetail('${tmdbId}')">📄 查看详情</button>
+    <button class="action-menu-item action-menu-cancel" onclick="closeActionMenu()">取消</button>
+  `;
+  document.body.appendChild(menu);
+}
+
+// 浏览页长按支持
+let _browseTouchTimer = null;
+function browseTouchStart(e, tmdbId) {
+  clearTimeout(_browseTouchTimer);
+  _browseTouchTimer = setTimeout(() => {
+    if (navigator.vibrate) navigator.vibrate(30);
+    showBrowseActionMenu(tmdbId);
+  }, 500);
+}
+function browseTouchEnd(e) {
+  clearTimeout(_browseTouchTimer);
+}
+function confirmRemove(tmdbId) {
+  if (confirm('确定要从追番列表中移除吗？\n（这只是本地移除，不会影响番剧库）')) {
+    removeFromList(tmdbId);
+  }
+}
+function markDropped(tmdbId) {
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  watchlist[idx].status = 'dropped';
+  saveWatchlist();
+  renderMylist();
+  showToast('💔 已弃番');
+}
+function restoreFromDropped(tmdbId) {
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  watchlist[idx].status = 'raising';
+  saveWatchlist();
+  renderMylist();
+  showToast('♻️ 已恢复追番');
+}
+
+// ======================== EDIT PLATFORMS（编辑平台 / 链接） ========================
+// 一个番剧可挂多个平台（bilibili / tencent / iqiyi / youku / migu / 自定义）
+// 每个平台有：name（显示名）、url（"去看"链接，留空则降级为"复制链接"）、isPrimary（主平台，决定卡片上显示哪个）
+function editPlatforms(tmdbId) {
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  const w = watchlist[idx];
+  if (!Array.isArray(w.platforms)) w.platforms = [];
+
+  document.getElementById('editPlatformsModal')?.remove();
+
+  // 平台下拉选项
+  const knownKeys = Object.keys(PLATFORM_BRAND);
+  const optionsHtml = knownKeys.map(k =>
+    `<option value="${k}">${PLATFORM_BRAND[k].name}</option>`
+  ).join('');
+
+  function buildRows() {
+    if (w.platforms.length === 0) {
+      return '<div class="ep-empty">还没有平台，点下方"添加平台"</div>';
+    }
+    return w.platforms.map((p, i) => {
+      const brand = PLATFORM_BRAND[p.platform];
+      const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
+      const color = brand ? brand.color : '#8B7AA8';
+      const isPrimary = p.isPrimary ? 'checked' : '';
+      return `<div class="ep-row" data-idx="${i}">
+        <div class="ep-row-head">
+          <span class="ep-row-icon">${logo}</span>
+          <select class="ep-platform-select" onchange="epChangePlatform(${i}, this.value)">
+            ${knownKeys.map(k => `<option value="${k}" ${k===p.platform?'selected':''}>${PLATFORM_BRAND[k].name}</option>`).join('')}
+            ${!knownKeys.includes(p.platform) && p.platform ? `<option value="${esc(p.platform)}" selected>${esc(p.name||p.platform)}</option>` : ''}
+          </select>
+          <label class="ep-primary-label" title="设为主平台（卡片上显示）">
+            <input type="radio" name="ep-primary" ${isPrimary} onchange="epSetPrimary(${i})">
+            <span>主</span>
+          </label>
+          <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
+        </div>
+        <input class="ep-name-input" placeholder="平台显示名（可留空用默认）" value="${esc(p.name||'')}" onchange="epChangeName(${i}, this.value)">
+        <input class="ep-url-input" placeholder="去看的链接（可留空，留空则点"复制链接"）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
+      </div>`;
+    }).join('');
+  }
+
+  const div = document.createElement('div');
+  div.id = 'editPlatformsModal';
+  div.className = 'modal-overlay';
+  div.onclick = function(e) { if (e.target === this) epClose(false); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">✏️ 编辑平台 · ${esc(w.name || '')}</div>
+      <button class="modal-close" onclick="epClose(false)">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">一个番剧可挂多个平台。设置链接后，卡片"平台 / 去看"可直接跳转；留空则点"复制链接"。</p>
+      <div id="epList">${buildRows()}</div>
+      <button class="ep-add-btn" onclick="epAddRow()">
+        <span style="font-size:16px;line-height:1">＋</span> 添加平台
+      </button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="epClose(false)">取消</button>
+      <button class="btn btn-primary" onclick="epClose(true)">保存</button>
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+  window._epIdx = idx; // 保存当前编辑的 watchlist index
+}
+
+// 平台编辑弹窗的 CRUD 助手（直接操作 watchlist + 局部重渲染）
+window._epIdx = -1;
+function epChangePlatform(rowIdx, newKey) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  const p = w.platforms[rowIdx];
+  if (!p) return;
+  p.platform = newKey;
+  // 切到已知平台时，自动用品牌名作为默认 name
+  if (PLATFORM_BRAND[newKey] && !p.name) p.name = PLATFORM_BRAND[newKey].name;
+  epRefreshList();
+}
+function epChangeName(rowIdx, val) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  if (w.platforms[rowIdx]) w.platforms[rowIdx].name = val.trim();
+}
+function epChangeUrl(rowIdx, val) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  if (w.platforms[rowIdx]) w.platforms[rowIdx].url = val.trim();
+}
+function epSetPrimary(rowIdx) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  w.platforms.forEach((p, i) => { p.isPrimary = (i === rowIdx); });
+  // 同步到 watchlist[].platform（主平台 key）
+  w.platform = w.platforms[rowIdx].platform || '';
+  epRefreshList();
+}
+function epDeleteRow(rowIdx) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  const wasPrimary = w.platforms[rowIdx] && w.platforms[rowIdx].isPrimary;
+  w.platforms.splice(rowIdx, 1);
+  // 删的是主平台 → 把第一个降级为主
+  if (wasPrimary && w.platforms[0]) {
+    w.platforms[0].isPrimary = true;
+    w.platform = w.platforms[0].platform || '';
+  }
+  epRefreshList();
+}
+function epAddRow() {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  // 找第一个未用的 known key
+  const used = new Set(w.platforms.map(p => p.platform));
+  const candidate = Object.keys(PLATFORM_BRAND).find(k => !used.has(k)) || 'bilibili';
+  const newRow = {
+    platform: candidate,
+    name: PLATFORM_BRAND[candidate].name,
+    url: '',
+    isPrimary: w.platforms.length === 0, // 第一个自动主
+  };
+  w.platforms.push(newRow);
+  if (newRow.isPrimary) w.platform = candidate;
+  epRefreshList();
+}
+function epRefreshList() {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  const list = document.getElementById('epList');
+  if (!list) return;
+  // 重渲染（保留输入焦点麻烦，干脆整体刷新；用户少改时问题不大）
+  // 为减少体验损失，只在非输入状态时刷新
+  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT')) return;
+  // 简单重写
+  const knownKeys = Object.keys(PLATFORM_BRAND);
+  if (w.platforms.length === 0) {
+    list.innerHTML = '<div class="ep-empty">还没有平台，点下方"添加平台"</div>';
+    return;
+  }
+  list.innerHTML = w.platforms.map((p, i) => {
+    const brand = PLATFORM_BRAND[p.platform];
+    const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
+    const color = brand ? brand.color : '#8B7AA8';
+    const isPrimary = p.isPrimary ? 'checked' : '';
+    return `<div class="ep-row" data-idx="${i}">
+      <div class="ep-row-head">
+        <span class="ep-row-icon">${logo}</span>
+        <select class="ep-platform-select" onchange="epChangePlatform(${i}, this.value)">
+          ${knownKeys.map(k => `<option value="${k}" ${k===p.platform?'selected':''}>${PLATFORM_BRAND[k].name}</option>`).join('')}
+        </select>
+        <label class="ep-primary-label" title="设为主平台（卡片上显示）">
+          <input type="radio" name="ep-primary" ${isPrimary} onchange="epSetPrimary(${i})">
+          <span>主</span>
+        </label>
+        <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
+      </div>
+      <input class="ep-name-input" placeholder="平台显示名（可留空用默认）" value="${esc(p.name||'')}" onchange="epChangeName(${i}, this.value)">
+      <input class="ep-url-input" placeholder="去看的链接（可留空）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
+    </div>`;
+  }).join('');
+}
+function epClose(save) {
+  if (save) {
+    const w = watchlist[window._epIdx];
+    if (w) {
+      // 清理空平台（既没 name 也没 url）
+      w.platforms = w.platforms.filter(p => (p.name && p.name.trim()) || (p.url && p.url.trim()) || p.platform);
+      // 确保至少有一个 isPrimary
+      if (w.platforms.length > 0 && !w.platforms.some(p => p.isPrimary)) {
+        w.platforms[0].isPrimary = true;
+        w.platform = w.platforms[0].platform;
+      } else if (w.platforms.length === 0) {
+        w.platform = '';
+      }
+      saveWatchlist();
+      renderMylist();
+      showToast('✅ 平台已保存');
+    }
+  }
+  document.getElementById('editPlatformsModal')?.remove();
+  window._epIdx = -1;
+}
+
+// ======================== PLATFORM POPUP（仿小程序 platform-popup） ========================
+function openPlatformPopup(tmdbId) {
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!w) return;
+  const enriched = enrichWatchlistItem(w);
+  const { name, cover, status, currentEpisode, latestEpisode, platforms, platform, platformName, updateFrequency, hasCover } = enriched;
+  const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+  const seasonMulti = enriched.latestSeason > 1 || enriched.currentSeason > 1;
+  const currentLabel = seasonMulti
+    ? `S${enriched.currentSeason}·E${currentEpisode}`
+    : (currentEpisode ? `第${currentEpisode}集` : '-');
+  const latestLabel = seasonMulti
+    ? `S${enriched.latestSeason}·E${latestEpisode}`
+    : (latestEpisode ? `第${latestEpisode}集` : '?');
+  const platBrand = platform ? PLATFORM_BRAND[platform] : null;
+  const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
+  const platColor = platBrand ? platBrand.color : '#8B7AA8';
+  const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+
+  // 过滤有效平台
+  const validPlatforms = platforms.filter(p => p && p.platform);
+
+  // 平台列表 HTML
+  // 按钮逻辑：
+  //   - 有 url → "去看"（直接打开）
+  //   - 无 url → "复制链接"（复制搜索 URL + 剧名到剪贴板）
+  const platformListHtml = validPlatforms.length === 0
+    ? '<div class="platform-empty-tip">该番暂无平台信息<br>点上方"复制搜索词"去各平台搜</div>'
+    : `<div class="platform-list">${validPlatforms.map(p => {
+        const brand = PLATFORM_BRAND[p.platform] || null;
+        const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
+        const color = brand ? brand.color : '#8B7AA8';
+        const pName = p.name || (brand ? brand.name : p.platform);
+        const pUrl = (p.url || '').trim();
+        // 按钮：有 url 直接跳转；无 url 复制搜索 URL
+        const btnHtml = pUrl
+          ? `<button class="platform-action-btn link" onclick="window.open('${esc(pUrl)}','_blank','noopener')">去看</button>`
+          : `<button class="platform-action-btn copy" onclick="copyPlatformLink('${esc(p.platform)}','${esc(w.name || '')}')">复制链接</button>`;
+        return `<div class="platform-item">
+          <span class="platform-item-icon">${logo}</span>
+          <span class="platform-item-name">${esc(pName)}</span>
+          <div class="platform-item-actions">${btnHtml}</div>
+        </div>`;
+      }).join('')}</div>`;
+
+  // 移除已存在的
+  document.getElementById('platformPopup')?.remove();
+
+  const div = document.createElement('div');
+  div.id = 'platformPopup';
+  div.className = 'modal-overlay';
+  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">🎬 ${esc(name || '')}</div>
+      <button class="modal-close" onclick="document.getElementById('platformPopup')?.remove()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="platform-card">
+        <div class="platform-card-cover">
+          ${hasCover
+            ? `<img src="${esc(cover)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+            : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
+          <div class="platform-card-status ${status}">${statusText}</div>
+        </div>
+        <div class="platform-card-info">
+          <div class="platform-card-title">${esc(name || '')}</div>
+          <div class="platform-card-meta">
+            ${platform
+              ? `<span class="platform-card-platform-icon">${platLogo}</span>
+                 <span class="platform-card-platform-name">${esc(platLabel)}</span>`
+              : '<span class="platform-card-platform-name">暂无平台</span>'}
+            ${updateFrequency ? `<span class="platform-card-schedule">· ${esc(updateFrequency)}</span>` : ''}
+          </div>
+          <div class="platform-card-episode">
+            <span style="color:#C44AFF;font-weight:700">追至${currentLabel || '-'}</span>
+            · 更新至${latestLabel}
+          </div>
+        </div>
+      </div>
+      <button class="platform-copy-all" onclick="copyPlatformSearch('${esc(name || '')}')">
+        <span class="platform-copy-all-icon">🔍</span>
+        <span class="platform-copy-all-text">复制搜索词到剪贴板</span>
+      </button>
+      <div class="platform-divider"></div>
+      ${platformListHtml}
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+}
+
+// 复制搜索词
+function copyPlatformSearch(name) {
+  if (!name) return;
+  copyToClipboard(name, '📋 已复制「' + name + '」');
+}
+
+// 复制平台搜索链接（无 url 时的兜底）
+function copyPlatformLink(platform, name) {
+  const searchPrefix = PLATFORM_SEARCH_URL[platform] || 'https://www.bing.com/search?q=';
+  const url = searchPrefix + encodeURIComponent(name || '');
+  copyToClipboard(url, '🔗 已复制 ' + (PLATFORM_BRAND[platform] ? PLATFORM_BRAND[platform].name : platform) + ' 搜索链接');
+}
+
+function copyToClipboard(text, successMsg) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast(successMsg), () => fallbackCopy(text, successMsg));
+  } else {
+    fallbackCopy(text, successMsg);
+  }
+}
+function fallbackCopy(text, successMsg) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast(successMsg); }
+  catch (e) { showToast('❌ 复制失败，请手动选中'); }
+  document.body.removeChild(ta);
+}
+
+// ======================== PROGRESS MODAL (catch-modal style) ========================
+function openProgress(tmdbId) {
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!w) return;
+  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  const enriched = enrichWatchlistItem(w);
+  const { latestEpisode, latestSeason, currentSeason } = enriched;
+
+  // 多季支持：优先用 watchlist.latestSeason，否则用 animeDb.seasonEpisodeCounts 长度
+  const seasonCounts = a && a.seasonEpisodeCounts ? a.seasonEpisodeCounts : null;
+  const totalSeasons = Math.max(
+    latestSeason || 1,
+    currentSeason || 1,
+    seasonCounts ? Object.keys(seasonCounts).length : 1
+  );
+
+  // 每季最新集数（用于"更新至"展示）
+  const seasonLatest = (s) => {
+    if (s === latestSeason) return latestEpisode;
+    if (seasonCounts && seasonCounts[String(s)]) return seasonCounts[String(s)];
+    if (seasonCounts && seasonCounts[s]) return seasonCounts[s];
+    return 0;
+  };
+
+  // 季选择 chip
+  const seasonChips = [];
+  for (let i = 1; i <= totalSeasons; i++) {
+    seasonChips.push(`<button class="season-chip ${i === currentSeason ? 'active' : ''}" data-season="${i}" onclick="pickSeason(${i})">第${i}季</button>`);
+  }
+
+  activeSeason = currentSeason || 1;
+  const activeLatest = seasonLatest(activeSeason) || latestEpisode;
+  const banked = activeLatest ? activeLatest - w.watchedEpisode : 0;
+
+  const div = document.createElement('div');
+  div.className = 'modal-overlay';
+  div.id = 'progressModal';
+  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📺 ${esc(w.name)}</div>
+      <button class="modal-close" onclick="document.getElementById('progressModal')?.remove()">✕</button>
+    </div>
+    <div class="modal-body progress-body">
+      <p class="progress-hint">更新你的追番进度</p>
+      ${totalSeasons > 1 ? `<div class="season-row" id="seasonRow">${seasonChips.join('')}</div>` : ''}
+      <div class="progress-input-row">
+        <span class="progress-suffix">已看到</span>
+        <div class="progress-input-wrap">
+          <input id="popupEpisode" type="number" min="0" max="${activeLatest || 999}" value="${w.watchedEpisode}" class="progress-input">
+        </div>
+        <span class="progress-suffix">集</span>
+      </div>
+      ${activeLatest ? `<span class="progress-reminder">最新 ${activeLatest} 集 · 存了 ${Math.max(0, banked)} 集</span>` : ''}
+      ${banked > 0 ? `<button class="progress-catchup" onclick="document.getElementById('popupEpisode').value=${activeLatest};showToast('⚡ 已追到最新')">⚡ 已追到最新</button>` : ''}
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="document.getElementById('progressModal')?.remove()">取消</button>
+      <button class="btn btn-primary" onclick="saveProgress('${tmdbId}')">保存</button>
+    </div>
+  </div>`;
+  document.body.style.overflow = 'hidden';
+  document.body.appendChild(div);
+  setTimeout(() => {
+    const inp = document.getElementById('popupEpisode');
+    if (inp) { inp.focus(); inp.select(); }
+  }, 400);
+}
+
+// 弹窗移除时恢复滚动（click 事件兜底）
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.modal-overlay') && e.target === e.currentTarget) {
+    setTimeout(() => {
+      if (!document.querySelector('.modal-overlay:not(.hidden)')) {
+        document.body.style.overflow = '';
+      }
+    }, 50);
+  }
+});
+
+function pickSeason(s) {
+  activeSeason = s;
+  document.querySelectorAll('.season-chip').forEach(c => {
+    c.classList.toggle('active', Number(c.dataset.season) === s);
+  });
+}
+
+function saveProgress(tmdbId) {
+  const ep = parseInt(document.getElementById('popupEpisode').value);
+  if (isNaN(ep) || ep < 0) { showToast('请输入有效集数'); return; }
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  watchlist[idx].watchedEpisode = ep;
+  if (activeSeason) watchlist[idx].watchedSeason = activeSeason;
+  // status 不再由 saveProgress 计算，由 enrichWatchlistItem 动态算（只保留 dropped）
+  if (watchlist[idx].status !== 'dropped') delete watchlist[idx].status;
+  saveWatchlist();
+  document.getElementById('progressModal')?.remove();
+  renderBrowse();
+  renderMylist();
+  showToast('✅ 进度已更新');
+}
+
+// ======================== ANIME DETAIL ========================
+function openDetail(tmdbId) {
+  const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!a) return;
+  const inList = watchlist.some(w => String(w.tmdbId) === String(tmdbId));
+  const w = inList ? watchlist.find(w => String(w.tmdbId) === String(tmdbId)) : null;
+  const status = getStatusForAnime(a);
+  const statusText = STATUS_TEXT[status];
+  const platforms = a.platforms || [];
+  const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'));
+
+  const div = document.createElement('div');
+  div.className = 'modal-overlay';
+  div.id = 'detailModal';
+  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-body" style="text-align:center;padding-top:16px">
+      ${hasCover
+        ? `<img class="detail-cover" src="${esc(a.cover)}" onerror="this.style.display='none'">`
+        : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(a.name||'?').charAt(0)}</div>`}
+      <div class="detail-name">${esc(a.name || a.displayName || '')}</div>
+      <div class="detail-meta">
+        <span class="cover-status ${status}" style="position:static;display:inline-block;margin-right:4px">${statusText}</span>
+        ${a.regionLabel ? esc(a.regionLabel) : ''}
+        ${a.latestEpisode ? ' · 更新至 E' + a.latestEpisode : ''}
+        ${a.totalEpisodes ? ' · 共 ' + a.totalEpisodes + ' 集' : ''}
+        ${a.voteAverage ? ' · ⭐ ' + a.voteAverage.toFixed(1) : ''}
+      </div>
+      ${w ? `<div style="margin-top:6px;font-size:12px;color:var(--purple);font-weight:700">追至 E${w.watchedEpisode}</div>` : ''}
+      ${a.overview ? `<div class="detail-overview">${esc(a.overview)}</div>` : ''}
+      ${platforms.length > 0 ? `<div class="detail-platforms">${platforms.map(p => '<span class="detail-platform-tag">' + esc(p.platform) + '</span>').join('')}</div>` : ''}
+    </div>
+    <div class="modal-actions">
+      ${inList
+        ? `<button class="btn btn-danger" onclick="document.getElementById('detailModal')?.remove();removeFromList('${tmdbId}')">移除追番</button>
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">更新进度</button>`
+        : `<button class="btn btn-cancel" onclick="document.getElementById('detailModal')?.remove()">关闭</button>
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">+ 加入追番</button>`}
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+}
+
+// ======================== RENDER MY LIST (仿小程序 pages/index) ========================
+// 状态判定：按小程序 processAnimeList 逻辑，但只看 watchlist + animeDb
+function getMylistStatus(w) {
+  if (w.status === 'dropped') return 'dropped';
+  // 用 watchlist 自带 latestEpisode（无则用 animeDb 兜底）判断番本身是否已完结
+  const a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  const latestEp = (w.latestEpisode != null) ? w.latestEpisode : (a ? a.latestEpisode || 0 : 0);
+  const latestSeason = w.latestSeason || (a ? a.latestSeason || 1 : 1);
+  // 多季且所有季都到顶 = 已完结；用 seasonEpisodeCounts
+  if (a && a.seasonEpisodeCounts) {
+    const totalS = a.totalSeasons || 1;
+    let allDone = true;
+    for (let s = 1; s <= totalS; s++) {
+      const max = a.seasonEpisodeCounts[String(s)] || a.seasonEpisodeCounts[s] || 0;
+      const cur = (s === w.watchedSeason) ? w.watchedEpisode : 0;
+      if (cur < max) { allDone = false; break; }
+    }
+    if (allDone && totalS > 0) return 'finished';
+  } else if (latestEp && w.watchedEpisode >= latestEp && (w.watchedSeason || 1) >= latestSeason) {
+    return 'finished';
+  }
+  // 追到最新 = caughtup（已追完本轮）
+  if (latestEp && w.watchedEpisode >= latestEp) return 'caughtup';
+  return 'raising';
+}
+
+const MYLIST_STATUS_TEXT = {
+  raising: '追番中', caughtup: '已追完', finished: '已完结', dropped: '已弃番', unknown: '追番中'
+};
+
+// 平台信息（带 logo SVG + 品牌色 + 中文名 + 短字符）
+// SVG 来源（全部 raw 抓自公开 CDN，viewBox 各异）：
+//   - bilibili: simple-icons (24×24) - https://dl.svgcdn.com/svg/simple-icons/bilibili.svg
+//   - iqiyi:    arcticons   (48×48) - https://dl.svgcdn.com/svg/arcticons/iqiyi.svg
+//   - migu:     arcticons   (48×48) - https://dl.svgcdn.com/svg/arcticons/migu.svg
+//   - youku:    brandico    (1000×1000) - https://dl.svgcdn.com/svg/brandico/youku.svg
+//   - tencent:  自画        (48×48) - 三色播放三角（橙 #FA8036 + 绿 #74CA12 + 蓝 #168CF5）
+//   - bilibili_intl: 复用 bilibili
+// 全部 SVG 已内嵌具体颜色（不依赖 currentColor），外层无染色背景。
+const PLATFORM_BRAND = {
+  bilibili: {
+    name: '哔哩哔哩', short: 'B', color: '#00A1D6',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
+  },
+  tencent: {
+    name: '腾讯视频', short: '腾', color: '#168CF5',
+    // 三色播放三角：橙(左) + 绿(中) + 蓝(右) + 中间白色播放图标
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FA8036" d="M4 8 L20 8 L20 40 L4 40 Z"/><path fill="#74CA12" d="M16 8 L32 8 L32 40 L16 40 Z"/><path fill="#168CF5" d="M28 8 L44 8 L44 40 L28 40 Z"/><polygon fill="#FFFFFF" points="20,16 32,24 20,32"/></svg>'
+  },
+  iqiyi: {
+    name: '爱奇艺', short: '爱', color: '#00DC5A',
+    // 来自 arcticons iqiyi.svg (line 版)，整体染绿
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="none" stroke="#00DC5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M9.5 5.5h29c2.216 0 4 1.784 4 4v29c0 2.216-1.784 4-4 4h-29c-2.216 0-4-1.784-4-4v-29c0-2.216 1.784-4 4-4"/><path fill="#00DC5A" d="M11.836 19.016c0 .414-.333.75-.744.75a.747.747 0 0 1-.744-.75c0-.414.333-.75.744-.75c.41 0 .744.336.744.75"/><path fill="none" stroke="#00DC5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M11.092 22.216v7.199m10.197 0l-3.438-3.6m-.001 3.6c-1.983 0-3.437-1.6-3.437-3.466v-3.6c0-2 1.586-3.6 3.438-3.6h0c1.983 0 3.438 1.6 3.438 3.6v3.466c0 2-1.455 3.6-3.438 3.6m6.494-10.665v10.665m9.933-10.665l-3.438 5.332l-3.438-5.332m3.438 10.665v-5.333m6.494-5.332v10.665"/></svg>'
+  },
+  youku: {
+    name: '优酷', short: '优', color: '#1492FF',
+    // 来自 brandico youku.svg (mono 单色), 整体染蓝
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#1492FF" d="M449.69 139.688c-15.29.025-30.615 4.098-43.781 13.188c-28.992 20.037-45.122 81.793-64.594 125.75c-21.444 48.358-40.259 97.095-61.156 132.594c-56.519-64.128-95.077-206.254-163.156-258.344c-21.959-16.783-70.099-16.305-91.781 0c-58.645 44.149.194 122.203 23.781 163.156c51.773 89.789 109.164 185.937 152.969 268.531c-28.476 75.092-172.29 287.292 20.406 275.313c46.636-30.14 66.384-92.854 91.75-149.594c51.861-116.102 95.923-216.406 149.563-336.469c22.294-49.908 76-123.645 64.594-180.156c-6.391-31.499-42.38-54.028-78.594-53.969zm466.219 46.063c-27.866.279-55.968 13.293-68.125 38.5c-20.112 22.945-41.65 44.45-64.594 64.563c-11.023 13.893-23.501 26.333-37.375 37.375c-16.133 16.783-29.222 36.525-51 47.625V241.251c-.497-72.107-135.42-72.107-135.938 0v377.313c5.893 26.925 18.13 47.511 47.563 50.938h40.813c27.977-4.861 43.889-21.793 47.563-50.938V536.97c0-28.284-5.294-76.032 13.594-47.594c27.691 27.098 66.712 56.252 102 88.344c33.872 30.887 66.285 80.739 101.938 88.375c73.005 15.653 105.208-54.421 78.188-105.344c-28.534-53.832-110.717-88.282-146.156-135.969c23.883-54.654 153.715-88.23 142.75-183.531c-4.322-37.644-37.587-55.837-71.219-55.5z"/></svg>'
+  },
+  migu: {
+    name: '咪咕', short: 'M', color: '#FF4F4F',
+    // 来自 arcticons migu.svg (line 单色), 整体染红
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="37" height="37" x="5.5" y="5.5" fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" rx="4" ry="4"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m11.572 28.149l-.654-8.965l5.142 8.647l3.833-9.288l.654 8.96m8.916-6.627l.49 6.73a2.25 2.25 0 0 1-2.079 2.408h0a2.24 2.24 0 0 1-1.634-.542"/><rect width="4.499" height="5.961" x="25.186" y="21.032" fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" rx="2.249" ry="2.249" transform="rotate(175.825 27.436 24.012)"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m31.997 20.69l.27 3.703a2.25 2.25 0 0 0 2.407 2.08h0a2.25 2.25 0 0 0 2.08-2.408l-.27-3.702m.27 3.702l.164 2.243"/><circle cx="22.344" cy="18.632" r=".75" fill="#FF4F4F"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m22.544 21.381l.434 5.945"/></svg>'
+  },
+  bilibili_intl: {
+    name: 'B站国际', short: 'Bi', color: '#00A1D6',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
+  },
+};
+// 平台搜索 URL 兜底（当 platforms[i].url 为空时使用）
+const PLATFORM_SEARCH_URL = {
+  bilibili: 'https://search.bilibili.com/all?keyword=',
+  tencent:  'https://v.qq.com/x/search/?q=',
+  iqiyi:    'https://search.iqiyi.com/o?key=',
+  youku:    'https://so.youku.com/search_video/q_',
+  migu:     'https://www.migu.cn/search?keyword=',
+};
+// 给未知平台兜底（"其他" 用灰色问号圆）
+const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#DFE6E9"/><text x="24" y="32" text-anchor="middle" fill="#636E72" font-size="22" font-weight="bold" font-family="sans-serif">?</text></svg>';
+
+// "enrich"：把 watchlist 的一条 + 关联的 animeDb 项合并成"后端视图"，
+// 跟小程序 processAnimeList 输出对齐（currentEpisode/latestEpisode/status/platforms 等）
+function enrichWatchlistItem(w) {
+  const a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  // latestEpisode 优先取 watchlist 自带（mock 数据里已经填了），否则取 animeDb
+  const latestEpisode = (w.latestEpisode != null) ? w.latestEpisode : (a ? a.latestEpisode || 0 : 0);
+  const latestSeason = w.latestSeason || (a ? a.latestSeason || 1 : 1);
+  // 平台列表：watchlist 优先，animeDb 兜底
+  const platforms = (w.platforms && w.platforms.length) ? w.platforms : (a && a.platforms ? a.platforms : []);
+  const primaryPlatform = platforms.find(p => p.isPrimary) || platforms[0] || null;
+  // 状态：dropped 保留用户标记，其余始终按最新数据重新计算
+  const status = w.status === 'dropped' ? 'dropped' : getMylistStatus(w);
+  // 剩余集数 = latestEpisode - watchedEpisode
+  const remaining = status === 'finished' ? 0 : Math.max(0, latestEpisode - w.watchedEpisode);
+  // 更新频率
+  const updateFrequency = w.updateFrequency || '';
+  return {
+    ...w,
+    animeId: w.tmdbId,
+    name: w.name,
+    cover: a ? a.cover : '',
+    status,
+    currentEpisode: w.watchedEpisode,
+    currentSeason: w.watchedSeason,
+    latestEpisode,
+    latestSeason,
+    remaining,
+    platforms,
+    platform: primaryPlatform ? primaryPlatform.platform : '',
+    platformName: primaryPlatform ? (primaryPlatform.name || primaryPlatform.platform) : '',
+    updateFrequency,
+    // 封面是否可用
+    hasCover: !!(a && a.cover && (a.cover.startsWith('http') || a.cover.startsWith('data:'))),
+  };
+}
+
+function renderMylist() {
+  updateMylistBadges();
+  const list = document.getElementById('mylistList');
+
+  if (watchlist.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有番剧呢~</p><p class="sub">点右上角 + 添加番剧吧 💕</p></div>';
+    return;
+  }
+
+  // enrich + 状态筛选 + 搜索过滤
+  const enriched = watchlist.map(enrichWatchlistItem);
+  // 小程序：all = 排除 dropped + finished；raising/finished/dropped 单独 tab
+  // 这里只暴露 3 个 tab：all（追番中+已追完） / raising / caughtup（与小程序一致）
+  let filtered = enriched;
+  if (currentMylistFilter === 'all') {
+    filtered = filtered.filter(it => it.status !== 'dropped' && it.status !== 'finished');
+  } else if (currentMylistFilter === 'raising') {
+    filtered = filtered.filter(it => it.status === 'raising');
+  } else if (currentMylistFilter === 'caughtup') {
+    filtered = filtered.filter(it => it.status === 'caughtup' || it.status === 'finished');
+  }
+  const q = (document.getElementById('mylistSearchInput')?.value || '').trim().toLowerCase();
+  if (q) {
+    filtered = filtered.filter(it => (it.name || '').toLowerCase().includes(q));
+  }
+  if (filtered.length === 0) {
+    const emptyMsg = q ? `没有找到包含「${q}」的追番` : '该分类下没有追番';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">' + emptyMsg + '</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(it => {
+    const { tmdbId, name, cover, status, hasCover, currentEpisode, latestEpisode, currentSeason, latestSeason, remaining, platforms, platform, platformName, updateFrequency } = it;
+    const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+    // 多季 vs 单季
+    const seasonMulti = latestSeason > 1 || currentSeason > 1;
+    // "追至第Y集" / "更新至第Y集"
+    const currentLabel = seasonMulti
+      ? `S${currentSeason}·E${currentEpisode}`
+      : (currentEpisode ? `第${currentEpisode}集` : '-');
+    const latestLabel = seasonMulti
+      ? `S${latestSeason}·E${latestEpisode}`
+      : (latestEpisode ? `第${latestEpisode}集` : '?');
+    // 平台 tag: 用 inline SVG 渲染 logo（替代原来的色块字符）
+    const platBrand = platform ? PLATFORM_BRAND[platform] : null;
+    const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
+    const platShort = platBrand ? platBrand.short : (platform ? platform.charAt(0).toUpperCase() : '');
+    const platColor = platBrand ? platBrand.color : '#8B7AA8';
+    const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+    // 右侧操作：raising/已追上+remaining>0 显示"追更"按钮 + 角标；finished 显示"已完结"；dropped 显示"已弃番"
+    let actionHtml = '';
+    if (status === 'raising' || (status === 'caughtup' && remaining > 0)) {
+      actionHtml = `<div class="btn-catch-wrap">
+        <button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="更新进度">
+          <span class="catch-label">追更</span>
+        </button>
+        ${remaining > 0 ? `<span class="catch-badge">${remaining}</span>` : ''}
+      </div>`;
+    } else if (status === 'finished') {
+      actionHtml = `<button class="btn-status finished" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看/调整">已完结</button>`;
+    } else if (status === 'dropped') {
+      actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();showActionMenu('${tmdbId}')" title="操作">已弃番</button>`;
+    } else if (status === 'caughtup') {
+      actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追上</button>`;
+    }
+    // 链接 icon（点开平台弹窗）—— 如果没有 platforms 数据则不渲染
+    const linkIcon = platforms.length > 0
+      ? `<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C44AFF' stroke-width='2.5' stroke-linecap='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>" onclick="event.stopPropagation();openPlatformPopup('${tmdbId}')" title="查看播放平台">`
+      : '';
+    return `<div class="wl-item" onclick="openDetail('${tmdbId}')" oncontextmenu="event.preventDefault();showActionMenu('${tmdbId}')" ontouchstart="wlTouchStart(event,'${tmdbId}')" ontouchend="wlTouchEnd(event)" ontouchmove="wlTouchEnd(event)">
+      <div class="card-deco"></div>
+      <div class="cover-wrap">
+        ${hasCover
+          ? `<img class="cover" src="${esc(cover)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+          : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
+        <div class="cover-glow"></div>
+        <div class="cover-status ${status}">${statusText}</div>
+      </div>
+      <div class="info">
+        <div class="anime-name">
+          <span class="name-text">${esc(name || '')}</span>
+          ${linkIcon}
+        </div>
+        <div class="anime-meta">
+          ${platform
+            ? `<span class="platform-tag">
+                <span class="platform-icon platform-icon-svg" aria-label="${esc(platLabel)}" title="${esc(platLabel)}">${platLogo}</span>
+                <span class="platform-name">${esc(platLabel)}</span>
+              </span>`
+            : `<span class="platform-empty">暂无平台</span>`}
+          ${updateFrequency ? `<span class="anime-schedule">${esc(updateFrequency)}</span>` : ''}
+        </div>
+        <div class="anime-episode-info">
+          <span><span class="ep-current">追至${currentLabel || '-'}</span></span>
+          <span>更新至${latestLabel}</span>
+        </div>
+      </div>
+      <div class="anime-actions">${actionHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+// 移动端长按支持（touch 长按 500ms 触发操作菜单）
+let _wlTouchTimer = null;
+let _wlTouchTargetId = null;
+function wlTouchStart(e, tmdbId) {
+  _wlTouchTargetId = tmdbId;
+  clearTimeout(_wlTouchTimer);
+  _wlTouchTimer = setTimeout(() => {
+    if (navigator.vibrate) navigator.vibrate(30);
+    showActionMenu(tmdbId);
+  }, 500);
+}
+function wlTouchEnd(e) {
+  clearTimeout(_wlTouchTimer);
+  _wlTouchTargetId = null;
+}
+
+// ======================== PERSIST (LOCAL) ========================
+function saveWatchlist() {
+  localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
+}
+
+// ======================== CLOUD SYNC (GitHub API) ========================
+async function syncToCloud() {
+  const token = settings.ghToken;
+  const repo = settings.ghRepo;
+  const branch = settings.ghBranch || 'main';
+  if (!token || !repo) {
+    showToast('请先在设置中配置 GitHub Token 和仓库');
+    openSettingsAndFocus('ghToken');
+    return;
+  }
+
+  const btn = document.getElementById('syncBtn');
+  const orig = btn.textContent;
+  btn.textContent = '⏳ 同步中...';
+  btn.disabled = true;
+
+  try {
+    const content = JSON.stringify(watchlist, null, 2);
+    const base64Content = btoa(unescape(encodeURIComponent(content)));
+
+    const [owner, repoName] = repo.split('/');
+    if (!owner || !repoName) throw new Error('仓库格式应为 owner/repo');
+    const filePath = 'data/watchlist.json';
+    const apiBase = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}`;
+    const authHeaders = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' };
+
+    // 1. 读取现有文件，获取 sha（用于覆盖更新）
+    let sha = null;
+    const getResp = await fetch(`${apiBase}/contents/${filePath}?ref=${encodeURIComponent(branch)}`, {
+      headers: authHeaders,
+    });
+    if (getResp.ok) {
+      const existing = await getResp.json();
+      sha = existing.sha;
+    } else if (getResp.status !== 404) {
+      const err = await getResp.json().catch(() => ({}));
+      throw new Error(err.message || `GET HTTP ${getResp.status}`);
+    }
+
+    // 2. 创建/更新文件（GitHub 用 PUT）
+    const body = {
+      message: `chore: update watchlist.json @ ${new Date().toISOString().slice(0, 10)}`,
+      content: base64Content,
+      branch: branch,
+    };
+    if (sha) body.sha = sha;
+
+    const putResp = await fetch(`${apiBase}/contents/${filePath}`, {
+      method: 'PUT',
+      headers: { ...authHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!putResp.ok) {
+      const err = await putResp.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${putResp.status}`);
+    }
+
+    showToast(`☁️ 已推送 ${watchlist.length} 部追番到 GitHub`);
+  } catch (e) {
+    showToast('❌ 推送失败: ' + e.message.slice(0, 60));
+    console.error(e);
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
+
+// ======================== PULL FROM CLOUD（从 GitHub 拉取最新 watchlist） ========================
+async function pullFromCloud() {
+  const token = settings.ghToken;
+  const repo = settings.ghRepo;
+  const branch = settings.ghBranch || 'main';
+  if (!token || !repo) {
+    showToast('请先在设置中配置 GitHub Token 和仓库');
+    openSettingsAndFocus('ghToken');
+    return;
+  }
+
+  const btn = document.getElementById('pullBtn');
+  const orig = btn.textContent;
+  btn.textContent = '⏳ 拉取中...';
+  btn.disabled = true;
+
+  try {
+    const [owner, repoName] = repo.split('/');
+    if (!owner || !repoName) throw new Error('仓库格式应为 owner/repo');
+    const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repoName)}/contents/data/watchlist.json?ref=${encodeURIComponent(branch)}`;
+
+    const resp = await fetch(apiUrl, {
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+    });
+    if (resp.status === 404) {
+      showToast('☁️ 云端还没有 watchlist.json，先点"推送"上传一份');
+      return;
+    }
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${resp.status}`);
+    }
+    const data = await resp.json();
+    // GitHub API 返回的 content 是 base64 编码
+    const content = decodeBase64Utf8(data.content || '');
+    let cloudList;
+    try { cloudList = JSON.parse(content); }
+    catch (e) { throw new Error('云端 watchlist.json 格式无效（不是 JSON 数组）'); }
+    if (!Array.isArray(cloudList)) throw new Error('云端内容不是数组');
+
+    // 数量比对 + 二次确认
+    const localCount = watchlist.length;
+    const cloudCount = cloudList.length;
+    let mode = 'overwrite';
+    if (localCount > 0 && localCount !== cloudCount) {
+      const choice = prompt(
+        `⚠️ 数量不一致：本地 ${localCount} 部 vs 云端 ${cloudCount} 部\n\n` +
+        `输入 1 = 覆盖（用云端替换本地）\n` +
+        `输入 2 = 合并（按 tmdbId 去重，云端优先）\n` +
+        `输入 0 = 取消`,
+        '1'
+      );
+      if (choice === null || choice === '0') { showToast('已取消'); return; }
+      mode = choice === '2' ? 'merge' : 'overwrite';
+    }
+
+    if (mode === 'overwrite') {
+      watchlist = cloudList;
+    } else {
+      const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
+      cloudList.forEach(cw => { localMap.set(String(cw.tmdbId), cw); });
+      watchlist = Array.from(localMap.values());
+    }
+
+    saveWatchlist();
+    renderMylist();
+    renderBrowse();
+    const msg = mode === 'overwrite'
+      ? `⬇️ 已覆盖为云端 ${cloudList.length} 部`
+      : `⬇️ 已合并，本地 ${watchlist.length} 部（云端 ${cloudCount} + 本地独有 ${watchlist.length - cloudCount}）`;
+    showToast(msg);
+  } catch (e) {
+    showToast('❌ 拉取失败: ' + e.message.slice(0, 60));
+    console.error(e);
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
+
+// base64 解码（支持 UTF-8 中文）
+function decodeBase64Utf8(b64) {
+  try {
+    const binary = atob(b64.replace(/\s+/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  } catch (e) {
+    return atob(b64);
+  }
+}
+
+// ======================== IMPORT ========================
+function showImport() { openModal('importModal'); }
+function doImport() {
+  const text = document.getElementById('importText').value.trim();
+  if (!text) { showToast('请粘贴 JSON 数据'); return; }
+  try {
+    const data = JSON.parse(text);
+    if (!Array.isArray(data)) throw new Error('需要数组格式');
+    watchlist = data;
+    saveWatchlist();
+    renderMylist();
+    renderBrowse();
+    closeModal('importModal');
+    document.getElementById('importText').value = '';
+    showToast(`📥 已导入 ${data.length} 条记录`);
+  } catch (e) {
+    showToast('JSON 解析失败: ' + e.message);
+  }
+}
+
+// ======================== SETTINGS ========================
+function showSettings() { openModal('settingsModal'); }
+function openSettingsAndFocus(fieldId) {
+  openModal('settingsModal');
+  setTimeout(() => {
+    const el = document.getElementById(fieldId);
+    if (el) el.focus();
+  }, 400);
+}
+function saveSettings() {
+  settings.ghToken = document.getElementById('ghToken').value.trim();
+  settings.ghRepo = document.getElementById('ghRepo').value.trim() || 'CYY-real/anime-coze';
+  settings.ghBranch = document.getElementById('ghBranch').value.trim() || 'main';
+  settings.defaultThreshold = parseInt(document.getElementById('defaultThreshold').value) || 3;
+  localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
+  showToast('✅ 设置已保存');
+}
+
+// ======================== MODAL HELPERS ========================
+function openModal(id) {
+  document.getElementById(id).classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+// ======================== UTILITY ========================
+function esc(s) {
+  if (!s && s !== 0) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+// ======================== START ========================
+init();
+</script>
+</body>
+</html>

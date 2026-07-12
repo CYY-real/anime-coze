@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "ua001",
+    "userId": "oABC123...",
+    "animeId": "a1b2c3d4",
+    "presetId": "12345",
+    "currentEpisode": 20,
+    "currentSeason": 1,
+    "platforms": [
+      { "platform": "bilibili", "name": "哔哩哔哩", "currentEpisode": 20, "isPrimary": true, "url": "https://www.bilibili.com/bangumi/play/ss12345" }
+    ],
+    "status": "raising",
+    "schedule": "fri",
+    "remindEnabled": true,
+    "sortOrder": 1712345678000,
+    "lastUpdateAt": "2026-07-10T12:00:00Z",
+    "lastRemindLatest": 22,
+    "lastRemindAt": "2026-07-09T09:00:00Z",
+    "createAt": "2026-06-01T00:00:00Z",
+    "updateAt": "2026-07-10T12:00:00Z"
+  }
+]

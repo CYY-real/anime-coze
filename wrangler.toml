@@ -1,0 +1,7 @@
+name = "anime-watchlist"
+main = "workers/watchlist.js"
+compatibility_date = "2025-04-01"
+
+[[kv_namespaces]]
+binding = "WATCHLIST"
+id = "YOUR_KV_NAMESPACE_ID"
