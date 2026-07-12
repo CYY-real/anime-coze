@@ -2281,5 +2281,37 @@
         "url": ""
       }
     ]
+  },
+  {
+    "tmdbId": "local-juansiliang",
+    "name": "眷思量",
+    "displayName": "眷思量",
+    "cover": "",
+    "mediaType": "tv",
+    "region": "CN",
+    "regionLabel": "国漫",
+    "category": "anime",
+    "latestSeason": 2,
+    "latestEpisode": 13,
+    "nextAirDate": "",
+    "updateFrequency": "已完结",
+    "totalSeasons": 2,
+    "seasonEpisodeCounts": {
+      "1": 15,
+      "2": 13
+    },
+    "totalEpisodes": 28,
+    "overview": "国产3D古风动画。以异界仙岛「思量岛」为背景，讲述神族少年镜玄与凡人少女屠丽在岛上探寻真相、挣脱命运枷锁的成长故事。第一季2021年腾讯视频独播（15集），第二季《眷思量之风烟迭起》2024年上线（13集）。",
+    "firstAirDate": "2021-06-14",
+    "voteAverage": 8.6,
+    "originCountry": "CN",
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ]
   }
 ]
