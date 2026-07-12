@@ -1040,7 +1040,7 @@
     "totalEpisodes": 25,
     "overview": "10年前，世界与其他次元链接的“门”被打开，各种魔物不断出现，于是乎能力各异的猎魔者也随之出现，被称为“猎人”。程肖宇(成振宇)是一名实力最弱的E级猎人，在一次挑战任务中，遇到了可怕的隐藏挑战。生死存亡之际，他居然获得了升级系统！在系统的利用下，他能成为最强猎人吗？",
     "firstAirDate": "2024-01-07",
-    "voteAverage": 8.669,
+    "voteAverage": 8.668,
     "originCountry": "JP",
     "platforms": []
   },
@@ -1319,8 +1319,8 @@
     "regionLabel": "国漫",
     "category": "anime",
     "latestSeason": 5,
-    "latestEpisode": 207,
-    "nextAirDate": "2026-09-05",
+    "latestEpisode": 206,
+    "nextAirDate": "2026-07-11",
     "updateFrequency": "周更",
     "totalSeasons": 5,
     "seasonEpisodeCounts": {
@@ -2165,45 +2165,6 @@
     "voteAverage": 0,
     "originCountry": "CN",
     "platforms": []
-  },
-  {
-    "tmdbId": 285479,
-    "name": "凡人修仙传",
-    "displayName": "凡人修仙传",
-    "cover": "https://image.tmdb.org/t/p/w500/sZJssMWcejxx2k8i0JPIr4t2tMY.jpg",
-    "mediaType": "tv",
-    "region": "CN",
-    "regionLabel": "国漫",
-    "category": "anime",
-    "latestSeason": 10,
-    "latestEpisode": 6,
-    "nextAirDate": "2026-07-18",
-    "updateFrequency": "周更",
-    "totalSeasons": 10,
-    "seasonEpisodeCounts": {
-      "1": 17,
-      "2": 4,
-      "3": 25,
-      "4": 14,
-      "5": 12,
-      "6": 4,
-      "7": 48,
-      "8": 28,
-      "9": 24,
-      "10": 30
-    },
-    "totalEpisodes": 206,
-    "overview": "看机智的凡人小子韩立如何稳健发展、步步为营，战魔道、夺至宝、驰骋星海、快意恩仇，成为纵横三界的强者。他日仙界重相逢，一声道友尽沧桑。",
-    "firstAirDate": "2020-07-25",
-    "voteAverage": 9.6,
-    "originCountry": "CN",
-    "platforms": [
-      {
-        "platform": "bilibili",
-        "name": "哔哩哔哩",
-        "url": ""
-      }
-    ]
   },
   {
     "tmdbId": 326844,
