@@ -78,7 +78,7 @@
       {
         "platform": "tencent",
         "name": "腾讯视频",
-        "url": "",
+        "url": "https://www.bwyy2026.com/bwplay/IC333L-2-242.html?share_token=3DDD7DAC-3449-400A-900F-4A7CB00FD73F",
         "isPrimary": true
       }
     ],
@@ -100,7 +100,7 @@
       {
         "platform": "tencent",
         "name": "腾讯视频",
-        "url": "",
+        "url": "https://m.koeynoshit.com/noshipy/782-2-147.html?share_token=6CDE824E-81DD-4C87-831B-ED9E0972574A",
         "isPrimary": true
       }
     ],
@@ -118,8 +118,15 @@
     "notifyEnabled": true,
     "lastNotifiedAt": "",
     "lastNotifiedEpisode": 0,
-    "platforms": [],
-    "platform": "",
+    "platforms": [
+      {
+        "platform": "youku",
+        "name": "优酷",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "wukong",
     "updateFrequency": ""
   },
   {
