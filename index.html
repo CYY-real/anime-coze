@@ -1344,9 +1344,6 @@ function init() {
     saveWatchlist();
   }
   renderMylist();
-  // 预加载番剧库
-  loadAnime({ url: './data/anime.json', source: 'local' });
-
   // 从 GitHub 同步追剧列表（静默，首次不弹 toast）
   pullWatchlistFromGitHub();
 }
