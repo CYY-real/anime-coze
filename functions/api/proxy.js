@@ -85,8 +85,10 @@ export async function onRequest(context) {
         branch,
       };
       if (sha) putBody.sha = sha;
+      // Gitee 语义：POST=创建(文件不存在), PUT=更新(文件已存在, 需带 sha)。
+      // 之前恒用 POST，已存在文件时返回 400「文件名已存在」→ 写回一直失败。
       const pr = await fetch(apiBase, {
-        method: 'POST',
+        method: sha ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(putBody),
       });
