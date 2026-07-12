@@ -2130,15 +2130,21 @@ function openProgress(tmdbId) {
   const activeLatest = seasonLatest(activeSeason) || latestEpisode;
   const banked = activeLatest ? activeLatest - w.watchedEpisode : 0;
 
+  function closeProgressModal() {
+    document.body.style.overflow = '';
+    const el = document.getElementById('progressModal');
+    if (el) el.remove();
+  }
+
   const div = document.createElement('div');
   div.className = 'modal-overlay';
   div.id = 'progressModal';
-  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.onclick = function(e) { if (e.target === this) closeProgressModal(); };
   div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
       <div class="modal-title">📺 ${esc(w.name)}</div>
-      <button class="modal-close" onclick="document.getElementById('progressModal')?.remove()">✕</button>
+      <button class="modal-close" onclick="closeProgressModal()">✕</button>
     </div>
     <div class="modal-body progress-body">
       <p class="progress-hint">更新你的追番进度</p>
@@ -2154,18 +2160,12 @@ function openProgress(tmdbId) {
       ${banked > 0 ? `<button class="progress-catchup" onclick="document.getElementById('popupEpisode').value=${activeLatest};showToast('⚡ 已追到最新')">⚡ 已追到最新</button>` : ''}
     </div>
     <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="document.getElementById('progressModal')?.remove()">取消</button>
+      <button class="btn btn-cancel" onclick="closeProgressModal()">取消</button>
       <button class="btn btn-primary" onclick="saveProgress('${tmdbId}')">保存</button>
     </div>
   </div>`;
   document.body.style.overflow = 'hidden';
   document.body.appendChild(div);
-  // 弹窗移除时恢复滚动
-  const _cleanup = () => {
-    document.body.style.overflow = '';
-    div.removeEventListener('DOMNodeRemoved', _cleanup);
-  };
-  div.addEventListener('DOMNodeRemoved', _cleanup);
   setTimeout(() => {
     const inp = document.getElementById('popupEpisode');
     if (inp) { inp.focus(); inp.select(); }
