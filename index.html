@@ -1239,6 +1239,7 @@ html,body{
       </div>
       <div class="mylist-header-actions">
         <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="从云端重新加载追剧列表">🔄 刷新</button>
+        <button class="btn btn-primary btn-sm" onclick="uploadWatchlist()" id="uploadBtn" title="把本地最新追剧列表上传到 Gitee">☁️ 上传到 Gitee</button>
       </div>
     </div>
 
@@ -1368,6 +1369,8 @@ let activeSeason = 1;
 function init() {
   const saved = localStorage.getItem('anime_coze_watchlist');
   if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
+  // 同名去重（清理历史遗留的重复番剧，如库里两个"凡人修仙传"导致的双条目）
+  if (dedupeWatchlistByName()) saveWatchlist();
   // 载入本机设置（云端同步经 Cloudflare 代理，浏览器不保存任何 Token）
   const savedSettings = localStorage.getItem('anime_coze_settings');
   if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
@@ -1786,6 +1789,10 @@ function addToList(tmdbId) {
   const a = animeDb.find(x => String(x.tmdbId) === String(tmdbId));
   if (!a) return;
   if (watchlist.some(w => String(w.tmdbId) === String(tmdbId))) {
+    showToast('已在追番列表中');
+    return;
+  }
+  if (a.name && watchlist.some(w => (w.name || '') === a.name)) {
     showToast('已在追番列表中');
     return;
   }
@@ -2590,6 +2597,27 @@ function saveWatchlist() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
   scheduleSync();
 }
+// 按名字去重追番列表（番剧库偶有同名不同 tmdbId 的条目，避免"我的列表"出现重复番剧）
+// 同名多条时保留：在库内(有正确 tmdbId) 且 latestEpisode 更高的一条
+function dedupeWatchlistByName() {
+  if (watchlist.length < 2) return false;
+  const seen = new Set();
+  const result = [];
+  let changed = false;
+  const score = (x) => ((animeDb.find(a => String(a.tmdbId) === String(x.tmdbId))) ? 100000 : 0) + (Number(x.latestEpisode) || 0);
+  for (const w of watchlist) {
+    const n = (w.name || '').trim();
+    if (!n) { result.push(w); continue; }
+    if (!seen.has(n)) { seen.add(n); result.push(w); }
+    else {
+      changed = true;
+      const idx = result.findIndex(r => (r.name || '').trim() === n);
+      if (idx >= 0 && score(w) > score(result[idx])) result[idx] = w;
+    }
+  }
+  if (changed) watchlist = result;
+  return changed;
+}
 function saveSettings() {
   localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
 }
@@ -2628,11 +2656,17 @@ async function pushWatchlist() {
       headers: { 'Content-Type': 'application/json' },
       body: content,
     });
-    if (!resp.ok) {
+    if (resp.ok) {
+      showToast('☁️ 已保存到 Gitee');
+    } else {
       const err = await resp.json().catch(() => ({}));
       console.warn('push watchlist failed', err);
+      showToast('⚠️ 同步 Gitee 失败，已保留本机');
     }
-  } catch (e) { /* silent */ }
+  } catch (e) {
+    console.warn('push watchlist error', e);
+    showToast('⚠️ 同步 Gitee 失败，已保留本机');
+  }
 }
 
 // 合并云端/快照数据到本机（按 tmdbId 去重，云端优先）；仅本机持久化，不回推避免回环
@@ -2641,6 +2675,7 @@ function mergeWatchlist(data) {
   const localMap = new Map(watchlist.map(w => [String(w.tmdbId), w]));
   data.forEach(cw => { if (cw && cw.tmdbId != null) localMap.set(String(cw.tmdbId), cw); });
   watchlist = Array.from(localMap.values());
+  dedupeWatchlistByName();   // 云端/本机按 tmdbId 合并后，再按名字收口，避免同名重复
   saveWatchlistLocal();
   renderMylist();
 }
@@ -2715,6 +2750,22 @@ function importConfigFromText() {
 function refreshWatchlist() {
   showToast('🔄 正在刷新追剧列表...');
   pullWatchlist(true);
+}
+
+// ======================== UPLOAD (兜底) ========================
+// 手动把本机最新追剧列表上传到 Gitee（经 /api/proxy）。
+// 用于自动 3 秒同步未触发、或想立刻强制覆盖云端时的兜底。
+let _uploadingToGitee = false;
+async function uploadWatchlist() {
+  if (_uploadingToGitee) return;            // 防止重复点击
+  _uploadingToGitee = true;
+  const btn = document.getElementById('uploadBtn');
+  const prevText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 上传中'; }
+  showToast('🔄 正在上传到 Gitee...');
+  await pushWatchlist();                    // 内部已含成功/失败 toast
+  if (btn) { btn.disabled = false; btn.textContent = prevText; }
+  _uploadingToGitee = false;
 }
 
 // ======================== MODAL HELPERS ========================
