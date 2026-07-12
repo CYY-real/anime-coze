@@ -79,16 +79,20 @@ html,body{
    ============================================ */
 .appbar{
   position:relative;overflow:hidden;
-  margin:0 0 16px;padding:15px 16px 14px;
-  background:var(--bg-glass);
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
-  border:1px solid var(--border-soft);
-  border-radius:20px;
-  box-shadow:0 10px 28px rgba(196,74,255,.10),0 2px 8px rgba(91,206,250,.07);
+  margin:-8px -12px 14px;padding:18px 12px 16px;
+  background:#fff;
+  border-radius:0;
+  border-bottom:1px solid var(--border-faint);
 }
 .appbar::before{
   content:'';position:absolute;left:0;right:0;top:0;height:4px;
   background:linear-gradient(90deg,var(--pink) 0%,var(--purple) 50%,var(--blue) 100%);
+}
+.appbar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Cg fill='%23C44AFF'%3E%3Cpath d='M12 8l2 5 5 2-5 2-2 5-2-5-5-2 5-2z'/%3E%3C/g%3E%3Cg fill='%23FF6B9D'%3E%3Ccircle cx='50' cy='20' r='3'/%3E%3C/g%3E%3Cg fill='%235BCEFA'%3E%3Cpath d='M40 50l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z'/%3E%3C/g%3E%3Cg fill='%23FFD166'%3E%3Ccircle cx='20' cy='55' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:70px 70px;
+  opacity:.07;
 }
 
 /* ============================================
@@ -107,9 +111,9 @@ html,body{
 }
 .deco-star{display:inline-block;color:var(--yellow);font-size:13px}
 
-  .header-settings{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-pill);font-size:18px;line-height:1;cursor:pointer;color:var(--text-secondary);transition:transform .15s,background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
-  .header-settings:hover{background:#fff;box-shadow:0 4px 12px rgba(196,74,255,.14)}
-  .header-settings:active{transform:scale(.94);background:rgba(128,128,128,.12)}
+  .icon-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-pill);font-size:18px;line-height:1;cursor:pointer;color:var(--text-secondary);transition:transform .15s,background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+  .icon-btn:hover{background:#fff;box-shadow:0 4px 12px rgba(196,74,255,.14)}
+  .icon-btn:active{transform:scale(.94);background:rgba(128,128,128,.12)}
   .set-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--border-soft)}
   .set-section:first-child{margin-top:0;padding-top:0;border-top:none}
   .set-label{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
@@ -264,7 +268,7 @@ html,body{
    ============================================ */
 .search-box{position:relative;margin:6px 0 10px}
 .search-box input{
-  width:100%;padding:9px 14px 9px 36px;border-radius:20px;
+  width:100%;padding:9px 36px 9px 36px;border-radius:20px;
   border:1px solid var(--border-faint);background:var(--bg-glass);
   color:var(--text-primary);font-size:13px;outline:none;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -276,6 +280,15 @@ html,body{
   position:absolute;left:12px;top:50%;transform:translateY(-50%);
   font-size:14px;opacity:.5;pointer-events:none;
 }
+.search-clear{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:20px;height:20px;border:none;border-radius:50%;
+  background:var(--border-soft);color:var(--text-secondary);
+  font-size:12px;line-height:1;padding:0;cursor:pointer;display:none;
+  align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.search-clear:hover{background:var(--border-mid);color:var(--text-primary)}
 
 /* ============================================
    Loading
@@ -774,6 +787,10 @@ html,body{
   display:flex;z-index:100;
   box-shadow:0 -2px 20px rgba(196,74,255,0.06);
 }
+.bottom-nav::before{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:3px;
+  background:linear-gradient(90deg,var(--pink) 0%,var(--purple) 50%,var(--blue) 100%);
+}
 .bottom-nav a{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:1px;
@@ -1237,6 +1254,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
    ============================================ */
 @media(min-width:600px){
   .container{max-width:640px;padding:8px 16px 0}
+  .appbar{margin:-8px -16px 14px;padding:18px 16px 16px}
   .modal{left:30px;right:30px;bottom:40px}
   .anime-card{padding:12px;gap:12px}
   .cover-wrap{width:80px;height:108px}
@@ -1249,23 +1267,25 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 <body>
 
 <div class="container">
-  <!-- 顶部 App Bar（浮起卡片，与下方内容区分） -->
+  <!-- 顶部 App Bar（白底 + 彩色横线 + 图案水印） -->
   <div class="appbar">
     <div class="header">
       <div class="header-left">
         <span class="deco-star">✨</span>
         <span class="header-title">追番不迷路</span>
       </div>
-      <button class="header-settings" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="refreshWatchlist()" title="刷新" aria-label="刷新">🔄</button>
+        <button class="icon-btn" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
+      </div>
     </div>
   </div>
 
   <!-- Content: Browse (list mode) -->
   <div id="tabBrowse" class="hidden">
-    <div class="browse-header">
-      <div class="browse-title">➕ 添加剧集</div>
-      <div class="browse-sub" id="browseSub">从剧库中选择要追的剧</div>
-    </div>
+      <div class="browse-header">
+        <div class="browse-title">添加剧集</div>
+      </div>
     <!-- 剧库自动从同源 ./data/anime.json 加载（GitHub Actions 每日更新并部署），无需选择数据源 -->
     <div id="browseContent" style="display:none">
       <!-- 分类/地区合并筛选 -->
@@ -1279,7 +1299,8 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
       <!-- 搜索 -->
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input id="browseSearchInput" placeholder="搜索剧名..." oninput="debounceSearch()">
+        <input id="browseSearchInput" placeholder="搜索剧名..." oninput="debounceSearch();toggleClear('browseSearchInput')">
+        <button class="search-clear" type="button" onclick="clearSearch('browseSearchInput', debounceSearch)" aria-label="清除">✕</button>
       </div>
       <div id="browseList" class="anime-list"></div>
     </div>
@@ -1289,11 +1310,9 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   <div id="tabMylist">
     <div class="mylist-header">
       <div class="mylist-header-left">
-        <span class="mylist-deco-star">✨</span>
         <div class="mylist-title">我的追番</div>
       </div>
       <div class="mylist-header-actions">
-        <button class="btn btn-secondary btn-sm" onclick="refreshWatchlist()" id="refreshBtn" title="刷新整个页面">🔄 刷新</button>
         <button class="btn btn-primary btn-sm" onclick="uploadWatchlist()" id="uploadBtn" title="把本地最新追剧列表上传到 Gitee">☁️ 上传到 Gitee</button>
       </div>
     </div>
@@ -1320,7 +1339,8 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
     <!-- My list search -->
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input id="mylistSearchInput" placeholder="在我的追番中搜索..." oninput="renderMylist()">
+      <input id="mylistSearchInput" placeholder="在我的追番中搜索..." oninput="renderMylist();toggleClear('mylistSearchInput')">
+      <button class="search-clear" type="button" onclick="clearSearch('mylistSearchInput', renderMylist)" aria-label="清除">✕</button>
     </div>
     <div id="mylistList" class="anime-list"></div>
   </div>
@@ -1423,6 +1443,10 @@ function init() {
   pullWatchlist();
   // 加载番剧库（GitHub Action 刷新的最新 TMDB 数据），让"我的追番"能实时跟随最新集数
   refreshAnimeDb();
+  // 恢复上次激活的 tab，刷新/重载后停留在当前页
+  const savedTab = localStorage.getItem('anime_coze_active_tab') || 'mylist';
+  const navLinks = document.querySelectorAll('.bottom-nav a');
+  switchTab(savedTab, savedTab === 'browse' ? navLinks[1] : navLinks[0]);
 }
 
 // ======================== TOAST ========================
@@ -1436,6 +1460,7 @@ function showToast(msg) {
 
 // ======================== TAB SWITCH ========================
 function switchTab(tab, el) {
+  localStorage.setItem('anime_coze_active_tab', tab);
   document.querySelectorAll('.bottom-nav a').forEach(a => a.classList.remove('active'));
   if (el) el.classList.add('active');
   document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
@@ -1452,6 +1477,20 @@ function switchTab(tab, el) {
   syncBodyScroll();
 }
 
+// 搜索框一键清除
+function toggleClear(inputId) {
+  const input = document.getElementById(inputId);
+  const btn = input.closest('.search-box').querySelector('.search-clear');
+  btn.style.display = input.value ? 'flex' : 'none';
+}
+function clearSearch(inputId, rerender) {
+  const input = document.getElementById(inputId);
+  input.value = '';
+  toggleClear(inputId);
+  if (rerender) rerender();
+  input.focus();
+}
+
 function initBrowseTab() {
   const browseContent = document.getElementById('browseContent');
   const browseSub = document.getElementById('browseSub');
@@ -1460,7 +1499,7 @@ function initBrowseTab() {
 
   if (animeDb.length > 0) { renderBrowse(); return; }
 
-  browseSub.textContent = '正在自动加载剧库…';
+  if (browseSub) browseSub.textContent = '正在自动加载剧库…';
   loadAnime();
 }
 
