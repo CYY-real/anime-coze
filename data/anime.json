@@ -6051,35 +6051,53 @@
     "platforms": []
   },
   {
-    "tmdbId": "local-juansiliang",
-    "name": "眷思量",
-    "displayName": "眷思量",
-    "cover": "",
+    "tmdbId": 224839,
+    "name": "遮天",
+    "displayName": "遮天",
+    "cover": "/api/img?p=/t/p/w500/z9JNGlJ8eGy6S6SOlBhpmxjjXGT.jpg",
     "mediaType": "tv",
     "region": "CN",
-    "regionLabel": "国漫",
-    "category": "anime",
+    "regionLabel": "国产剧",
+    "category": "cdrama",
+    "latestSeason": 1,
+    "latestEpisode": 170,
+    "nextAirDate": "2026-07-14",
+    "updateFrequency": "周更",
+    "totalSeasons": 1,
+    "seasonEpisodeCounts": {
+      "1": 175
+    },
+    "totalEpisodes": 175,
+    "overview": "本作动画改编自起点白金作者辰东遮天三部曲的第一部——遮天。冰冷与黑暗并存的宇宙深处，九具庞大的龙尸拉着一口青铜古棺，亘古长存。这是太空探测器在枯寂的宇宙中捕捉到的一幅极其震撼的画面。九龙拉棺，究竟是回到了上古，还是来到了星空的彼岸？一个浩大的仙侠世界，光怪陆离，神秘无尽。热血似火山沸腾，激情若瀚海汹涌，欲望如深渊无止境……登天路，踏歌行，弹指遮天。",
+    "firstAirDate": "2023-05-03",
+    "voteAverage": 8.867,
+    "originCountry": "CN",
+    "platforms": []
+  },
+  {
+    "tmdbId": 127473,
+    "name": "眷思量",
+    "displayName": "眷思量",
+    "cover": "/api/img?p=/t/p/w500/p6WEDdXoXutyx7rYCGTajQCWami.jpg",
+    "mediaType": "tv",
+    "region": "CN",
+    "regionLabel": "国产剧",
+    "category": "cdrama",
     "latestSeason": 2,
-    "latestEpisode": 13,
+    "latestEpisode": 15,
     "nextAirDate": "",
     "updateFrequency": "已完结",
-    "totalSeasons": 2,
+    "totalSeasons": 3,
     "seasonEpisodeCounts": {
       "1": 15,
-      "2": 13
+      "2": 15,
+      "3": 1
     },
-    "totalEpisodes": 28,
-    "overview": "国产3D古风动画。以异界仙岛「思量岛」为背景，讲述神族少年镜玄与凡人少女屠丽在岛上探寻真相、挣脱命运枷锁的成长故事。第一季2021年腾讯视频独播（15集），第二季《眷思量之风烟迭起》2024年上线（13集）。",
+    "totalEpisodes": 31,
+    "overview": "《眷思量》从主角镜玄探寻父母逝世真相的事件切入，一步步揭开思量岛上的秘密往事，同时展现了一群年轻人为了各自的人生目标努力蜕变成长、挣脱枷锁的故事。",
     "firstAirDate": "2021-06-14",
-    "voteAverage": 8.6,
+    "voteAverage": 8.8,
     "originCountry": "CN",
-    "platforms": [
-      {
-        "platform": "tencent",
-        "name": "腾讯视频",
-        "url": "",
-        "isPrimary": true
-      }
-    ]
+    "platforms": []
   }
 ]
