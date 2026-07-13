@@ -164,6 +164,60 @@
       "name": "剑来",
       "latestSeason": 2,
       "latestEpisode": 27
+    },
+    {
+      "tmdbId": "30801",
+      "name": "两天一夜",
+      "latestSeason": 4,
+      "latestEpisode": 335
+    },
+    {
+      "tmdbId": "65270",
+      "name": "黄金渔场之明星电台",
+      "latestSeason": 1,
+      "latestEpisode": 970
+    },
+    {
+      "tmdbId": "66046",
+      "name": "蒙面歌王",
+      "latestSeason": 1,
+      "latestEpisode": 525
+    },
+    {
+      "tmdbId": "72896",
+      "name": "我家的熊孩子",
+      "latestSeason": 1,
+      "latestEpisode": 503
+    },
+    {
+      "tmdbId": "105194",
+      "name": "남자 셋 여자 셋",
+      "latestSeason": 1,
+      "latestEpisode": 625
+    },
+    {
+      "tmdbId": "120218",
+      "name": "跟着书本去旅行",
+      "latestSeason": 8,
+      "latestEpisode": 1
+    },
+    {
+      "tmdbId": "214295",
+      "name": "姐姐恋爱吧",
+      "latestSeason": 1,
+      "latestEpisode": 24
+    },
+    {
+      "tmdbId": "244984",
+      "name": "아이돌 라디오",
+      "latestSeason": 4,
+      "latestEpisode": 93
+    },
+    {
+      "tmdbId": "271305",
+      "name": "传奇故事",
+      "latestSeason": 14,
+      "latestEpisode": 162
     }
   ]
 }
