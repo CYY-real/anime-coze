@@ -64,28 +64,6 @@
     "updateFrequency": ""
   },
   {
-    "tmdbId": 224839,
-    "name": "遮天",
-    "watchedSeason": 1,
-    "watchedEpisode": 146,
-    "latestSeason": 1,
-    "latestEpisode": 170,
-    "threshold": 0,
-    "notifyEnabled": true,
-    "lastNotifiedAt": "",
-    "lastNotifiedEpisode": 0,
-    "platforms": [
-      {
-        "platform": "tencent",
-        "name": "腾讯视频",
-        "url": "https://m.koeynoshit.com/noshipy/782-2-147.html?share_token=6CDE824E-81DD-4C87-831B-ED9E0972574A",
-        "isPrimary": true
-      }
-    ],
-    "platform": "tencent",
-    "updateFrequency": ""
-  },
-  {
     "tmdbId": 229192,
     "name": "沧元图",
     "watchedSeason": 1,
@@ -220,39 +198,46 @@
     }
   },
   {
-    "tmdbId": "291392",
-    "name": "野狗骨头",
+    "tmdbId": "224839",
+    "name": "遮天",
     "watchedSeason": 1,
-    "watchedEpisode": 0,
+    "watchedEpisode": 146,
     "latestSeason": 1,
-    "latestEpisode": 13,
+    "latestEpisode": 170,
     "threshold": 0,
     "notifyEnabled": true,
     "lastNotifiedAt": "",
     "lastNotifiedEpisode": 0,
-    "platforms": [],
-    "platform": "",
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": "",
+        "isPrimary": true
+      }
+    ],
+    "platform": "wukong",
     "updateFrequency": "",
     "meta": {
-      "tmdbId": "291392",
-      "name": "野狗骨头",
-      "cover": "/api/img?p=/t/p/w500/ixwG1ECra9rSTuRCql81mkMoLVO.jpg",
+      "tmdbId": "224839",
+      "name": "遮天",
+      "cover": "/api/img?p=/t/p/w500/z9JNGlJ8eGy6S6SOlBhpmxjjXGT.jpg",
       "category": "cdrama",
       "categoryLabel": "",
       "region": "CN",
       "regionLabel": "国产剧",
       "latestSeason": 1,
-      "latestEpisode": 13,
+      "latestEpisode": 170,
       "seasonEpisodeCounts": {
-        "1": 32
+        "1": 175
       },
-      "totalEpisodes": 32,
+      "totalEpisodes": 175,
       "platforms": [],
-      "overview": "20世纪90年代，陈异和苗靖因父母的相识而结缘。起初陈异对苗靖充满敌意，直到一次受伤后，苗靖的善良让两人关系开始转变。然而好景不长，陈父去世、苗母消失，两家大人并未走到一起，两个孩子却不得不相依为命。来到大学，苗靖勇敢告白，陈异却被卷入纵火案，成为关键证人，为保护苗靖，他逼她离开了藤城，配合警方抓捕嫌犯。多年后，陈异经营着一家台球厅，苗靖则为了好运物流的审计工作回到藤城。两人重逢，陈异因当年纵火案，对好运老板张宾早就心存警惕，试图阻止苗靖前去工作未果。张宾的走私生意逐渐暴露，为保护苗靖，陈异只能以身入局，两人并肩作战，配合警方对抗张宾。最终，张宾及其同伙受到法律制裁。身受重伤的陈异向苗靖告白，两人终成眷属。",
-      "firstAirDate": "2026-07-05",
-      "voteAverage": 8,
+      "overview": "本作动画改编自起点白金作者辰东遮天三部曲的第一部——遮天。冰冷与黑暗并存的宇宙深处，九具庞大的龙尸拉着一口青铜古棺，亘古长存。这是太空探测器在枯寂的宇宙中捕捉到的一幅极其震撼的画面。九龙拉棺，究竟是回到了上古，还是来到了星空的彼岸？一个浩大的仙侠世界，光怪陆离，神秘无尽。热血似火山沸腾，激情若瀚海汹涌，欲望如深渊无止境……登天路，踏歌行，弹指遮天。",
+      "firstAirDate": "2023-05-03",
+      "voteAverage": 8.867,
       "originCountry": "CN",
-      "nextAirDate": "2026-07-12",
+      "nextAirDate": "2026-07-14",
       "updateFrequency": "周更"
     }
   }
