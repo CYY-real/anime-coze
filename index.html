@@ -841,6 +841,22 @@ html,body{
   animation:spin .8s linear infinite;
 }
 .upload-block-text{color:#3a3a4a;font-size:15px;font-weight:600;letter-spacing:.3px;}
+/* 上传成功态：醒目绿色对勾 + 强调边框（替代易错过的小 toast） */
+.upload-check{
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,#2ecc71,#27ae60);
+  color:#fff;font-size:32px;font-weight:700;line-height:58px;text-align:center;
+  display:none;box-shadow:0 10px 24px rgba(39,174,96,.45);
+  animation:uploadPop .35s ease;
+}
+.upload-block-overlay.success .upload-spinner{display:none;}
+.upload-block-overlay.success .upload-check{display:block;}
+.upload-block-overlay.success .upload-block-text{color:#1e9e54;font-size:16px;}
+.upload-block-overlay.success .upload-block-box{
+  border:2px solid #2ecc71;padding:34px 44px;
+  animation:uploadPop .35s ease;
+}
+@keyframes uploadPop{0%{transform:scale(.6);opacity:0;}60%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
 
 /* ============================================
    Modal - 底部抽屉风格（对齐小程序）
@@ -1450,6 +1466,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 <div id="uploadBlockOverlay" class="upload-block-overlay hidden">
   <div class="upload-block-box">
     <div class="upload-spinner"></div>
+    <div class="upload-check">✓</div>
     <div class="upload-block-text">正在上传到 Gitee…</div>
   </div>
 </div>
@@ -2921,9 +2938,20 @@ async function pullWatchlist(showMsg = false) {
 // 保存追剧记录到 Gitee（经代理）
 let _uploadingToGitee = false;   // 上传 Gitee 进行中标志（防重入 + 整页锁定）
 // 整页锁定遮罩开关（上传 Gitee 期间禁止继续操作）
-function setUploadLock(on) {
+// state: 'uploading' | 'success' —— success 时切换为醒目绿色对勾提示
+function setUploadLock(on, state) {
   const overlay = document.getElementById('uploadBlockOverlay');
-  if (overlay) overlay.classList.toggle('hidden', !on);
+  if (!overlay) return;
+  if (!on) { overlay.classList.add('hidden'); overlay.classList.remove('success'); return; }
+  const text = overlay.querySelector('.upload-block-text');
+  if (state === 'success') {
+    overlay.classList.add('success');
+    if (text) text.textContent = '已成功上传到 Gitee ✅';
+  } else {
+    overlay.classList.remove('success');
+    if (text) text.textContent = '正在上传到 Gitee…';
+  }
+  overlay.classList.remove('hidden');
 }
 
 // 上传本机追番列表到 Gitee（经 /api/proxy）。
@@ -2932,8 +2960,9 @@ async function pushWatchlist(block = true) {
   if (block) {
     if (_uploadingToGitee) return;   // 上一次上传未结束，忽略重复触发
     _uploadingToGitee = true;
-    setUploadLock(true);
+    setUploadLock(true, 'uploading');
   }
+  let ok = false;
   try {
     const content = JSON.stringify(watchlist, null, 2);
     const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, {
@@ -2943,7 +2972,10 @@ async function pushWatchlist(block = true) {
     });
     if (resp.ok) {
       markSynced();
-      showToast('☁️ 已保存到 Gitee');
+      ok = true;
+      // 成功态：整页醒目提示（绿色对勾），停留 1.4s 再淡出，比小 toast 更不易错过
+      if (block) setUploadLock(true, 'success');
+      showToast('✅ 已成功上传到 Gitee');
     } else {
       const err = await resp.json().catch(() => ({}));
       console.warn('push watchlist failed', err);
@@ -2954,7 +2986,14 @@ async function pushWatchlist(block = true) {
     console.warn('push watchlist error', e);
     showToast('⚠️ 同步 Gitee 失败（网络），已保留本机');
   } finally {
-    if (block) { setUploadLock(false); _uploadingToGitee = false; }
+    if (block) {
+      _uploadingToGitee = false;
+      if (ok) {
+        setTimeout(() => setUploadLock(false), 1400);  // 成功态停留，让用户看清
+      } else {
+        setUploadLock(false);  // 失败立即释放
+      }
+    }
   }
 }
 
