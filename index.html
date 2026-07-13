@@ -1185,6 +1185,10 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
 }
 .detail-name{font-size:16px;font-weight:700;text-align:center;margin-bottom:2px}
+.detail-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:0 auto 8px;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
+.detail-tmdb:active{opacity:.6}
+.progress-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:-4px 0 6px;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
+.progress-tmdb:active{opacity:.6}
 .detail-meta{font-size:12px;color:var(--text-secondary);text-align:center}
 .detail-overview{
   margin:10px 0;font-size:12px;color:var(--text-secondary);
@@ -2316,6 +2320,7 @@ function openProgress(tmdbId) {
       <div class="modal-title">📺 ${esc(w.name)}</div>
       <button class="modal-close" onclick="closeProgressModal()">✕</button>
     </div>
+    <div class="progress-tmdb" title="点击复制 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','已复制 TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
     <div class="modal-body progress-body">
       <p class="progress-hint">更新你的追番进度</p>
       ${totalSeasons > 1 ? `<div class="season-row" id="seasonRow">${seasonChips.join('')}</div>` : ''}
@@ -2391,6 +2396,7 @@ function openDetail(tmdbId) {
         ? `<img class="detail-cover" src="${esc(proxyCover(cover))}" loading="lazy" onerror="this.style.display='none'">`
         : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(name||'?').charAt(0)}</div>`}
       <div class="detail-name">${esc(name)}</div>
+      <div class="detail-tmdb" title="点击复制 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','已复制 TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
       <div class="detail-meta">
         <span class="cover-status ${status}" style="position:static;display:inline-block;margin-right:4px">${statusText}</span>
         <span style="font-size:10px;font-weight:600;color:var(--orange,#ff9f43);margin-right:4px">${esc(categoryLabel)}</span>
