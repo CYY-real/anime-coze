@@ -41,13 +41,32 @@ const { matchPlatforms } = require('./platformSeed');
 // 例：遮天(224839)、眷思量(127473) 命中 ID 不在 discover 前 N 页，致主库 anime.json 缺它、
 // 前端永远回退到追番里的 meta 死数据、不随 TMDB 刷新。这里显式 /tv/{id} 拉取并入主库，
 // 使其集数/更新频率随每日同步自动更新（卡片走 animeDb，更新页走 update-log）。
-// 新增这类剧只需在此追加 TMDB 数字 ID；下方 main() 会按 ID 去重并入，已存在的会被跳过。
-const PINNED_TMDB_IDS = [224839, 127473];
+// 自动固定追踪：从 data/watchlist.json（CI 中由 Gitee 拉取的真实追番）识别每个 tmdbId，
+// 把 discover 热度榜覆盖不到、但用户在追番的剧显式拉进主库，使其随每日同步自动更新。
+// 因此「搜索加入的剧」无需手动登记即可自动纳入——这是真正自动的机制，替代手写 PINNED 名单。
+function collectTrackedIdsFromWatchlist() {
+  const ids = new Set();
+  const f = path.join(__dirname, '..', 'data', 'watchlist.json');
+  if (!fs.existsSync(f)) return ids;
+  try {
+    const list = JSON.parse(fs.readFileSync(f, 'utf8'));
+    if (!Array.isArray(list)) return ids;
+    for (const w of list) {
+      const id = w && w.tmdbId;
+      // 只认数字 TMDB id，跳过本地假 id（如 'local-xxx'），避免脏数据污染主库
+      if (typeof id === 'number' && Number.isFinite(id)) ids.add(id);
+      else if (typeof id === 'string' && /^\d+$/.test(id)) ids.add(Number(id));
+    }
+  } catch (e) {
+    console.warn('[自动固定] 读取 watchlist 失败，跳过自动固定:', e.message);
+  }
+  return ids;
+}
 
-// 本地补充番剧（TMDB discover 未覆盖、又不在 PINNED_TMDB_IDS 里的手工剧）。
+// 本地补充番剧（TMDB discover 未覆盖、且也不在用户追番里的手工剧）。
 // 每日同步会把 data/anime.json 整体覆盖，因此在这里追加可长期稳定存在。
 // 字段与 normalize() 输出保持一致；tmdbId 用本地字符串（不与 TMDB 数字 id 冲突，前端按 String() 比较）。
-// 注：眷思量已改走 PINNED_TMDB_IDS(127473) 真实 ID，不再放这里，避免同一剧出现两个 ID 的重复条目。
+// 搜索加入、但不在 discover 热度榜的剧，现由 collectTrackedIdsFromWatchlist() 自动纳入，无需在此登记。
 const LOCAL_EXTRA_ANIME = [];
 
 if (!TMDB_TOKEN) {
@@ -230,9 +249,12 @@ async function main() {
     await fetchRegion(region, false);  // 全量通道：补真人国产剧/韩剧/日剧
   }
 
-  // 固定追踪：把 discover 热度榜覆盖不到、但用户在追番的剧显式拉进主库，
+  // 自动固定追踪：识别追番列表里 discover 热度榜覆盖不到的剧，显式拉进主库，
   // 使其集数/更新频率随每日同步自动刷新（否则永远用追番里的 meta 死数据）。
-  for (const id of PINNED_TMDB_IDS) {
+  // 来源是 data/watchlist.json——CI 中已提前从 Gitee 拉取真实追番，故任何「搜索加入」的剧都会自动纳入。
+  const pinnedIds = collectTrackedIdsFromWatchlist();
+  console.log(`[自动固定] 识别出 ${pinnedIds.size} 个需固定追踪的 TMDB ID`);
+  for (const id of pinnedIds) {
     const key = `${id}-tv`;
     if (seen.has(key)) { console.log(`- [固定] ${id} 已被 discover 覆盖，跳过`); continue; }
     const resp = await tmdbGet(`/tv/${id}`, { language: LANG });
