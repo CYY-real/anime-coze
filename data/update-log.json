@@ -158,6 +158,12 @@
       "name": "公寓黑风暴",
       "latestSeason": 1,
       "latestEpisode": 2
+    },
+    {
+      "tmdbId": "259537",
+      "name": "剑来",
+      "latestSeason": 2,
+      "latestEpisode": 27
     }
   ]
 }

@@ -5768,6 +5768,37 @@
     "platforms": []
   },
   {
+    "tmdbId": 259537,
+    "name": "剑来",
+    "displayName": "剑来",
+    "cover": "/api/img?p=/t/p/w500/44LJUcedKZ7fsFeWeOvtLIJzEU.jpg",
+    "mediaType": "tv",
+    "region": "CN",
+    "regionLabel": "国漫",
+    "category": "anime",
+    "latestSeason": 2,
+    "latestEpisode": 27,
+    "nextAirDate": "",
+    "updateFrequency": "已完结",
+    "totalSeasons": 3,
+    "seasonEpisodeCounts": {
+      "1": 26,
+      "2": 27
+    },
+    "totalEpisodes": 53,
+    "overview": "大千世界，无奇不有。 骊珠洞天中本该有大气运的贫寒少年，因为本命瓷碎裂的缘故，使得机缘临身却难以捉住。基于此，众多大佬纷纷以少年为焦点进行布局，使得少年身边的朋友获得大机缘，而少年却置身风口浪尖之上…",
+    "firstAirDate": "2024-08-15",
+    "voteAverage": 8.071,
+    "originCountry": "CN",
+    "platforms": [
+      {
+        "platform": "tencent",
+        "name": "腾讯视频",
+        "url": ""
+      }
+    ]
+  },
+  {
     "tmdbId": 127473,
     "name": "眷思量",
     "displayName": "眷思量",
