@@ -569,24 +569,26 @@ html,body{
   align-items:center;gap:6px;
 }
 .wl-item .btn-catch-wrap{
-  display:flex;align-items:center;position:relative;
+  display:flex;align-items:center;
 }
 .wl-item .btn-catch{
   display:flex;align-items:center;justify-content:center;
   width:54px;height:28px;border-radius:14px;
-  background:linear-gradient(135deg,#FF6B9D,#C44AFF);
-  box-shadow:0 2px 6px rgba(255,107,157,0.25);
-  border:none;cursor:pointer;
+  background:#fff;color:#C44AFF;border:1.5px solid rgba(196,74,255,0.35);
+  cursor:pointer;
 }
-.wl-item .btn-catch:active{transform:scale(0.93);opacity:0.85}
-.wl-item .catch-label{font-size:12px;color:#fff;font-weight:700}
+.wl-item .btn-catch:active{transform:scale(0.94);opacity:0.85}
+.wl-item .catch-label{font-size:12px;color:#C44AFF;font-weight:700}
+.wl-item .btn-go-watch-wrap{
+  position:relative;display:inline-flex;
+}
 .wl-item .catch-badge{
-  position:absolute;top:-7px;right:-7px;
+  position:absolute;top:-8px;right:-6px;z-index:3;
   display:flex;align-items:center;justify-content:center;
-  min-width:20px;height:16px;padding:0 5px;
-  border-radius:8px;background:#FF8C00;color:#fff;
-  font-size:10px;font-weight:700;
-  box-shadow:0 1px 4px rgba(255,140,0,0.35);
+  min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;
+  border-radius:9px;background:#FF8C00;color:#fff;
+  font-size:10px;line-height:1;font-weight:700;
+  box-shadow:0 1px 4px rgba(255,140,0,0.4);
 }
 .wl-item .btn-status{
   flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;
@@ -603,12 +605,13 @@ html,body{
 .wl-item .btn-status.dropped{background:#FFECEC;color:#FF8A8A}
 .wl-item .btn-go-watch{
   display:inline-flex;align-items:center;justify-content:center;
-  min-width:54px;height:26px;padding:0 12px;border-radius:13px;
+  min-width:54px;height:28px;padding:0 12px;border-radius:14px;
   font-size:12px;font-weight:700;box-sizing:border-box;
-  background:#fff;color:#C44AFF;border:1.5px solid rgba(196,74,255,0.35);
-  cursor:pointer;white-space:nowrap;
+  background:linear-gradient(135deg,#FF6B9D,#C44AFF);
+  color:#fff;border:none;cursor:pointer;white-space:nowrap;
+  box-shadow:0 2px 6px rgba(255,107,157,0.25);
 }
-.wl-item .btn-go-watch:active{transform:scale(0.94);opacity:0.85}
+.wl-item .btn-go-watch:active{transform:scale(0.93);opacity:0.85}
 
 /* 旧的内联控件（不再使用，保留以防兼容） */
 .wl-item .controls{display:none}
@@ -1187,7 +1190,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 .detail-name{font-size:16px;font-weight:700;text-align:center;margin-bottom:2px}
 .detail-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:0 auto 8px;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
 .detail-tmdb:active{opacity:.6}
-.progress-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:-4px 0 6px;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
+.progress-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:2px auto 8px;align-self:center;width:max-content;max-width:90%;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
 .progress-tmdb:active{opacity:.6}
 .detail-meta{font-size:12px;color:var(--text-secondary);text-align:center}
 .detail-overview{
@@ -1267,6 +1270,25 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   .btn-catch{width:60px;height:32px;font-size:13px}
   .header-title{font-size:22px}
 }
+
+/* ============================================
+   更新动态 Tab（昨日/今日更新）
+   ============================================ */
+.updates-header{padding:18px 4px 10px}
+.updates-title{font-size:19px;font-weight:700;color:var(--text-primary)}
+.updates-sub{font-size:12px;color:var(--text-secondary);margin-top:3px}
+.updates-list{display:flex;flex-direction:column;gap:18px;padding-bottom:8px}
+.upd-group-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.upd-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;
+  box-shadow:0 1px 3px rgba(139,122,168,.12);cursor:pointer;
+}
+.upd-item:active{background:#FBF7FF}
+.upd-name{font-size:14px;font-weight:600;color:var(--text-primary);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upd-ep{font-size:12px;color:var(--pink);font-weight:600;flex-shrink:0}
+.upd-empty{font-size:13px;color:var(--text-ghost);padding:10px 2px}
+.upd-note{font-size:13px;color:var(--text-secondary);line-height:1.6;background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(139,122,168,.12)}
 </style>
 </head>
 <body>
@@ -1349,6 +1371,15 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
     </div>
     <div id="mylistList" class="anime-list"></div>
   </div>
+
+  <!-- Content: Updates (昨日/今日更新) -->
+  <div id="tabUpdates" class="hidden">
+    <div class="updates-header">
+      <div class="updates-title">更新动态</div>
+      <div class="updates-sub">仅展示你追番里昨日 / 今日有更新的番剧</div>
+    </div>
+    <div id="updateList" class="updates-list"></div>
+  </div>
 </div>
 
 <!-- Bottom Nav -->
@@ -1360,6 +1391,10 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   <a href="#" onclick="switchTab('browse',this)">
     <span class="icon">➕</span>
     <span class="label">添加剧集</span>
+  </a>
+  <a href="#" onclick="switchTab('updates',this)">
+    <span class="icon">📅</span>
+    <span class="label">更新</span>
   </a>
 
 </nav>
@@ -1428,6 +1463,10 @@ let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
 let activeSeason = 1;
+// 进度弹窗跨季辅助（供 pickSeason / catchUpToLatest 读取）
+let seasonLatestMap = {};
+let latestSeasonGlobal = 1;
+let latestEpisodeGlobal = 0;
 // 添加页实时搜索(TMDB)结果缓存 + 加载态
 let liveResults = [];
 let liveLoading = false;
@@ -1444,14 +1483,21 @@ function init() {
   if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
   // 不再注入 mock 演示数据——首次访问显示空状态提示，pullWatchlist 会从 Gitee 拉取真实数据
   renderMylist();
-  // 从 Gitee 同步追剧列表（静默，首次不弹 toast）
-  pullWatchlist();
-  // 加载番剧库（GitHub Action 刷新的最新 TMDB 数据），让"我的追番"能实时跟随最新集数
-  refreshAnimeDb();
-  // 恢复上次激活的 tab，刷新/重载后停留在当前页
-  const savedTab = localStorage.getItem('anime_coze_active_tab') || 'mylist';
-  const navLinks = document.querySelectorAll('.bottom-nav a');
-  switchTab(savedTab, savedTab === 'browse' ? navLinks[1] : navLinks[0]);
+  // 先加载数据（云端或站点快照 + 番剧库），再渲染当前 tab，
+  // 否则"更新"页会在 myIds 尚未就绪时渲染一次并卡在空状态（角标同理依赖 animeDb）。
+  // 两个加载各自内部有 try/catch，不会因网络异常而 reject，await 安全。
+  pullWatchlist().finally(() => {
+    refreshAnimeDb().finally(() => {
+      // 恢复上次激活的 tab，刷新/重载后停留在当前页
+      const savedTab = localStorage.getItem('anime_coze_active_tab') || 'mylist';
+      const navLinks = document.querySelectorAll('.bottom-nav a');
+      // 恢复上次激活的 tab（更新页为第 3 个导航项，索引 2）
+      let savedEl = navLinks[0];
+      if (savedTab === 'browse') savedEl = navLinks[1];
+      else if (savedTab === 'updates') savedEl = navLinks[2];
+      switchTab(savedTab, savedEl);
+    });
+  });
 }
 
 // ======================== TOAST ========================
@@ -1470,15 +1516,79 @@ function switchTab(tab, el) {
   if (el) el.classList.add('active');
   document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
   document.getElementById('tabMylist').classList.toggle('hidden', tab !== 'mylist');
+  document.getElementById('tabUpdates').classList.toggle('hidden', tab !== 'updates');
   document.body.style.overflow = '';
 
   if (tab === 'mylist') {
     renderMylist();
   } else if (tab === 'browse') {
     initBrowseTab();
+  } else if (tab === 'updates') {
+    renderUpdates();
   }
   // 切 tab 时刷新番剧库，保证页面上的 TMDB 数据是最新的（GitHub Action 跑的结果）
   refreshAnimeDb();
+  syncBodyScroll();
+}
+
+// ======================== UPDATES TAB (昨日/今日更新) ========================
+let updateLog = null;
+
+// 读取每日同步产出的更新日志（按日期记录有更新的番剧 tmdbId）
+async function loadUpdateLog() {
+  try {
+    const resp = await fetch('./data/update-log.json', { cache: 'no-store' });
+    if (!resp.ok) { updateLog = {}; return; }
+    updateLog = await resp.json();
+  } catch (e) { updateLog = {}; }
+}
+
+// 本地日期字符串（用户设备时区，中国用户即北京时间，与日志记录口径一致）
+function localDateStr(d) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+async function renderUpdates() {
+  const el = document.getElementById('updateList');
+  if (!el) return;
+  if (updateLog == null) await loadUpdateLog();
+  const log = updateLog || {};
+  const myIds = new Set(watchlist.map((w) => String(w.tmdbId)));
+  const todayStr = localDateStr(new Date());
+  const yStr = localDateStr(new Date(Date.now() - 86400000));
+
+  const hasAny = Object.keys(log).length > 0;
+  if (!hasAny) {
+    el.innerHTML = `<div class="upd-note">📭 更新日志会从部署后的每日同步开始累积，过一两个同步周期即可看到昨日 / 今日更新。</div>`;
+    syncBodyScroll();
+    return;
+  }
+
+  const pick = (key) => (log[key] || []).filter((x) => myIds.has(String(x.tmdbId)));
+  const todayItems = pick(todayStr);
+  const yItems = pick(yStr);
+
+  const groupHtml = (title, icon, items, emptyMsg) => {
+    const body = items.length
+      ? items.map((x) => {
+          const label = (x.latestSeason && x.latestSeason > 1)
+            ? `更新至 S${x.latestSeason}E${x.latestEpisode}`
+            : `更新至第 ${x.latestEpisode} 集`;
+          return `<div class="upd-item" onclick="openDetail('${esc(String(x.tmdbId))}')">
+            <div class="upd-name">${esc(x.name || '')}</div>
+            <div class="upd-ep">${label}</div>
+          </div>`;
+        }).join('')
+      : `<div class="upd-empty">${emptyMsg || '暂无更新'}</div>`;
+    return `<div class="upd-group">
+      <div class="upd-group-title">${icon} ${title}（${items.length}）</div>
+      ${body}
+    </div>`;
+  };
+
+  el.innerHTML = groupHtml(`今日更新 ${todayStr}`, '🟢', todayItems, '今日暂无新集上线（你追的番均为周更，新一集将在各自播出日更新）')
+    + groupHtml(`昨日更新 ${yStr}`, '🟡', yItems, '昨日暂无更新');
   syncBodyScroll();
 }
 
@@ -2305,8 +2415,16 @@ function openProgress(tmdbId) {
   }
 
   activeSeason = currentSeason || 1;
-  const activeLatest = seasonLatest(activeSeason) || latestEpisode;
-  const banked = activeLatest ? activeLatest - w.watchedEpisode : 0;
+  const activeLatest = seasonLatest(activeSeason) || latestEpisode;  // 当前选中季的集数（用于输入框 max）
+  // 跨季总存集数（与列表一致），弹窗里统一展示真实未看总数
+  const totalBanked = enriched.status === 'finished'
+    ? 0
+    : computeRemainingEpisodes(latestSeason, latestEpisode, w.watchedSeason || 1, w.watchedEpisode || 0, seasonCounts);
+  // 记录全局季信息，供 pickSeason / catchUpToLatest 使用
+  seasonLatestMap = {};
+  for (let s = 1; s <= totalSeasons; s++) seasonLatestMap[s] = seasonLatest(s);
+  latestSeasonGlobal = latestSeason || 1;
+  latestEpisodeGlobal = latestEpisode || 0;
 
   // closeProgressModal 已提升为全局函数（见 MODAL HELPERS），供内联 onclick 调用
 
@@ -2331,8 +2449,8 @@ function openProgress(tmdbId) {
         </div>
         <span class="progress-suffix">集</span>
       </div>
-      ${activeLatest ? `<span class="progress-reminder">最新 ${activeLatest} 集 · 存了 ${Math.max(0, banked)} 集</span>` : ''}
-      ${banked > 0 ? `<button class="progress-catchup" onclick="document.getElementById('popupEpisode').value=${activeLatest};showToast('⚡ 已追到最新')">⚡ 已追到最新</button>` : ''}
+      <span class="progress-reminder">最新 ${latestSeason > 1 ? `S${latestSeason}E${latestEpisode}` : `第${latestEpisode}集`} · 存了 ${Math.max(0, totalBanked)} 集</span>
+      ${totalBanked > 0 ? `<button class="progress-catchup" onclick="catchUpToLatest()">⚡ 已追到最新</button>` : ''}
     </div>
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeProgressModal()">取消</button>
@@ -2353,6 +2471,21 @@ function pickSeason(s) {
   document.querySelectorAll('.season-chip').forEach(c => {
     c.classList.toggle('active', Number(c.dataset.season) === s);
   });
+  const inp = document.getElementById('popupEpisode');
+  if (inp) inp.max = (seasonLatestMap[s] || latestEpisodeGlobal || 999);
+}
+
+// 「⚡已追到最新」：跳到真正最新的季/集（跨季也正确），而非仅当前季末
+function catchUpToLatest() {
+  const inp = document.getElementById('popupEpisode');
+  if (!inp) return;
+  activeSeason = latestSeasonGlobal;
+  document.querySelectorAll('.season-chip').forEach(c => {
+    c.classList.toggle('active', Number(c.dataset.season) === latestSeasonGlobal);
+  });
+  inp.max = latestEpisodeGlobal || 999;
+  inp.value = latestEpisodeGlobal;
+  showToast('⚡ 已追到最新');
 }
 
 function saveProgress(tmdbId) {
@@ -2432,7 +2565,7 @@ function getMylistStatus(w) {
   const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
   // 多季且所有季都到顶 = 已完结；用 seasonEpisodeCounts
   if (a && a.seasonEpisodeCounts) {
-    const totalS = a.totalSeasons || 1;
+    const totalS = a.totalSeasons || Object.keys(a.seasonEpisodeCounts).length || 1;
     let allDone = true;
     for (let s = 1; s <= totalS; s++) {
       const max = a.seasonEpisodeCounts[String(s)] || a.seasonEpisodeCounts[s] || 0;
@@ -2443,8 +2576,8 @@ function getMylistStatus(w) {
   } else if (latestEp && w.watchedEpisode >= latestEp && (w.watchedSeason || 1) >= latestSeason) {
     return 'finished';
   }
-  // 追到最新 = caughtup（已追完本轮）
-  if (latestEp && w.watchedEpisode >= latestEp) return 'caughtup';
+  // 追到最新 = caughtup（已追完本轮）。多季必须季也对齐，否则后面还有未看季不算追完
+  if (latestEp && (w.watchedSeason || 1) >= latestSeason && w.watchedEpisode >= latestEp) return 'caughtup';
   return 'raising';
 }
 
@@ -2534,6 +2667,31 @@ function resolveAnime(tmdbId) {
   return null;
 }
 
+// 跨季正确计算「还差多少集没看」（存集数）。
+// latestEpisode / watchedEpisode 是「季内集数」，多季时不能直接相减。
+// 算法：当前季剩余 + 中间整季全算 + 最新季已释放集数；缺 seasonEpisodeCounts 时保守兜底。
+function computeRemainingEpisodes(latestSeason, latestEpisode, watchedSeason, watchedEpisode, seasonCounts) {
+  watchedSeason = watchedSeason || 1;
+  watchedEpisode = watchedEpisode || 0;
+  if (watchedSeason >= latestSeason) {
+    return Math.max(0, latestEpisode - watchedEpisode);
+  }
+  const num = (v) => (v == null ? 0 : Number(v) || 0);
+  let remain = 0;
+  // 当前正在看的季，剩多少集没看
+  const curTotal = seasonCounts ? (num(seasonCounts[String(watchedSeason)]) || num(seasonCounts[watchedSeason])) : 0;
+  remain += Math.max(0, curTotal - watchedEpisode);
+  // 中间那些已完结的整季，全算未看
+  for (let s = watchedSeason + 1; s < latestSeason; s++) {
+    remain += seasonCounts ? (num(seasonCounts[String(s)]) || num(seasonCounts[s])) : 0;
+  }
+  // 最新季已释放但尚未看的集数
+  remain += latestEpisode;
+  // 兜底：缺 seasonEpisodeCounts 且上面算出 0，但确实跨季（后面有未看季），至少给最新季已出集数，避免错判为 0/已追完
+  if (seasonCounts == null && remain === 0) remain = latestEpisode;
+  return remain;
+}
+
 function enrichWatchlistItem(w) {
   // 优先按 tmdbId 精确匹配（存的就是 TMDB 的 id，后续直接对应）
   let a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
@@ -2554,8 +2712,9 @@ function enrichWatchlistItem(w) {
   const primaryPlatform = platforms.find(p => p.isPrimary) || platforms[0] || null;
   // 状态：dropped 保留用户标记，其余始终按最新数据重新计算
   const status = w.status === 'dropped' ? 'dropped' : getMylistStatus(w);
-  // 剩余集数 = latestEpisode - watchedEpisode
-  const remaining = status === 'finished' ? 0 : Math.max(0, latestEpisode - w.watchedEpisode);
+  // 剩余集数（存集数）：多季需跨季累加，不能直接 latestEpisode - watchedEpisode
+  const seasonCounts = (a && a.seasonEpisodeCounts) ? a.seasonEpisodeCounts : null;
+  const remaining = status === 'finished' ? 0 : computeRemainingEpisodes(latestSeason, latestEpisode, w.watchedSeason, w.watchedEpisode, seasonCounts);
   // 更新频率：优先用番剧库 anime 的 nextAirDate 实时推算（与添加页 browseCard 一致），追番自带值兜底
   const updateFrequency = (a ? computeUpdateFrequency(a) : '') || w.updateFrequency || '';
   const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧', jdrama: '日剧' };
@@ -2638,12 +2797,9 @@ function renderMylist() {
     // 右侧操作：raising/已追完+remaining>0 显示"追更"按钮 + 角标；caughtup/finished 统一显示"已追完"；dropped 显示"已弃番"
     let actionHtml = '';
     if (status === 'raising' || (status === 'caughtup' && remaining > 0)) {
-      actionHtml = `<div class="btn-catch-wrap">
-        <button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="更新进度">
-          <span class="catch-label">追更</span>
-        </button>
-        ${remaining > 0 ? `<span class="catch-badge">${remaining}</span>` : ''}
-      </div>`;
+      actionHtml = `<button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="更新进度">
+        <span class="catch-label">追更</span>
+      </button>`;
     } else if (status === 'dropped') {
       actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="操作">已弃番</button>`;
     } else if (status === 'caughtup' || status === 'finished') {
@@ -2661,7 +2817,9 @@ function renderMylist() {
       const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
       if (goUrl) {
         const goLabel = pu ? '去看' : '搜看';
-        goWatchBtn = `<button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button>`;
+        const showBadge = (status === 'raising' || (status === 'caughtup' && remaining > 0)) && remaining > 0;
+        const badgeHtml = showBadge ? `<span class="catch-badge">${remaining}</span>` : '';
+        goWatchBtn = `<div class="btn-go-watch-wrap">${badgeHtml}<button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button></div>`;
       }
     }
     return `<div class="wl-item" onclick="openDetail('${tmdbId}')">
@@ -2692,7 +2850,7 @@ function renderMylist() {
           <span>更新至${latestLabel}</span>
         </div>
       </div>
-      <div class="anime-actions">${actionHtml}${goWatchBtn}</div>
+      <div class="anime-actions">${goWatchBtn}${actionHtml}</div>
     </div>`;
   }).join('');
 }
@@ -2741,7 +2899,12 @@ let _syncTimer = null;
 async function pullWatchlist(showMsg = false) {
   try {
     const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, { cache: 'no-store' });
-    if (resp.status === 404) { if (showMsg) showToast('☁️ 云端还没有追剧记录'); return; }
+    if (resp.status === 404) {
+      // 云端暂无记录：回退到站点同源快照（本地预览 / 代理不可用时也能量到追番列表）
+      if (await tryFallbackSnapshot(showMsg)) return;
+      if (showMsg) showToast('☁️ 云端还没有追剧记录');
+      return;
+    }
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const text = await resp.text();
     const data = text ? JSON.parse(text) : [];
