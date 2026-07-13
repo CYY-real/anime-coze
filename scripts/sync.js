@@ -37,34 +37,18 @@ const GITEE_BRANCH = process.env.GITEE_BRANCH || 'master';
 
 const { matchPlatforms } = require('./platformSeed');
 
-// 本地补充番剧（TMDB discover 未覆盖 / 用户指定补充）。
-// 每日同步会把 data/anime.json 整体覆盖，因此在这里追加，保证眷思量等手工剧长期稳定存在。
+// 固定追踪的 TMDB 剧集数字 ID：discover 热度榜覆盖不到、但用户在「追番」里已添加（经 /api/tmdb 名称搜索加入）的剧。
+// 例：遮天(224839)、眷思量(127473) 命中 ID 不在 discover 前 N 页，致主库 anime.json 缺它、
+// 前端永远回退到追番里的 meta 死数据、不随 TMDB 刷新。这里显式 /tv/{id} 拉取并入主库，
+// 使其集数/更新频率随每日同步自动更新（卡片走 animeDb，更新页走 update-log）。
+// 新增这类剧只需在此追加 TMDB 数字 ID；下方 main() 会按 ID 去重并入，已存在的会被跳过。
+const PINNED_TMDB_IDS = [224839, 127473];
+
+// 本地补充番剧（TMDB discover 未覆盖、又不在 PINNED_TMDB_IDS 里的手工剧）。
+// 每日同步会把 data/anime.json 整体覆盖，因此在这里追加可长期稳定存在。
 // 字段与 normalize() 输出保持一致；tmdbId 用本地字符串（不与 TMDB 数字 id 冲突，前端按 String() 比较）。
-const LOCAL_EXTRA_ANIME = [
-  {
-    tmdbId: 'local-juansiliang',
-    name: '眷思量',
-    displayName: '眷思量',
-    cover: '',
-    mediaType: 'tv',
-    region: 'CN',
-    regionLabel: '国漫',
-    category: 'anime',
-    latestSeason: 2,
-    latestEpisode: 13,
-    nextAirDate: '',
-    updateFrequency: '已完结',
-    totalSeasons: 2,
-    seasonEpisodeCounts: { '1': 15, '2': 13 },
-    totalEpisodes: 28,
-    overview:
-      '国产3D古风动画。以异界仙岛「思量岛」为背景，讲述神族少年镜玄与凡人少女屠丽在岛上探寻真相、挣脱命运枷锁的成长故事。第一季2021年腾讯视频独播（15集），第二季《眷思量之风烟迭起》2024年上线（13集）。',
-    firstAirDate: '2021-06-14',
-    voteAverage: 8.6,
-    originCountry: 'CN',
-    platforms: [{ platform: 'tencent', name: '腾讯视频', url: '', isPrimary: true }],
-  },
-];
+// 注：眷思量已改走 PINNED_TMDB_IDS(127473) 真实 ID，不再放这里，避免同一剧出现两个 ID 的重复条目。
+const LOCAL_EXTRA_ANIME = [];
 
 if (!TMDB_TOKEN) {
   console.error('缺少 TMDB_ACCESS_TOKEN');
@@ -143,6 +127,52 @@ function normalize(it, region) {
   };
 }
 
+// 对比新旧 anime.json，把「今天有更新的番剧」按日期累加进 data/update-log.json。
+// 前端「更新」标签页读取它，按本地日期展示昨日/今日更新（仅我的追番）。
+// 日期用北京时间（GMT+8），与前端本地日期筛选保持一致，避免跨零点时区错位导致匹配不上。
+function updateChangeLog(newArr, dataDir) {
+  const logPath = path.join(dataDir, 'update-log.json');
+  const animePath = path.join(dataDir, 'anime.json');
+  const newMap = {};
+  newArr.forEach((a) => { newMap[String(a.tmdbId)] = a; });
+  // 旧数据（上一次提交的 anime.json），用于对比出集数新增/变更
+  const oldMap = {};
+  if (fs.existsSync(animePath)) {
+    try {
+      JSON.parse(fs.readFileSync(animePath, 'utf8')).forEach((a) => { oldMap[String(a.tmdbId)] = a; });
+    } catch (e) { /* 忽略损坏数据 */ }
+  }
+  // 北京时间日期字符串 YYYY-MM-DD
+  const bj = new Date(Date.now() + 8 * 3600 * 1000);
+  const today = bj.toISOString().slice(0, 10);
+  let log = {};
+  if (fs.existsSync(logPath)) {
+    try { log = JSON.parse(fs.readFileSync(logPath, 'utf8')); } catch (e) { log = {}; }
+  }
+  // 与当天已记录项做并集（同一天多次同步不重复、不丢早上记录）
+  const prev = Array.isArray(log[today]) ? log[today] : [];
+  const byId = new Map(prev.map((x) => [String(x.tmdbId), x]));
+  for (const [id, a] of Object.entries(newMap)) {
+    const old = oldMap[id];
+    const oldKey = old ? `${old.latestSeason}:${old.latestEpisode}` : null;
+    const newKey = `${a.latestSeason}:${a.latestEpisode}`;
+    if (oldKey !== newKey) {
+      byId.set(id, {
+        tmdbId: id,
+        name: a.name,
+        latestSeason: a.latestSeason,
+        latestEpisode: a.latestEpisode,
+      });
+    }
+  }
+  log[today] = [...byId.values()];
+  // 仅保留最近 30 天，避免无限增长
+  const keys = Object.keys(log).sort();
+  while (keys.length > 30) delete log[keys.shift()];
+  fs.writeFileSync(logPath, JSON.stringify(log, null, 2));
+  console.log(`📝 更新日志：${today} 记录 ${log[today].length} 部有更新`);
+}
+
 async function main() {
   const out = [];
   const seen = new Set();          // tmdbId 去重
@@ -200,6 +230,18 @@ async function main() {
     await fetchRegion(region, false);  // 全量通道：补真人国产剧/韩剧/日剧
   }
 
+  // 固定追踪：把 discover 热度榜覆盖不到、但用户在追番的剧显式拉进主库，
+  // 使其集数/更新频率随每日同步自动刷新（否则永远用追番里的 meta 死数据）。
+  for (const id of PINNED_TMDB_IDS) {
+    const key = `${id}-tv`;
+    if (seen.has(key)) { console.log(`- [固定] ${id} 已被 discover 覆盖，跳过`); continue; }
+    const resp = await tmdbGet(`/tv/${id}`, { language: LANG });
+    if (!resp.ok) { console.warn(`[固定] /tv/${id} 失败: ${resp.status}，跳过`); continue; }
+    // region 用 TMDB 返回的产地推断（遮天/眷思量均为 CN），normalize 据此定分类与地区标签
+    const region = (resp.body.origin_country && resp.body.origin_country[0]) || 'CN';
+    ingest(normalize(resp.body, region));
+  }
+
   // 追加本地补充番剧（避免被 TMDB 每日整体覆盖）
   for (const extra of LOCAL_EXTRA_ANIME) {
     const key = `${extra.tmdbId}-tv`;
@@ -216,6 +258,8 @@ async function main() {
 
   const dataDir = path.join(__dirname, '..', 'data');
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  // 先产出更新日志（读取磁盘上的旧 anime.json 做对比），再覆盖写入新 anime.json
+  updateChangeLog(out, dataDir);
   const outFile = path.join(dataDir, 'anime.json');
   const jsonContent = JSON.stringify(out, null, 2);
   fs.writeFileSync(outFile, jsonContent);
