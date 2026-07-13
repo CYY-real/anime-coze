@@ -132,8 +132,8 @@
   {
     "tmdbId": 259537,
     "name": "剑来",
-    "watchedSeason": 1,
-    "watchedEpisode": 0,
+    "watchedSeason": 2,
+    "watchedEpisode": 27,
     "latestSeason": 2,
     "latestEpisode": 27,
     "threshold": 0,
@@ -238,6 +238,44 @@
       "voteAverage": 8.867,
       "originCountry": "CN",
       "nextAirDate": "2026-07-14",
+      "updateFrequency": "周更"
+    }
+  },
+  {
+    "tmdbId": "259231",
+    "name": "斩神之凡尘神域",
+    "watchedSeason": 1,
+    "watchedEpisode": 0,
+    "latestSeason": 2,
+    "latestEpisode": 5,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [],
+    "platform": "",
+    "updateFrequency": "",
+    "meta": {
+      "tmdbId": "259231",
+      "name": "斩神之凡尘神域",
+      "cover": "/api/img?p=/t/p/w500/yEURCDODP6noWXQsQ97VMVdupfq.jpg",
+      "category": "anime",
+      "categoryLabel": "",
+      "region": "CN",
+      "regionLabel": "国漫",
+      "latestSeason": 2,
+      "latestEpisode": 5,
+      "seasonEpisodeCounts": {
+        "1": 15,
+        "2": 15
+      },
+      "totalEpisodes": 30,
+      "platforms": [],
+      "overview": "\"若黯夜终临，吾必立于万万人前，横刀向渊，血染天穹！\" 你是否想过，在霓虹璀璨的都市之下，潜藏着来自古老神话的怪物？你是否想过，在那高悬于世人头顶的月亮之上，伫立着守望人间的神明？你是否想过，在人潮汹涌的现代城市之中，存在代替神明行走人间的超凡之人？",
+      "firstAirDate": "2024-07-31",
+      "voteAverage": 7.889,
+      "originCountry": "CN",
+      "nextAirDate": "2026-07-15",
       "updateFrequency": "周更"
     }
   }

@@ -7,5 +7,157 @@
       "latestSeason": 1,
       "latestEpisode": 149
     }
+  ],
+  "2026-07-14": [
+    {
+      "tmdbId": "5705",
+      "name": "개그콘서트",
+      "latestSeason": 2,
+      "latestEpisode": 1175
+    },
+    {
+      "tmdbId": "13916",
+      "name": "死亡笔记",
+      "latestSeason": 1,
+      "latestEpisode": 37
+    },
+    {
+      "tmdbId": "34860",
+      "name": "忍者乱太郎",
+      "latestSeason": 17,
+      "latestEpisode": 80
+    },
+    {
+      "tmdbId": "35024",
+      "name": "Show!音乐中心",
+      "latestSeason": 1,
+      "latestEpisode": 960
+    },
+    {
+      "tmdbId": "35790",
+      "name": "魔卡少女樱",
+      "latestSeason": 4,
+      "latestEpisode": 22
+    },
+    {
+      "tmdbId": "52823",
+      "name": "一周偶像",
+      "latestSeason": 1,
+      "latestEpisode": 706
+    },
+    {
+      "tmdbId": "61415",
+      "name": "命运之夜 无限剑制",
+      "latestSeason": 2,
+      "latestEpisode": 13
+    },
+    {
+      "tmdbId": "63942",
+      "name": "맛있는 녀석들",
+      "latestSeason": 3,
+      "latestEpisode": 550
+    },
+    {
+      "tmdbId": "74035",
+      "name": "어서와~ 한국은 처음이지?",
+      "latestSeason": 4,
+      "latestEpisode": 436
+    },
+    {
+      "tmdbId": "82694",
+      "name": "盟卡车神之龙兽觉醒",
+      "latestSeason": 1,
+      "latestEpisode": 52
+    },
+    {
+      "tmdbId": "83319",
+      "name": "BANGTAN BOMB",
+      "latestSeason": 13,
+      "latestEpisode": 6
+    },
+    {
+      "tmdbId": "93471",
+      "name": "연애 하루 전",
+      "latestSeason": 3,
+      "latestEpisode": 18
+    },
+    {
+      "tmdbId": "103270",
+      "name": "虹猫蓝兔武侠系列",
+      "latestSeason": 5,
+      "latestEpisode": 1
+    },
+    {
+      "tmdbId": "106853",
+      "name": "侠岚",
+      "latestSeason": 7,
+      "latestEpisode": 40
+    },
+    {
+      "tmdbId": "122612",
+      "name": "万界独尊",
+      "latestSeason": 1,
+      "latestEpisode": 464
+    },
+    {
+      "tmdbId": "155208",
+      "name": "哈啰！小梅子",
+      "latestSeason": 6,
+      "latestEpisode": 16
+    },
+    {
+      "tmdbId": "206558",
+      "name": "神澜奇域无双珠",
+      "latestSeason": 1,
+      "latestEpisode": 45
+    },
+    {
+      "tmdbId": "219498",
+      "name": "小鸡不好惹",
+      "latestSeason": 2,
+      "latestEpisode": 78
+    },
+    {
+      "tmdbId": "220118",
+      "name": "为涟苍士献上纯洁",
+      "latestSeason": 1,
+      "latestEpisode": 8
+    },
+    {
+      "tmdbId": "234265",
+      "name": "王牌大賤諜",
+      "latestSeason": 1,
+      "latestEpisode": 738
+    },
+    {
+      "tmdbId": "274037",
+      "name": "뚝딱맨",
+      "latestSeason": 5,
+      "latestEpisode": 39
+    },
+    {
+      "tmdbId": "276880",
+      "name": "拜托请穿上，鹰峰同学",
+      "latestSeason": 1,
+      "latestEpisode": 12
+    },
+    {
+      "tmdbId": "282338",
+      "name": "小品一家人",
+      "latestSeason": 20,
+      "latestEpisode": 49
+    },
+    {
+      "tmdbId": "287329",
+      "name": "倒霉熊",
+      "latestSeason": 1,
+      "latestEpisode": 4
+    },
+    {
+      "tmdbId": "300727",
+      "name": "公寓黑风暴",
+      "latestSeason": 1,
+      "latestEpisode": 2
+    }
   ]
 }
