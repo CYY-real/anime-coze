@@ -3,7 +3,7 @@
     "tmdbId": 106449,
     "name": "凡人修仙传",
     "watchedSeason": 1,
-    "watchedEpisode": 181,
+    "watchedEpisode": 182,
     "latestSeason": 1,
     "latestEpisode": 96,
     "threshold": 5,
@@ -201,7 +201,7 @@
     "tmdbId": "224839",
     "name": "遮天",
     "watchedSeason": 1,
-    "watchedEpisode": 146,
+    "watchedEpisode": 147,
     "latestSeason": 1,
     "latestEpisode": 170,
     "threshold": 0,
@@ -212,7 +212,7 @@
       {
         "platform": "tencent",
         "name": "腾讯视频",
-        "url": "",
+        "url": "https://www.6789kb.com/vod/32224.html",
         "isPrimary": true
       }
     ],
