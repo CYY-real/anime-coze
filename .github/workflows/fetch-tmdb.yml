@@ -30,14 +30,6 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Run TMDB sync (生成 data/anime.json)
-        env:
-          TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
-          TMDB_LANG: zh-CN
-          TMDB_REGIONS: JP,CN,KR
-          TMDB_PAGES: '2'
-        run: node scripts/sync.js
-
       - name: Pull config from Gitee (写入 data/watchlist.json)
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
@@ -57,6 +49,14 @@ jobs:
             echo "$CONTENT" | base64 -d > data/watchlist.json
             echo "✅ 已从 Gitee 拉取配置"
           fi
+
+      - name: Run TMDB sync (生成 data/anime.json)
+        env:
+          TMDB_ACCESS_TOKEN: ${{ secrets.TMDB_ACCESS_TOKEN }}
+          TMDB_LANG: zh-CN
+          TMDB_REGIONS: JP,CN,KR
+          TMDB_PAGES: '2'
+        run: node scripts/sync.js
 
       - name: Commit data
         run: |
