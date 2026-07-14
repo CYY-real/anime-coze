@@ -255,5 +255,127 @@
       "latestSeason": 1,
       "latestEpisode": 17
     }
+  ],
+  "2026-07-15": [
+    {
+      "tmdbId": "7677",
+      "name": "我们结婚了",
+      "latestSeason": 4,
+      "latestEpisode": 241
+    },
+    {
+      "tmdbId": "35026",
+      "name": "M Countdown",
+      "latestSeason": 1,
+      "latestEpisode": 904
+    },
+    {
+      "tmdbId": "59206",
+      "name": "Canimals",
+      "latestSeason": 2,
+      "latestEpisode": 52
+    },
+    {
+      "tmdbId": "70607",
+      "name": "魔法指环少女",
+      "latestSeason": 2,
+      "latestEpisode": 26
+    },
+    {
+      "tmdbId": "82172",
+      "name": "世界遗产",
+      "latestSeason": 32,
+      "latestEpisode": 19
+    },
+    {
+      "tmdbId": "89338",
+      "name": "万界神主",
+      "latestSeason": 3,
+      "latestEpisode": 316
+    },
+    {
+      "tmdbId": "91121",
+      "name": "闲着干嘛呢？",
+      "latestSeason": 1,
+      "latestEpisode": 337
+    },
+    {
+      "tmdbId": "94662",
+      "name": "精灵战车",
+      "latestSeason": 1,
+      "latestEpisode": 52
+    },
+    {
+      "tmdbId": "109096",
+      "name": "密室大逃脱 大神版",
+      "latestSeason": 7,
+      "latestEpisode": 14
+    },
+    {
+      "tmdbId": "119171",
+      "name": "爱情保卫战",
+      "latestSeason": 17,
+      "latestEpisode": 67
+    },
+    {
+      "tmdbId": "120850",
+      "name": "七十二家房客",
+      "latestSeason": 19,
+      "latestEpisode": 120
+    },
+    {
+      "tmdbId": "129272",
+      "name": "逆天至尊",
+      "latestSeason": 1,
+      "latestEpisode": 509
+    },
+    {
+      "tmdbId": "194524",
+      "name": "MBC 다큐프라임",
+      "latestSeason": 1,
+      "latestEpisode": 552
+    },
+    {
+      "tmdbId": "195410",
+      "name": "斗龙战士",
+      "latestSeason": 6,
+      "latestEpisode": 30
+    },
+    {
+      "tmdbId": "199332",
+      "name": "非你莫属",
+      "latestSeason": 17,
+      "latestEpisode": 45
+    },
+    {
+      "tmdbId": "202715",
+      "name": "开心锤锤",
+      "latestSeason": 1,
+      "latestEpisode": 1074
+    },
+    {
+      "tmdbId": "259140",
+      "name": "乱马½",
+      "latestSeason": 1,
+      "latestEpisode": 24
+    },
+    {
+      "tmdbId": "271576",
+      "name": "夏日口袋",
+      "latestSeason": 1,
+      "latestEpisode": 26
+    },
+    {
+      "tmdbId": "289763",
+      "name": "明天上班见！",
+      "latestSeason": 1,
+      "latestEpisode": 7
+    },
+    {
+      "tmdbId": "323180",
+      "name": "蜡笔小新",
+      "latestSeason": 1,
+      "latestEpisode": 480
+    }
   ]
 }
