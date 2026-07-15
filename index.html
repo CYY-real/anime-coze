@@ -622,6 +622,23 @@ html,body{
 .remove-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
 
 /* ============================================
+   Update Group Headers (今日/昨日)
+   ============================================ */
+.update-group-header{
+  margin:14px 0 8px;padding:6px 12px;
+  font-size:13px;font-weight:700;color:#C44AFF;
+  background:rgba(196,74,255,0.06);
+  border-radius:8px;display:inline-flex;align-items:center;gap:4px;
+}
+.update-group-header:first-child{margin-top:0}
+
+/* Update time in bottom-right of update cards */
+.wl-item .update-time{
+  position:absolute;bottom:8px;right:12px;
+  font-size:10px;color:#B8B0C8;font-weight:500;
+}
+
+/* ============================================
    My List Header
    注：用户要求"不置顶，跟内容一起滚走"——所以不加 sticky/fixed。
    保持普通文档流即可。
@@ -2679,53 +2696,35 @@ function renderUpdates() {
     return (a.name || '').localeCompare(b.name || '', 'zh');
   });
 
-  list.innerHTML = updated.map(it => {
-    const { tmdbId, name, cover, status, hasCover, currentEpisode, latestEpisode, currentSeason, latestSeason, remaining, platforms, platform, platformName, updateFrequency } = it;
+  // 分组：今日更新 / 昨日更新
+  const todayItems = [];
+  const yesterdayItems = [];
+  updated.forEach(it => {
+    const a = resolveAnime(it.tmdbId);
+    const nd = a && a.nextAirDate ? a.nextAirDate : '';
+    if (nd && new Date(nd + 'T00:00:00').getTime() === today.getTime()) {
+      todayItems.push(it);
+    } else {
+      yesterdayItems.push(it);
+    }
+  });
+
+  // 格式化日期为 MM/DD
+  const fmtDate = dateStr => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    return (d.getMonth() + 1) + '/' + d.getDate();
+  };
+
+  const buildUpdateCard = (it) => {
+    const { tmdbId, name, cover, status, hasCover, latestEpisode, latestSeason } = it;
     const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
-    const seasonMulti = latestSeason > 1 || currentSeason > 1;
-    const currentLabel = seasonMulti
-      ? 'S' + currentSeason + '·E' + currentEpisode
-      : (currentEpisode ? '第' + currentEpisode + '集' : '-');
+    const seasonMulti = latestSeason > 1;
     const latestLabel = seasonMulti
       ? 'S' + latestSeason + '·E' + latestEpisode
       : (latestEpisode ? '第' + latestEpisode + '集' : '?');
-    const platBrand = platform ? PLATFORM_BRAND[platform] : null;
-    const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
-    const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
-
-    let actionHtml = '';
-    if (status === 'raising') {
-      actionHtml = '<div class="btn-catch-wrap">' +
-        '<button class="btn-catch" onclick="event.stopPropagation();openProgress(\'' + tmdbId + '\')" title="更新进度">' +
-        '<span class="catch-label">追更</span></button>' +
-        (remaining > 0 ? '<span class="catch-badge">' + remaining + '</span>' : '') +
-        '</div>';
-    } else if (status === 'dropped') {
-      actionHtml = '<button class="btn-status dropped" onclick="event.stopPropagation();openDetail(\'' + tmdbId + '\')" title="操作">已弃番</button>';
-    } else if (status === 'caughtup' || status === 'finished') {
-      actionHtml = '<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress(\'' + tmdbId + '\')" title="查看进度">已追完</button>';
-    }
-
-    const linkIcon = platforms.length > 0
-      ? '<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23C44AFF\' stroke-width=\'2.5\' stroke-linecap=\'round\'><path d=\'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\'/><path d=\'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\'/></svg>" onclick="event.stopPropagation();openPlatformPopup(\'' + tmdbId + '\')" title="查看播放平台">'
-      : '';
-
-    let goWatchBtn = '';
-    if (platforms.length > 0) {
-      const primaryPlat = platforms.find(function(p) { return p.isPrimary; }) || platforms[0];
-      const pu = (primaryPlat.url || '').trim();
-      const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
-      if (goUrl) {
-        const goLabel = pu ? '去看' : '搜看';
-        goWatchBtn = '<button class="btn-go-watch" onclick="event.stopPropagation();window.open(\'' + esc(goUrl) + '\',\'_blank\',\'noopener\')" title="前往' + esc(platLabel) + '观看">' + goLabel + '</button>';
-      }
-    }
-
-    // 更新日期标签
     const a = resolveAnime(tmdbId);
-    const nextDate = a && a.nextAirDate ? a.nextAirDate : '';
-    const isToday = nextDate ? (new Date(nextDate + 'T00:00:00').getTime() === today.getTime()) : false;
-    const updateTag = nextDate ? (isToday ? '🆕 今日更新' : '📅 昨日更新') : '';
+    const updateDateStr = a && a.nextAirDate ? fmtDate(a.nextAirDate) : '';
 
     return '<div class="wl-item" onclick="openDetail(\'' + tmdbId + '\')">' +
       '<div class="card-deco"></div>' +
@@ -2736,26 +2735,28 @@ function renderUpdates() {
       '<div class="cover-glow"></div>' +
       '<div class="cover-status ' + status + '">' + statusText + '</div>' +
       '</div>' +
-      '<div class="info">' +
+      '<div class="info" style="gap:4px">' +
       '<div class="anime-name">' +
       '<span class="name-text">' + esc(name || '') + '</span>' +
-      (updateTag ? '<span class="update-badge" style="display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;background:' + (isToday ? 'linear-gradient(135deg,#FF6B9D,#C44AFF)' : 'rgba(196,74,255,0.12)') + ';color:' + (isToday ? '#fff' : '#C44AFF') + ';margin-left:6px;flex-shrink:0;white-space:nowrap">' + updateTag + '</span>' : '') +
-      linkIcon +
-      '</div>' +
-      '<div class="anime-meta">' +
-      (platform
-        ? '<span class="platform-tag"><span class="platform-icon platform-icon-svg" aria-label="' + esc(platLabel) + '" title="' + esc(platLabel) + '">' + platLogo + '</span><span class="platform-name">' + esc(platLabel) + '</span></span>'
-        : '<span class="platform-empty">暂无平台</span>') +
-      (updateFrequency ? '<span class="anime-schedule">' + esc(updateFrequency) + '</span>' : '') +
       '</div>' +
       '<div class="anime-episode-info">' +
-      '<span><span class="ep-current">追至' + (currentLabel || '-') + '</span></span>' +
-      '<span>更新至' + latestLabel + '</span>' +
+      '<span class="ep-current">更新至' + latestLabel + '</span>' +
       '</div>' +
       '</div>' +
-      '<div class="anime-actions">' + actionHtml + goWatchBtn + '</div>' +
+      (updateDateStr ? '<div class="update-time">' + updateDateStr + '</div>' : '') +
       '</div>';
-  }).join('');
+  };
+
+  let html = '';
+  if (todayItems.length > 0) {
+    html += '<div class="update-group-header">🆕 今日更新</div>';
+    html += todayItems.map(buildUpdateCard).join('');
+  }
+  if (yesterdayItems.length > 0) {
+    html += '<div class="update-group-header">📅 昨日更新</div>';
+    html += yesterdayItems.map(buildUpdateCard).join('');
+  }
+  list.innerHTML = html;
 }
 
 function renderMylist() {
@@ -2825,10 +2826,6 @@ function renderMylist() {
     } else if (status === 'caughtup' || status === 'finished') {
       actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追完</button>`;
     }
-    // 链接 icon（点开平台弹窗）—— 如果没有 platforms 数据则不渲染
-    const linkIcon = platforms.length > 0
-      ? `<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C44AFF' stroke-width='2.5' stroke-linecap='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>" onclick="event.stopPropagation();openPlatformPopup('${tmdbId}')" title="查看播放平台">`
-      : '';
     // 主平台「去看」按钮：点击直接跳转主平台链接（无直链时回退到平台搜索页）
     let goWatchBtn = '';
     if (platforms.length > 0) {
@@ -2852,7 +2849,6 @@ function renderMylist() {
       <div class="info">
         <div class="anime-name">
           <span class="name-text">${esc(name || '')}</span>
-          ${linkIcon}
         </div>
         <div class="anime-meta">
           ${platform
