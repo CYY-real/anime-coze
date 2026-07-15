@@ -369,37 +369,13 @@
       "tmdbId": "289763",
       "name": "明天上班见！",
       "latestSeason": 1,
-      "latestEpisode": 8
+      "latestEpisode": 7
     },
     {
       "tmdbId": "323180",
       "name": "蜡笔小新",
       "latestSeason": 1,
       "latestEpisode": 480
-    },
-    {
-      "tmdbId": "110181",
-      "name": "武神主宰",
-      "latestSeason": 1,
-      "latestEpisode": 674
-    },
-    {
-      "tmdbId": "224839",
-      "name": "遮天",
-      "latestSeason": 1,
-      "latestEpisode": 171
-    },
-    {
-      "tmdbId": "276567",
-      "name": "夫妻的博弈",
-      "latestSeason": 1,
-      "latestEpisode": 10
-    },
-    {
-      "tmdbId": "286506",
-      "name": "百花杀",
-      "latestSeason": 1,
-      "latestEpisode": 15
     }
   ]
 }

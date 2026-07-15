@@ -3,6 +3,3132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>追番不迷路 - 配置</title>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<meta name="theme-color" content="#FF6B9D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="追番不迷路">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="/manifest.webmanifest">
+<style>
+/* ============================================
+   🎀 追番不迷路 - 二次元梦幻风格设计系统
+   （移植自原小程序 rpx/2 = px）
+   ============================================ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --pink:#FF6B9D;
+  --pink2:#FF8FB0;
+  --purple:#C44AFF;
+  --blue:#5BCEFA;
+  --green:#00D4AA;
+  --green2:#5CE1C3;
+  --green3:#2BD9B0;
+  --green4:#00B894;
+  --orange:#FF8C00;
+  --yellow:#FFD166;
+  --red:#FF8A8A;
+  --red2:#FFB0B0;
+  --text-primary:#3D2B5E;
+  --text-secondary:#8B7AA8;
+  --text-tertiary:#A8A0B8;
+  --text-faint:#B8B0C8;
+  --text-ghost:#C8C0D8;
+  --text-soft:#B0A8C4;
+  --bg-pink:#FFF0F5;
+  --bg-pink2:#F8F0FF;
+  --bg-purple:#F5E6FF;
+  --bg-blue:#E8F4FF;
+  --bg-pill:#F5F0FF;
+  --bg-card-light:#F8F5FF;
+  --bg-card-softer:#FAF8FF;
+  --bg-placeholder:#F2F0F6;
+  --bg-soft:#F1EDF8;
+  --bg-red-soft:#FFECEC;
+  --border-faint:rgba(196,74,255,0.08);
+  --border-soft:rgba(196,74,255,0.12);
+  --border-mid:rgba(196,74,255,0.20);
+  --border-faint2:rgba(196,74,255,0.15);
+  --shadow-btn:0 4px 16px rgba(255,107,157,0.35);
+  --shadow-card:0 3px 12px rgba(196,74,255,0.07),0 1px 4px rgba(255,107,157,0.03);
+  --shadow-card-hover:0 4px 16px rgba(196,74,255,0.10),0 1px 4px rgba(255,107,157,0.05);
+  --shadow-popup:0 -4px 20px rgba(30,10,50,0.20);
+  --bg-glass:rgba(255,255,255,0.78);
+  --bg-glass-soft:rgba(255,255,255,0.65);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+html,body{
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC","Noto Sans SC",sans-serif;
+  background:linear-gradient(180deg,var(--bg-pink) 0%,var(--bg-purple) 30%,var(--bg-blue) 70%,var(--bg-pink) 100%);
+  background-attachment:fixed;
+  color:var(--text-primary);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding-bottom:calc(60px + var(--safe-bottom));
+}
+
+.container{max-width:560px;margin:0 auto;padding:8px 12px 0}
+.hidden{display:none!important}
+
+/* ============================================
+   顶部 App Bar（浮起卡片，与下方内容区分层次）
+   ============================================ */
+.appbar{
+  position:relative;overflow:hidden;
+  margin:-8px -12px 14px;padding:18px 12px 16px;
+  background:#fff;
+  border-radius:0;
+  border-bottom:1px solid var(--border-faint);
+}
+.appbar::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:4px;
+  background:linear-gradient(90deg,var(--pink) 0%,var(--purple) 50%,var(--blue) 100%);
+}
+.appbar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Cg fill='%23C44AFF'%3E%3Cpath d='M12 8l2 5 5 2-5 2-2 5-2-5-5-2 5-2z'/%3E%3C/g%3E%3Cg fill='%23FF6B9D'%3E%3Ccircle cx='50' cy='20' r='3'/%3E%3C/g%3E%3Cg fill='%235BCEFA'%3E%3Cpath d='M40 50l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z'/%3E%3C/g%3E%3Cg fill='%23FFD166'%3E%3Ccircle cx='20' cy='55' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:70px 70px;
+  opacity:.07;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0;position:relative;z-index:1;
+  background:transparent;
+}
+.header-left{display:flex;align-items:center;gap:4px}
+.header-title{
+  font-size:20px;font-weight:800;letter-spacing:1px;
+  background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.deco-star{display:inline-block;color:var(--yellow);font-size:13px}
+
+  .icon-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-pill);font-size:18px;line-height:1;cursor:pointer;color:var(--text-secondary);transition:transform .15s,background .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+  .icon-btn:hover{background:#fff;box-shadow:0 4px 12px rgba(196,74,255,.14)}
+  .icon-btn:active{transform:scale(.94);background:rgba(128,128,128,.12)}
+  .set-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--border-soft)}
+  .set-section:first-child{margin-top:0;padding-top:0;border-top:none}
+  .set-label{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+  .set-hint{font-size:11px;line-height:1.5;color:var(--text-secondary);margin-bottom:10px}
+  .set-input{width:100%;box-sizing:border-box;padding:12px 13px;font-size:14px;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-card-light);color:var(--text-primary);outline:none;transition:border-color .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+  .set-input::placeholder{color:var(--text-tertiary)}
+  .set-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(196,74,255,.16)}
+  .set-textarea{width:100%;box-sizing:border-box;min-height:104px;margin-top:10px;padding:11px 12px;font-size:12px;line-height:1.55;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border:1px solid var(--border-soft);border-radius:11px;background:var(--bg-card-light);color:var(--text-primary);outline:none;resize:vertical;transition:border-color .15s,box-shadow .15s}
+  .set-textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(196,74,255,.16)}
+  .sync-status{background:var(--bg-card-light);border:1px solid var(--border-soft);border-radius:11px;padding:10px 12px}
+  .sync-status-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:3px 0}
+  .sync-status-key{color:var(--text-secondary)}
+  .sync-status-val{font-weight:700;color:var(--text-primary)}
+.deco-heart{display:inline-block;color:var(--pink);font-size:12px}
+
+.header-actions{display:flex;align-items:center;gap:6px}
+
+/* ============================================
+   Sub Tabs（对齐小程序）
+   ============================================ */
+.sub-tabs{
+  display:flex;align-items:center;gap:7px;
+  margin:8px 0 10px;flex-wrap:nowrap;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.sub-tab{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:7px 12px;border-radius:12px;
+  font-size:13px;font-weight:500;color:var(--text-secondary);
+  background:rgba(255,255,255,0.65);
+  border:1px solid var(--border-faint);
+  transition:all .2s;flex-shrink:0;cursor:pointer;
+}
+.sub-tab.active{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;border-color:transparent;
+  box-shadow:0 2px 6px rgba(255,107,157,0.30);
+}
+.sub-tab-icon{font-size:12px;line-height:1}
+.tab-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:rgba(255,255,255,0.35);color:var(--purple);
+  font-size:10px;font-weight:700;line-height:1;
+}
+.sub-tab.active .tab-badge{background:rgba(255,255,255,0.3);color:#fff}
+
+.add-anime-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 2px 7px rgba(255,107,157,0.30);
+  flex-shrink:0;margin-left:auto;cursor:pointer;border:none;
+  color:#fff;font-size:18px;font-weight:700;line-height:1;
+}
+.add-anime-btn:active{transform:scale(0.94)}
+
+/* ============================================
+   Buttons（对齐小程序）
+   ============================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:8px 16px;border-radius:25px;
+  border:none;font-size:13px;font-weight:700;cursor:pointer;
+  transition:all .15s;white-space:nowrap;gap:4px;
+  font-family:inherit;letter-spacing:.5px;
+}
+.btn:active{transform:scale(0.97);opacity:.9}
+.btn-primary{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;box-shadow:0 4px 16px rgba(255,107,157,0.30);
+}
+.btn-secondary{
+  background:rgba(255,255,255,0.7);color:var(--purple);
+  border:1px solid var(--border-soft);
+}
+.btn-cancel{
+  background:var(--bg-pill);color:var(--text-secondary);
+  border:none;box-shadow:none;
+}
+.btn-cancel:active{background:#E8E0F5}
+.btn-danger{
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;
+}
+.btn-confirm{
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;
+  box-shadow:0 3px 10px rgba(255,107,157,0.30);
+}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:20px}
+.btn-xs{padding:4px 10px;font-size:11px;border-radius:15px}
+.btn-ghost{
+  background:transparent;color:var(--text-secondary);
+  border:1px solid var(--text-ghost);
+}
+.btn-icon{
+  width:36px;height:36px;border-radius:50%;
+  padding:0;font-size:18px;
+}
+.btn-block{width:100%;padding:12px 0;font-size:14px;border-radius:25px}
+
+/* ============================================
+   Catch Button（追更按钮，对齐小程序）
+   ============================================ */
+.btn-catch{
+  display:flex;align-items:center;justify-content:center;
+  width:54px;height:28px;border-radius:14px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 2px 6px rgba(255,107,157,0.25);
+  color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer;
+  transition:all .15s;
+}
+.btn-catch:active{transform:scale(0.93);opacity:.85}
+.btn-catch.caughtup{
+  background:linear-gradient(135deg,var(--green3),var(--green4));
+  box-shadow:0 2px 6px rgba(0,212,170,0.28);
+}
+.btn-catch.finished{
+  background:var(--bg-soft);color:var(--text-soft);
+  box-shadow:none;
+}
+/* 已添加：添加页置灰后的禁用态 */
+.btn-catch.added{
+  background:rgba(150,150,160,0.15);color:var(--text-secondary);
+  box-shadow:none;cursor:default;
+}
+.btn-catch.added:active{transform:none;opacity:1}
+
+/* 状态操作按钮：已完结 / 未开播（独立，不与「去追番」粉紫形成对比） */
+.btn-status{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:28px;padding:0 12px;border-radius:14px;
+  font-size:12px;font-weight:700;line-height:1;
+}
+.btn-status.finished,.btn-status.unreleased{
+  background:var(--bg-soft);color:var(--text-soft);
+}
+
+.btn-catch-wrap{display:flex;align-items:center;position:relative}
+.catch-badge{
+  position:absolute;top:-7px;right:-7px;
+  display:flex;align-items:center;justify-content:center;
+  min-width:18px;height:16px;padding:0 5px;border-radius:8px;
+  background:var(--orange);color:#fff;
+  font-size:10px;font-weight:700;line-height:1;
+  box-shadow:0 1px 4px rgba(255,140,0,0.35);
+}
+
+/* ============================================
+   Search
+   ============================================ */
+.search-box{position:relative;margin:6px 0 10px}
+.search-box input{
+  width:100%;padding:9px 36px 9px 36px;border-radius:20px;
+  border:1px solid var(--border-faint);background:var(--bg-glass);
+  color:var(--text-primary);font-size:13px;outline:none;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-family:inherit;
+}
+.search-box input:focus{border-color:rgba(196,74,255,0.30)}
+.search-box input::placeholder{color:var(--text-ghost)}
+.search-box .search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  font-size:14px;opacity:.5;pointer-events:none;
+}
+.search-clear{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:20px;height:20px;border:none;border-radius:50%;
+  background:var(--border-soft);color:var(--text-secondary);
+  font-size:12px;line-height:1;padding:0;cursor:pointer;display:none;
+  align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.search-clear:hover{background:var(--border-mid);color:var(--text-primary)}
+
+/* ============================================
+   Loading
+   ============================================ */
+.loading{text-align:center;padding:50px 16px}
+.spinner{
+  display:inline-block;width:28px;height:28px;
+  border:3px solid rgba(196,74,255,0.15);
+  border-top-color:var(--purple);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================
+   Empty State（对齐小程序 acg-empty）
+   ============================================ */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;
+  padding:60px 16px;
+}
+.empty-state .icon{
+  font-size:48px;margin-bottom:12px;opacity:.5;
+}
+.empty-state .text{
+  font-size:14px;color:var(--text-soft);font-weight:600;
+}
+.empty-state .sub{
+  font-size:12px;color:var(--text-faint);margin-top:4px;
+}
+
+/* ============================================
+   Anime Card（列表模式 - 对齐小程序）
+   ============================================ */
+.anime-list{
+  display:flex;flex-direction:column;gap:10px;
+  padding-bottom:12px;
+}
+.browse-net-divider{
+  margin:14px 2px 4px;
+  padding:7px 10px;
+  font-size:12px;font-weight:700;letter-spacing:.3px;
+  color:var(--purple,#a855f7);
+  background:linear-gradient(90deg,rgba(168,85,247,.12),rgba(168,85,247,0));
+  border-left:3px solid var(--purple,#a855f7);
+  border-radius:6px;
+}
+.anime-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:var(--shadow-card);
+  position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+  cursor:pointer;
+  /* 长按时不触发文本选择 / 系统菜单 */
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.anime-card:active{transform:scale(0.985);opacity:.95}
+/* 已添加到「我的番剧」：添加页置灰 */
+.anime-card.in-list{filter:grayscale(.85);opacity:.6}
+.anime-card.in-list:active{transform:none;opacity:.6}
+.anime-card.in-list .cover-glow{box-shadow:inset 0 0 10px rgba(150,150,160,0.2)}
+.anime-card .card-deco{
+  position:absolute;top:-15px;right:-15px;
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,107,157,0.05),rgba(196,74,255,0.03));
+  pointer-events:none;
+}
+
+.cover-wrap{
+  position:relative;width:70px;height:90px;
+  border-radius:9px;overflow:hidden;flex-shrink:0;
+}
+.cover{
+  width:100%;height:100%;object-fit:cover;display:block;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+}
+.cover-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  font-size:28px;font-weight:800;
+  color:rgba(196,74,255,0.30);
+}
+.cover-glow{
+  position:absolute;inset:0;border-radius:9px;
+  box-shadow:inset 0 0 10px rgba(255,107,157,0.15);
+  pointer-events:none;
+}
+
+/* 状态徽章 - 封面左上角 */
+.cover-status{
+  position:absolute;top:4px;left:4px;
+  padding:2px 7px;border-radius:6px;
+  font-size:10px;font-weight:600;color:#fff;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  line-height:1.3;
+}
+.cover-status.raising{background:linear-gradient(135deg,rgba(255,107,157,0.85),rgba(255,107,157,0.7))}
+.cover-status.caughtup{background:linear-gradient(135deg,rgba(0,212,170,0.85),rgba(0,212,170,0.7))}
+.cover-status.finished{background:linear-gradient(135deg,rgba(184,176,200,0.85),rgba(184,176,200,0.7))}
+.cover-status.dropped{background:linear-gradient(135deg,rgba(255,138,138,0.85),rgba(255,138,138,0.7))}
+.cover-status.unreleased{background:linear-gradient(135deg,rgba(180,180,200,0.85),rgba(180,180,200,0.7))}
+
+/* 信息区 */
+.anime-info{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+  gap:4px;justify-content:center;
+}
+.anime-name{
+  display:flex;align-items:center;gap:4px;min-width:0;
+  font-size:14px;font-weight:700;color:var(--text-primary);
+  line-height:1.3;
+}
+.anime-name .name-text{
+  min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.go-watch-icon{
+  flex-shrink:0;font-size:11px;opacity:.5;cursor:pointer;
+  transition:opacity .15s;
+}
+.go-watch-icon:hover{opacity:1}
+
+.anime-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.platform-tag{
+  display:inline-flex;align-items:center;gap:4px;
+}
+.platform-icon{
+  width:16px;height:16px;border-radius:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:9px;color:#fff;font-weight:700;line-height:1;
+  flex-shrink:0;
+}
+.platform-name{font-size:11px;color:var(--text-secondary);font-weight:500}
+.category-tag{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  background:rgba(255,159,67,0.12);color:var(--orange,#ff9f43);
+  font-size:10px;font-weight:600;margin-right:4px;
+}
+.platform-tag-pill{
+  display:inline-block;padding:1px 6px;border-radius:4px;
+  background:rgba(196,74,255,0.05);
+  color:var(--text-secondary);font-size:10px;font-weight:500;
+}
+.platform-empty{
+  font-size:10px;color:var(--text-tertiary);
+  background:var(--bg-placeholder);border-radius:4px;
+  padding:2px 6px;line-height:1.4;
+}
+.region-tag{
+  padding:1px 6px;border-radius:4px;
+  font-size:10px;font-weight:600;
+}
+.region-tag.jp{background:rgba(255,107,157,0.10);color:var(--pink)}
+.region-tag.cn{background:rgba(0,212,170,0.10);color:#009977}
+
+.anime-episode-info{
+  font-size:11px;color:var(--text-tertiary);
+  display:flex;flex-direction:column;gap:2px;line-height:1.4;
+}
+.ep-current{color:var(--purple);font-weight:700}
+.anime-schedule{font-size:11px;color:var(--text-faint);font-weight:500}
+
+/* 右侧操作 */
+.anime-actions{
+  flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+}
+
+/* ============================================
+   Watchlist Item（我的追番列表 — 仿小程序 .anime-card）
+   rpx→px: 1rpx=0.5px（750rpx 设计稿）
+   ============================================ */
+.wl-item{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-radius:12px;padding:10px;
+  margin-bottom:10px;
+  box-shadow:0 3px 12px rgba(196,74,255,0.07),0 1px 4px rgba(255,107,157,0.03);
+  border:1px solid rgba(255,255,255,0.9);
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:transform .15s;
+  /* 长按时不触发文本选择 (iOS Safari / Android Chrome 默认会高亮周围文本),
+     同时阻止 iOS 长按弹出系统菜单 (复制/分享) */
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.wl-item:active{transform:scale(0.985);opacity:0.95}
+.wl-item .card-deco{
+  position:absolute;top:-15px;right:-15px;
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,107,157,0.05),rgba(196,74,255,0.03));
+  pointer-events:none;
+}
+
+/* 封面区 */
+.wl-item .cover-wrap{
+  position:relative;flex-shrink:0;
+  width:70px;height:90px;border-radius:9px;overflow:hidden;
+}
+.wl-item .cover{
+  width:100%;height:100%;display:block;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  object-fit:cover;
+}
+.wl-item .cover-placeholder{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  font-size:28px;font-weight:800;color:rgba(196,74,255,0.30);
+}
+.wl-item .cover-glow{
+  position:absolute;inset:0;border-radius:9px;
+  box-shadow:inset 0 0 10px rgba(255,107,157,0.15);pointer-events:none;
+}
+/* 封面状态角标 */
+.wl-item .cover-status{
+  position:absolute;top:4px;left:4px;
+  padding:2px 7px;border-radius:6px;
+  font-size:10px;font-weight:600;color:#fff;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.wl-item .cover-status.raising{background:linear-gradient(135deg,rgba(255,107,157,0.85),rgba(255,107,157,0.7))}
+.wl-item .cover-status.caughtup{background:linear-gradient(135deg,rgba(0,212,170,0.85),rgba(0,212,170,0.7))}
+.wl-item .cover-status.finished{background:linear-gradient(135deg,rgba(184,176,200,0.85),rgba(184,176,200,0.7))}
+.wl-item .cover-status.dropped{background:linear-gradient(135deg,rgba(255,138,138,0.85),rgba(255,138,138,0.7))}
+
+/* 信息区 */
+.wl-item .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.wl-item .anime-name{
+  display:flex;align-items:center;gap:4px;min-width:0;
+  font-size:15px;font-weight:700;color:var(--text-primary);
+}
+.wl-item .anime-name .name-text{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.wl-item .go-watch-icon{
+  flex-shrink:0;width:11px;height:11px;cursor:pointer;opacity:0.7;
+}
+.wl-item .go-watch-icon:hover{opacity:1}
+.wl-item .go-watch-icon:active{opacity:0.55}
+
+/* 平台 tag + 更新频率 */
+.wl-item .anime-meta{
+  display:flex;align-items:center;gap:7px;
+}
+.wl-item .platform-tag{
+  display:inline-flex;align-items:center;gap:4px;
+}
+.wl-item .platform-icon{
+  width:18px;height:18px;border-radius:4px;
+}
+.wl-item .platform-icon-svg{display:flex;align-items:center;justify-content:center;padding:2px}
+.wl-item .platform-icon-svg svg{width:100%;height:100%;display:block}
+.wl-item .platform-icon-tencent,
+.wl-item .platform-icon-youku,
+.wl-item .platform-icon-iqiyi{width:13px;height:13px}
+.wl-item .platform-name{font-size:11px;color:#8B7AA8;font-weight:500}
+.wl-item .platform-empty{
+  font-size:11px;color:#A8A0B8;background:#F2F0F6;
+  border-radius:4px;padding:2px 6px;line-height:1.4;flex-shrink:0;
+}
+.wl-item .anime-schedule{font-size:11px;color:#B8B0C8}
+
+/* 集数信息 */
+.wl-item .anime-episode-info{
+  font-size:11px;color:#A8A0B8;display:flex;flex-direction:column;gap:2px;
+}
+.wl-item .ep-current{color:#C44AFF;font-weight:700}
+
+/* 右侧操作区 */
+.wl-item .anime-actions{
+  flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;gap:6px;
+}
+.wl-item .btn-catch-wrap{
+  display:flex;align-items:center;position:relative;
+}
+.wl-item .btn-catch{
+  display:flex;align-items:center;justify-content:center;
+  width:54px;height:28px;border-radius:14px;
+  background:linear-gradient(135deg,#FF6B9D,#C44AFF);
+  box-shadow:0 2px 6px rgba(255,107,157,0.25);
+  border:none;cursor:pointer;
+}
+.wl-item .btn-catch:active{transform:scale(0.93);opacity:0.85}
+.wl-item .catch-label{font-size:12px;color:#fff;font-weight:700}
+.wl-item .catch-badge{
+  position:absolute;top:-7px;right:-7px;
+  display:flex;align-items:center;justify-content:center;
+  min-width:20px;height:16px;padding:0 5px;
+  border-radius:8px;background:#FF8C00;color:#fff;
+  font-size:10px;font-weight:700;
+  box-shadow:0 1px 4px rgba(255,140,0,0.35);
+}
+.wl-item .btn-status{
+  flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;
+  min-width:62px;height:28px;padding:0 10px;border-radius:14px;
+  font-size:12px;font-weight:700;box-sizing:border-box;
+  border:none;cursor:pointer;
+}
+.wl-item .btn-status:active{transform:scale(0.94);opacity:0.85}
+.wl-item .btn-status.caughtup{
+  background:linear-gradient(135deg,#2BD9B0,#00B894);color:#fff;
+  box-shadow:0 2px 6px rgba(0,212,170,0.28);
+}
+.wl-item .btn-status.finished{background:#F1EDF8;color:#B0A8C4}
+.wl-item .btn-status.dropped{background:#FFECEC;color:#FF8A8A}
+.wl-item .btn-go-watch{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:54px;height:26px;padding:0 12px;border-radius:13px;
+  font-size:12px;font-weight:700;box-sizing:border-box;
+  background:#fff;color:#C44AFF;border:1.5px solid rgba(196,74,255,0.35);
+  cursor:pointer;white-space:nowrap;
+}
+.wl-item .btn-go-watch:active{transform:scale(0.94);opacity:0.85}
+
+/* 旧的内联控件（不再使用，保留以防兼容） */
+.wl-item .controls{display:none}
+.remove-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:none;background:rgba(255,138,138,0.12);
+  color:var(--red);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+.remove-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
+
+/* ============================================
+   My List Header
+   注：用户要求"不置顶，跟内容一起滚走"——所以不加 sticky/fixed。
+   保持普通文档流即可。
+   ============================================ */
+.mylist-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:8px 0 10px;gap:10px;
+  position:relative;z-index:auto;
+}
+.mylist-header-left{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.mylist-deco-star{font-size:14px}
+.mylist-title{
+  font-size:18px;font-weight:800;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;letter-spacing:.5px;
+}
+.mylist-sub{
+  font-size:11px;color:var(--text-secondary);
+  display:flex;align-items:center;gap:5px;margin-top:2px;
+}
+.mylist-dot{color:var(--text-ghost);font-weight:700}
+.mylist-header-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* ============================================
+   Browse Header & Setup Required
+   ============================================ */
+.browse-header{margin:8px 0 10px}
+.browse-title{
+  display:inline-block;
+  font-size:18px;font-weight:800;letter-spacing:.5px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.browse-sub{
+  font-size:11px;color:var(--text-secondary);margin-top:2px;
+}
+.setup-required{
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  padding:40px 20px;margin:20px 0;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:var(--shadow-card);
+}
+.setup-required .setup-icon{font-size:42px;margin-bottom:8px;opacity:.7}
+.setup-required .setup-title{
+  font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:6px;
+}
+.setup-required .setup-desc{
+  font-size:12px;color:var(--text-secondary);line-height:1.5;
+  max-width:320px;
+}
+
+/* ============================================
+   Toggle Switch
+   ============================================ */
+.toggle-wrap{display:flex;align-items:center;gap:5px;margin-left:auto}
+.toggle{position:relative;width:36px;height:20px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .slider{
+  position:absolute;inset:0;cursor:pointer;border-radius:10px;
+  background:#D0C8E0;transition:.2s;
+}
+.toggle .slider::before{
+  content:'';position:absolute;left:2px;top:2px;
+  width:16px;height:16px;border-radius:50%;background:#fff;
+  transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,0.1);
+}
+.toggle input:checked+.slider{background:linear-gradient(135deg,var(--pink),var(--purple))}
+.toggle input:checked+.slider::before{transform:translateX(16px)}
+.toggle-label{font-size:11px;color:var(--text-secondary)}
+
+/* ============================================
+   Episode badge (catch count)
+   ============================================ */
+.ep-badge{
+  display:inline-flex;align-items:center;gap:2px;
+  padding:2px 6px;border-radius:6px;
+  font-size:10px;font-weight:700;line-height:1.2;
+}
+.ep-badge.banked{background:#FFE9F1;color:#E8427F}
+.ep-badge.caughtup{background:#E6F8EE;color:#1F9D57}
+
+/* ============================================
+   Source Card (可点击的数据源选择器)
+   ============================================ */
+.source-card{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;margin:4px 0 10px;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:var(--shadow-card);
+  cursor:pointer;transition:transform .15s;
+}
+.source-card:active{transform:scale(0.985)}
+.source-card .source-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+}
+.source-card .source-info{flex:1;min-width:0}
+.source-card .source-label{
+  font-size:13px;font-weight:700;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.source-card .source-meta{
+  font-size:10px;color:var(--text-secondary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-top:1px;
+}
+.source-card .source-arrow{
+  color:var(--text-ghost);font-size:20px;font-weight:300;
+  flex-shrink:0;
+}
+.source-card.loaded .source-icon{
+  background:linear-gradient(135deg,var(--green),var(--green4));
+}
+.source-card.loaded .source-meta{color:var(--green);font-weight:600}
+
+/* ============================================
+   Source Presets (数据源预设)
+   ============================================ */
+.source-presets{
+  display:flex;flex-direction:column;gap:8px;
+}
+.source-preset{
+  display:flex;align-items:center;gap:12px;
+  padding:12px;
+  background:var(--bg-card-light);
+  border:1px solid var(--border-faint);
+  border-radius:14px;cursor:pointer;
+  transition:all .15s;text-align:left;
+  font-family:inherit;color:inherit;width:100%;
+}
+.source-preset:active{background:#EFE8FA;transform:scale(0.98)}
+.source-preset.active{
+  background:linear-gradient(135deg,rgba(255,107,157,0.08),rgba(196,74,255,0.08));
+  border-color:rgba(196,74,255,0.3);
+}
+.preset-icon{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;
+}
+.preset-info{flex:1;min-width:0}
+.preset-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+.preset-meta{font-size:10px;color:var(--text-secondary);margin-top:1px;word-break:break-all}
+
+/* ============================================
+   Bottom Nav
+   ============================================ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(56px + var(--safe-bottom));padding-bottom:var(--safe-bottom);
+  background:#fff;border-top:1px solid rgba(196,74,255,0.06);
+  display:flex;z-index:100;
+  box-shadow:0 -2px 20px rgba(196,74,255,0.06);
+}
+.bottom-nav::before{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:3px;
+  background:linear-gradient(90deg,var(--pink) 0%,var(--purple) 50%,var(--blue) 100%);
+}
+.bottom-nav a{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1px;
+  color:var(--text-ghost);text-decoration:none;
+  font-size:10px;font-weight:600;transition:color .15s;
+  cursor:pointer;
+}
+.bottom-nav a.active{color:var(--pink)}
+.bottom-nav a .icon{font-size:22px;line-height:1}
+.bottom-nav a .label{transition:color .15s}
+
+/* ============================================
+   Toast
+   ============================================ */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  padding:10px 20px;border-radius:16px;
+  background:var(--bg-glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.9);
+  font-size:13px;font-weight:600;color:var(--text-primary);
+  z-index:9999;box-shadow:var(--shadow-card);
+  transition:opacity .3s;white-space:nowrap;pointer-events:none;
+  max-width:80vw;
+}
+
+/* 上传到 Gitee 时的整页锁定遮罩 */
+.upload-block-overlay{
+  position:fixed;inset:0;z-index:9998;
+  background:rgba(20,18,32,0.55);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeIn .15s;
+}
+.upload-block-overlay.hidden{display:none;}
+.upload-block-box{
+  background:#fff;border-radius:18px;padding:30px 40px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  box-shadow:0 16px 48px rgba(0,0,0,.28);
+}
+.upload-spinner{
+  width:40px;height:40px;border-radius:50%;
+  border:4px solid #ece3ff;border-top-color:#7c4dff;
+  animation:spin .8s linear infinite;
+}
+.upload-block-text{color:#3a3a4a;font-size:15px;font-weight:600;letter-spacing:.3px;}
+
+/* ============================================
+   Modal - 底部抽屉风格（对齐小程序）
+   ============================================ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(30,10,50,0.45);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  z-index:200;
+  animation:fadeIn .25s;
+}
+/* 弹窗打开时锁背景滚动：position:fixed 方案，兼容 iOS Safari
+   （仅设 body overflow:hidden 在移动端无法阻止背景滑动） */
+body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  position:fixed;left:15px;right:15px;bottom:20px;
+  background:#fff;border-radius:18px 18px 0 0;
+  padding:0;width:auto;max-width:530px;margin:0 auto;
+  max-height:75vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  animation:slideUp .3s cubic-bezier(0.32,0.72,0,1);
+  box-shadow:var(--shadow-popup);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+.modal-handle{
+  width:40px;height:4px;border-radius:2px;
+  background:#E8E0F5;margin:8px auto 0;
+}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px 10px;
+  border-bottom:1px solid var(--bg-pill);
+  flex-shrink:0;
+}
+.modal-title{font-size:16px;font-weight:700;color:var(--text-primary)}
+.modal-close{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--bg-pill);font-size:14px;
+  color:var(--text-ghost);font-weight:600;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;line-height:1;
+}
+.modal-close:active{background:#E8E0F5;color:var(--text-tertiary)}
+.modal-body{
+  padding:14px 18px;overflow-y:auto;
+  flex:1;min-height:0;
+}
+.modal-desc{
+  font-size:12px;color:var(--text-secondary);
+  text-align:center;margin:0 0 12px;
+}
+.modal textarea{
+  width:100%;min-height:140px;padding:12px;
+  border-radius:14px;
+  border:1px solid var(--border-faint);
+  background:var(--bg-card-light);
+  color:var(--text-primary);font-size:12px;
+  font-family:monospace;resize:vertical;outline:none;line-height:1.5;
+}
+.modal textarea:focus{border-color:rgba(196,74,255,0.25)}
+
+.modal-actions{
+  display:flex;gap:10px;padding:10px 18px 18px;
+  flex-shrink:0;border-top:1px solid var(--bg-pill);
+}
+.modal-actions .btn{
+  flex:1;padding:11px 0;font-size:13px;
+  border-radius:25px;
+}
+.btn-more{
+  flex:none;padding:11px 14px;font-size:12px;
+  border-radius:25px;border:1px solid var(--bg-pill);
+  background:transparent;color:var(--text-secondary);cursor:pointer;
+}
+.more-actions{
+  padding:0 18px 14px;display:flex;flex-direction:column;gap:6px;
+}
+.more-actions .action-menu-item{
+  display:block;width:100%;padding:10px 14px;font-size:13px;
+  border:none;border-radius:12px;background:var(--bg-card-light);
+  color:var(--text);text-align:left;cursor:pointer;
+}
+
+/* ============================================
+   Progress Modal（catch-modal 风格）
+   ============================================ */
+.progress-body{text-align:center;padding:8px 0 0}
+.progress-hint{
+  font-size:12px;color:var(--text-secondary);margin-bottom:14px;
+}
+.progress-input-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;margin:8px 0;
+}
+.progress-input-wrap{
+  background:var(--bg-card-light);border-radius:14px;
+  padding:10px 18px;border:1px solid #E8E0F5;
+}
+.progress-input{
+  width:90px;font-size:32px;font-weight:800;
+  text-align:center;color:var(--purple);
+  background:transparent;border:none;outline:none;
+  font-family:inherit;
+}
+.progress-suffix{
+  font-size:14px;font-weight:600;color:var(--text-primary);
+}
+.progress-reminder{
+  display:block;text-align:center;
+  font-size:11px;color:var(--text-faint);
+  margin:6px 0 8px;
+}
+.progress-catchup{
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 0;margin-top:8px;
+  background:linear-gradient(135deg,rgba(255,107,157,0.06),rgba(196,74,255,0.06));
+  border-radius:14px;font-size:13px;
+  color:var(--purple);font-weight:600;
+  cursor:pointer;border:none;width:100%;
+  font-family:inherit;
+}
+.progress-catchup:active{
+  background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(196,74,255,0.12));
+}
+
+/* 季选择 chip */
+.season-row{
+  display:flex;flex-wrap:wrap;gap:7px;
+  margin-bottom:12px;justify-content:center;
+}
+.season-chip{
+  font-size:12px;font-weight:600;
+  padding:6px 14px;border-radius:15px;
+  color:#6D4BBC;
+  background:rgba(109,75,188,0.08);
+  border:1px solid transparent;cursor:pointer;
+  transition:all .15s;
+  font-family:inherit;
+}
+.season-chip.active{
+  color:#fff;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 2px 7px rgba(196,74,255,0.25);
+}
+
+/* ============================================
+   Platform Popup（仿小程序 platform-popup）
+   ============================================ */
+.platform-card{
+  display:flex;gap:10px;padding:10px;
+  margin-bottom:10px;
+  background:linear-gradient(135deg,rgba(255,107,157,0.04),rgba(196,74,255,0.04));
+  border-radius:10px;
+}
+.platform-card-cover{
+  position:relative;width:60px;height:80px;
+  border-radius:7px;overflow:hidden;flex-shrink:0;
+}
+.platform-card-cover img,
+.platform-card-cover .cover-placeholder{
+  width:100%;height:100%;display:block;
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+  object-fit:cover;
+}
+.platform-card-cover .cover-placeholder{
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:800;color:rgba(196,74,255,0.25);
+}
+.platform-card-status{
+  position:absolute;top:3px;left:3px;
+  padding:2px 5px;border-radius:4px;
+  font-size:9px;font-weight:600;color:#fff;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.platform-card-status.raising{background:rgba(255,107,157,0.8)}
+.platform-card-status.caughtup{background:rgba(0,212,170,0.8)}
+.platform-card-status.finished{background:rgba(184,176,200,0.8)}
+.platform-card-status.dropped{background:rgba(255,138,138,0.8)}
+.platform-card-info{
+  flex:1;display:flex;flex-direction:column;
+  justify-content:center;gap:4px;min-width:0;
+}
+.platform-card-title{
+  font-size:14px;font-weight:700;color:var(--text-primary);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.platform-card-meta{display:flex;align-items:center;gap:5px}
+.platform-card-platform-icon{
+  width:14px;height:14px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;padding:1px;
+  flex-shrink:0;
+}
+.platform-card-platform-icon svg{width:100%;height:100%;display:block}
+.platform-card-platform-name{font-size:11px;color:#8B7AA8}
+.platform-card-schedule{font-size:11px;color:#B8B0C8}
+.platform-card-episode{font-size:11px;color:#A8A0B8}
+
+.platform-copy-all{
+  display:flex;align-items:center;justify-content:center;
+  gap:5px;padding:11px 0;
+  background:linear-gradient(135deg,rgba(255,107,157,0.06),rgba(196,74,255,0.06));
+  border-radius:10px;margin-bottom:10px;
+  cursor:pointer;border:none;width:100%;
+  font-family:inherit;
+}
+.platform-copy-all:active{
+  background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(196,74,255,0.12));
+}
+.platform-copy-all-icon{font-size:13px}
+.platform-copy-all-text{font-size:13px;font-weight:600;color:#C44AFF}
+
+.platform-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(196,74,255,0.1),transparent);
+  margin-bottom:8px;
+}
+.platform-list{display:flex;flex-direction:column;gap:4px}
+.platform-item{
+  display:flex;align-items:center;gap:7px;
+  padding:10px 9px;border-radius:10px;
+  background:#FAF8FF;
+}
+.platform-item-icon{
+  width:22px;height:22px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;padding:2px;
+  flex-shrink:0;
+}
+.platform-item-icon svg{width:100%;height:100%;display:block}
+.platform-item-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.platform-item-name{
+  font-size:13px;font-weight:600;color:var(--text-primary);
+}
+.platform-item-url{
+  font-size:10px;color:var(--text-tertiary);
+  font-family:monospace;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:200px;
+}
+.platform-item-actions{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.platform-action-btn.copyurl{
+  width:30px;height:30px;padding:0;border-radius:8px;
+  background:rgba(196,74,255,0.08);color:var(--purple);
+  font-size:14px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border-faint);
+}
+.platform-action-btn.copyurl:active{background:rgba(196,74,255,0.18)}
+.platform-action-btn.link{
+  padding:5px 11px;border-radius:10px;
+  background:linear-gradient(135deg,#FF6B9D,#C44AFF);
+  font-size:12px;color:#fff;font-weight:600;
+  border:none;cursor:pointer;font-family:inherit;
+}
+.platform-action-btn.link:active{transform:scale(0.94);opacity:0.85}
+/* 无 url 时的"复制链接"按钮 — 用次级配色避免和"去看"撞 */
+.platform-action-btn.copy{
+  padding:5px 11px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(196,74,255,0.10),rgba(255,107,157,0.08));
+  color:#C44AFF;
+  font-size:12px;font-weight:600;
+  border:1px solid rgba(196,74,255,0.18);cursor:pointer;font-family:inherit;
+}
+.platform-action-btn.copy:active{transform:scale(0.94);opacity:0.7}
+.platform-empty-tip{
+  text-align:center;padding:14px 10px;
+  font-size:12px;color:#B0B0C0;
+  background:#FAF8FF;border-radius:10px;
+}
+
+/* ============================================
+   Edit Platforms Modal（编辑平台 / 链接）
+   ============================================ */
+.ep-empty{
+  text-align:center;padding:18px 0;
+  font-size:12px;color:#B0A0C0;
+  background:#FAF8FF;border-radius:10px;
+}
+.ep-row{
+  background:#FAF8FF;border-radius:12px;
+  padding:10px;margin-bottom:8px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.ep-row-head{
+  display:flex;align-items:center;gap:6px;
+}
+.ep-row-icon{
+  width:22px;height:22px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;padding:2px;
+  flex-shrink:0;
+}
+.ep-row-icon svg{width:100%;height:100%;display:block}
+.ep-platform-select{
+  flex:1;min-width:0;
+  padding:6px 8px;border-radius:8px;
+  border:1px solid rgba(196,74,255,0.12);
+  background:#fff;color:var(--text-primary);
+  font-size:12px;font-weight:600;font-family:inherit;outline:none;
+}
+.ep-platform-select:focus{border-color:var(--purple)}
+.ep-primary-label{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:11px;color:var(--text-secondary);
+  padding:4px 8px;border-radius:8px;
+  background:rgba(196,74,255,0.06);cursor:pointer;
+  flex-shrink:0;
+}
+.ep-primary-label input{accent-color:var(--purple)}
+.ep-del-btn{
+  width:24px;height:24px;border-radius:50%;
+  border:none;background:rgba(255,138,138,0.12);
+  color:#FF8A8A;font-size:12px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ep-del-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
+.ep-url-input{
+  width:100%;padding:7px 10px;border-radius:8px;
+  border:1px solid rgba(196,74,255,0.10);
+  background:#fff;color:var(--text-primary);
+  font-size:12px;font-family:inherit;outline:none;
+  box-sizing:border-box;
+}
+.ep-url-input:focus{border-color:var(--purple)}
+.ep-url-input::placeholder{color:#C8C0D8}
+.ep-add-btn{
+  width:100%;padding:10px 0;
+  background:linear-gradient(135deg,rgba(196,74,255,0.06),rgba(255,107,157,0.06));
+  border:1px dashed rgba(196,74,255,0.25);
+  border-radius:10px;
+  font-size:13px;font-weight:600;color:#C44AFF;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:inherit;margin-top:4px;
+}
+.ep-add-btn:active{background:linear-gradient(135deg,rgba(196,74,255,0.12),rgba(255,107,157,0.12))}
+
+/* ============================================
+   Detail Modal
+   ============================================ */
+.detail-cover{
+  width:120px;height:170px;border-radius:12px;
+  object-fit:cover;margin:0 auto 8px;display:block;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  background:linear-gradient(135deg,#FFE0EC,#E8D5FF);
+}
+.detail-name{font-size:16px;font-weight:700;text-align:center;margin-bottom:2px}
+.detail-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:0 auto 8px;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
+.detail-tmdb:active{opacity:.6}
+.progress-tmdb{font-size:11px;color:var(--text-secondary);text-align:center;margin:-4px 0 6px;display:inline-block;padding:2px 9px;border:1px dashed rgba(139,122,168,.45);border-radius:10px;cursor:pointer;font-family:ui-monospace,Menlo,Consolas,monospace}
+.progress-tmdb:active{opacity:.6}
+.detail-meta{font-size:12px;color:var(--text-secondary);text-align:center}
+.detail-overview{
+  margin:10px 0;font-size:12px;color:var(--text-secondary);
+  text-align:left;line-height:1.5;
+  max-height:80px;overflow-y:auto;
+}
+.detail-platforms{
+  display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:8px 0;
+}
+.detail-platform-tag{
+  padding:2px 10px;border-radius:10px;
+  background:rgba(196,74,255,0.06);
+  color:var(--purple);font-size:11px;font-weight:600;
+}
+
+/* ============================================
+   Settings Modal
+   ============================================ */
+.setting-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border-faint);
+}
+.setting-item:last-child{border:none}
+.setting-item label{
+  font-size:13px;font-weight:600;color:var(--text-primary);
+  white-space:nowrap;min-width:80px;
+}
+.setting-item input[type=number],.setting-item input[type=text]{
+  flex:1;padding:8px 12px;border-radius:10px;
+  border:1px solid var(--border-faint);
+  background:var(--bg-card-light);
+  color:var(--text-primary);font-size:13px;
+  text-align:center;outline:none;
+  max-width:100px;font-family:inherit;
+}
+.setting-item input[type=text]{
+  text-align:left;max-width:none;
+  font-family:monospace;font-size:12px;
+}
+.setting-item input:focus{border-color:rgba(196,74,255,0.25)}
+.setting-item .status-text{font-size:12px;color:var(--green);font-weight:600}
+
+.settings-group-title{
+  font-size:12px;font-weight:700;color:var(--purple);
+  letter-spacing:.3px;margin:8px 0 6px;
+}
+.settings-help{
+  font-size:11px;color:var(--text-secondary);line-height:1.6;
+  padding:8px 10px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(196,74,255,0.05),rgba(255,107,157,0.05));
+  border:1px solid var(--border-faint);
+  margin:4px 0 8px;
+}
+.settings-help b{color:var(--purple);font-weight:700}
+.settings-help code{
+  font-family:monospace;font-size:10px;
+  background:rgba(196,74,255,0.1);color:var(--purple);
+  padding:1px 4px;border-radius:3px;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar{width:0;height:0}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media(min-width:600px){
+  .container{max-width:640px;padding:8px 16px 0}
+  .appbar{margin:-8px -16px 14px;padding:18px 16px 16px}
+  .modal{left:30px;right:30px;bottom:40px}
+  .anime-card{padding:12px;gap:12px}
+  .cover-wrap{width:80px;height:108px}
+  .anime-name{font-size:15px}
+  .btn-catch{width:60px;height:32px;font-size:13px}
+  .header-title{font-size:22px}
+}
+</style>
 </head>
-<body></body>
+<body>
+
+<div class="container">
+  <!-- 顶部 App Bar（白底 + 彩色横线 + 图案水印） -->
+  <div class="appbar">
+    <div class="header">
+      <div class="header-left">
+        <span class="deco-star">✨</span>
+        <span class="header-title">追番不迷路</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="refreshWatchlist()" title="刷新" aria-label="刷新">🔄</button>
+        <button class="icon-btn" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content: Browse (list mode) -->
+  <div id="tabBrowse" class="hidden">
+      <div class="browse-header">
+        <div class="browse-title">添加剧集</div>
+      </div>
+    <!-- 剧库自动从同源 ./data/anime.json 加载（GitHub Actions 每日更新并部署），无需选择数据源 -->
+    <div id="browseContent" style="display:none">
+      <!-- 分类/地区合并筛选 -->
+      <div class="sub-tabs" id="browseFilters">
+        <span class="sub-tab active" data-bfilter="all" onclick="switchBrowseFilter(this)">📺 全部</span>
+        <span class="sub-tab" data-bfilter="jp-anime" onclick="switchBrowseFilter(this)">🌸 日漫</span>
+        <span class="sub-tab" data-bfilter="cn-anime" onclick="switchBrowseFilter(this)">🎋 国漫</span>
+        <span class="sub-tab" data-bfilter="cdrama" onclick="switchBrowseFilter(this)">🎭 国产剧</span>
+        <span class="sub-tab" data-bfilter="kdrama" onclick="switchBrowseFilter(this)">🇰🇷 韩剧</span>
+      </div>
+      <!-- 搜索 -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input id="browseSearchInput" placeholder="搜索剧名..." oninput="debounceSearch();toggleClear('browseSearchInput')">
+        <button class="search-clear" type="button" onclick="clearSearch('browseSearchInput', debounceSearch)" aria-label="清除">✕</button>
+      </div>
+      <div id="browseList" class="anime-list"></div>
+    </div>
+  </div>
+
+  <!-- Content: Updates（昨日 & 今日更新的追番） -->
+  <div id="tabUpdates" class="hidden">
+    <div class="mylist-header">
+      <div class="mylist-header-left">
+        <div class="mylist-title">📺 更新</div>
+      </div>
+    </div>
+    <div id="updatesList" class="anime-list"></div>
+  </div>
+
+  <!-- Content: My List -->
+  <div id="tabMylist">
+    <div class="mylist-header">
+      <div class="mylist-header-left">
+        <div class="mylist-title">我的追番</div>
+      </div>
+      <div class="mylist-header-actions">
+        <button class="btn btn-primary btn-sm" onclick="uploadWatchlist()" id="uploadBtn" title="把本地最新追剧列表上传到 Gitee">☁️ 上传到 Gitee</button>
+      </div>
+    </div>
+
+    <!-- My list status filters（仿小程序：全部 / 追番中 / 已追完） -->
+    <div class="sub-tabs" id="mylistFilters">
+      <span class="sub-tab active" data-mfilter="all" onclick="switchMylistFilter(this)">
+        <span class="sub-tab-icon">📋</span><span>全部</span>
+        <span class="tab-badge" id="badgeMylistAll" style="display:none">0</span>
+      </span>
+      <span class="sub-tab" data-mfilter="raising" onclick="switchMylistFilter(this)">
+        <span class="sub-tab-icon">🌸</span><span>追番中</span>
+        <span class="tab-badge" id="badgeMylistRaising" style="display:none">0</span>
+      </span>
+      <span class="sub-tab" data-mfilter="caughtup" onclick="switchMylistFilter(this)">
+        <span class="sub-tab-icon">🌿</span><span>已追完</span>
+        <span class="tab-badge" id="badgeMylistCaughtup" style="display:none">0</span>
+      </span>
+      <span class="add-anime-btn" onclick="switchTab('browse', document.querySelectorAll('.bottom-nav a')[2])" title="添加剧集">
+        <span class="add-anime-icon">+</span>
+      </span>
+    </div>
+
+    <!-- My list search -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="mylistSearchInput" placeholder="在我的追番中搜索..." oninput="renderMylist();toggleClear('mylistSearchInput')">
+      <button class="search-clear" type="button" onclick="clearSearch('mylistSearchInput', renderMylist)" aria-label="清除">✕</button>
+    </div>
+    <div id="mylistList" class="anime-list"></div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="#" class="active" onclick="switchTab('mylist',this)">
+    <span class="icon">⭐</span>
+    <span class="label">我的追番</span>
+  </a>
+  <a href="#" onclick="switchTab('updates',this)">
+    <span class="icon">🆕</span>
+    <span class="label">更新</span>
+  </a>
+  <a href="#" onclick="switchTab('browse',this)">
+    <span class="icon">➕</span>
+    <span class="label">添加剧集</span>
+  </a>
+
+</nav>
+
+<!-- Toast -->
+<div id="toast" class="toast" style="opacity:0"></div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settingsModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">⚙️ 设置</div>
+      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="set-section">
+        <div class="set-label">☁️ 云端同步</div>
+        <div class="sync-status">
+          <div class="sync-status-row">
+            <span class="sync-status-key">当前追番</span>
+            <span class="sync-status-val" id="syncCount">—</span>
+          </div>
+          <div class="sync-status-row">
+            <span class="sync-status-key">上次同步</span>
+            <span class="sync-status-val" id="syncTime">—</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn btn-sm" style="flex:1" onclick="pullFromCloud()">☁️ 从云端拉取</button>
+          <button class="btn btn-sm" style="flex:1" onclick="pushToCloud()">⬆️ 上传到云端</button>
+        </div>
+        <div class="set-hint" style="margin-top:8px">追番记录自动保存到 Gitee（经 Cloudflare 代理转发，浏览器无需任何 Token）；番剧库由 GitHub Actions 每日自动更新并随站点部署，无需手动选择数据源。</div>
+      </div>
+      <div class="set-section">
+        <div class="set-label">💾 追番记录备份（JSON 文本）</div>
+        <div class="set-hint">导出的是你的完整追番列表，可复制保存到备忘录等处；换设备或误删时，粘贴回来「导入并合并」即可恢复（不会覆盖已有记录，按剧集智能合并）。</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="exportConfig()">生成备份文本</button>
+          <button class="btn btn-sm" id="copyCfgBtn" style="display:none" onclick="copyConfigText()">复制</button>
+        </div>
+        <textarea id="cfgTextArea" class="set-textarea" placeholder="点「生成备份文本」导出；或在此粘贴之前备份的追番 JSON 后点「导入并合并」"></textarea>
+        <button class="btn btn-sm btn-block" style="margin-top:8px" onclick="importConfigFromText()">导入并合并</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 上传到 Gitee 时整页锁定，直到返回结果才允许继续操作 -->
+<div id="uploadBlockOverlay" class="upload-block-overlay hidden">
+  <div class="upload-block-box">
+    <div class="upload-spinner"></div>
+    <div class="upload-block-text">正在上传到 Gitee…</div>
+  </div>
+</div>
+
+<script>
+// ======================== STATE ========================
+let animeDb = [];
+let watchlist = [];
+let settings = { lastSyncAt: '', lastAnimeCount: 0 };
+let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
+let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
+let searchTimer;
+let activeSeason = 1;
+let _progressCtx = null;
+// 添加页实时搜索(TMDB)结果缓存 + 加载态
+let liveResults = [];
+let liveLoading = false;
+let liveQuery = '';
+
+// ======================== INIT ========================
+function init() {
+  const saved = localStorage.getItem('anime_coze_watchlist');
+  if (saved) { try { watchlist = JSON.parse(saved); } catch(e) {} }
+  // 同名去重（清理历史遗留的重复番剧，如库里两个"凡人修仙传"导致的双条目）
+  if (dedupeWatchlistByName()) saveWatchlistLocal();
+  // 载入本机设置（云端同步经 Cloudflare 代理，浏览器不保存任何 Token）
+  const savedSettings = localStorage.getItem('anime_coze_settings');
+  if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
+  // 不再注入 mock 演示数据——首次访问显示空状态提示，pullWatchlist 会从 Gitee 拉取真实数据
+  renderMylist();
+  // 从 Gitee 同步追剧列表（静默，首次不弹 toast）
+  pullWatchlist();
+  // 加载番剧库（GitHub Action 刷新的最新 TMDB 数据），让"我的追番"能实时跟随最新集数
+  refreshAnimeDb();
+  // 恢复上次激活的 tab，刷新/重载后停留在当前页
+  const savedTab = localStorage.getItem('anime_coze_active_tab') || 'mylist';
+  const navLinks = document.querySelectorAll('.bottom-nav a');
+  const navIdx = savedTab === 'browse' ? 2 : (savedTab === 'updates' ? 1 : 0);
+  switchTab(savedTab, navLinks[navIdx]);
+}
+
+// ======================== TOAST ========================
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.style.opacity = '0', 2200);
+}
+
+// ======================== TAB SWITCH ========================
+function switchTab(tab, el) {
+  localStorage.setItem('anime_coze_active_tab', tab);
+  document.querySelectorAll('.bottom-nav a').forEach(a => a.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
+  document.getElementById('tabMylist').classList.toggle('hidden', tab !== 'mylist');
+  document.getElementById('tabUpdates').classList.toggle('hidden', tab !== 'updates');
+  document.body.style.overflow = '';
+
+  if (tab === 'mylist') {
+    renderMylist();
+  } else if (tab === 'browse') {
+    initBrowseTab();
+  } else if (tab === 'updates') {
+    renderUpdates();
+  }
+  // 切 tab 时刷新番剧库，保证页面上的 TMDB 数据是最新的（GitHub Action 跑的结果）
+  refreshAnimeDb();
+  syncBodyScroll();
+}
+
+// 搜索框一键清除
+function toggleClear(inputId) {
+  const input = document.getElementById(inputId);
+  const btn = input.closest('.search-box').querySelector('.search-clear');
+  btn.style.display = input.value ? 'flex' : 'none';
+}
+function clearSearch(inputId, rerender) {
+  const input = document.getElementById(inputId);
+  input.value = '';
+  toggleClear(inputId);
+  if (rerender) rerender();
+  input.focus();
+}
+
+function initBrowseTab() {
+  const browseContent = document.getElementById('browseContent');
+  const browseSub = document.getElementById('browseSub');
+
+  browseContent.style.display = '';
+
+  if (animeDb.length > 0) { renderBrowse(); return; }
+
+  if (browseSub) browseSub.textContent = '正在自动加载剧库…';
+  loadAnime();
+}
+
+
+
+// ======================== FILTERS ========================
+// 浏览页：分类/地区合并筛选
+function switchBrowseFilter(el) {
+  document.querySelectorAll('#browseFilters .sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentBrowseFilter = el.dataset.bfilter;
+  renderBrowse();
+}
+
+// 我的追番：状态筛选
+function switchMylistFilter(el) {
+  document.querySelectorAll('#mylistFilters .sub-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentMylistFilter = el.dataset.mfilter;
+  renderMylist();
+}
+
+// ======================== SEARCH ========================
+function debounceSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(async () => {
+    const mylistVisible = !document.getElementById('tabMylist').classList.contains('hidden');
+    if (mylistVisible) { renderMylist(); return; }
+    const q = (document.getElementById('browseSearchInput')?.value || '').trim();
+    if (!q) { liveResults = []; renderBrowse(); return; }
+    // 有查询词：先渲染本地结果 + loading 态，再异步拉取 TMDB 全网结果合并
+    liveLoading = true;
+    liveQuery = q;
+    renderBrowse();
+    try {
+      const r = await fetch(`/api/tmdb?q=${encodeURIComponent(q)}`, { cache: 'no-store' });
+      if (r.ok) {
+        const j = await r.json();
+        const net = Array.isArray(j.results) ? j.results : [];
+        // 排除已存在于本地剧库的（fetch 端已排过，这里双保险）
+        liveResults = net.filter((x) => !animeDb.some((a) => String(a.tmdbId) === String(x.tmdbId)));
+      } else {
+        liveResults = [];
+      }
+    } catch (e) {
+      liveResults = [];
+    }
+    liveLoading = false;
+    // 仅当搜索框仍是同一查询时才重渲染，避免竞态覆盖
+    const q2 = (document.getElementById('browseSearchInput')?.value || '').trim();
+    if (q2 === q) renderBrowse();
+  }, 250);
+}
+
+// ======================== LOAD ANIME JSON ========================
+// 番剧库固定读同源 ./data/anime.json（由 GitHub Actions 每日更新并随站点部署，无需选择数据源）
+const ANIME_DB_URL = './data/anime.json';
+async function loadAnime() {
+  const list = document.getElementById('browseList');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在加载剧库...</p></div>';
+  try {
+    const resp = await fetch(ANIME_DB_URL, { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    if (!Array.isArray(data)) throw new Error('数据格式异常（需为 JSON 数组）');
+    animeDb = data;
+    updateBadges();
+    renderBrowse();
+    settings.lastAnimeCount = animeDb.length;
+    saveSettings();
+    showToast(`✨ 已加载 ${animeDb.length} 部剧集`);
+  } catch (e) {
+    // 加载失败：保留旧数据（如果有），但显示明确错误
+    list.innerHTML = '<div class="empty-state"><div class="icon">😵</div><p class="text">加载番剧库失败</p><p class="sub">' + esc(e.message) + '</p><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="initBrowseTab()">重试</button></div>';
+    showToast('❌ 加载失败：' + e.message.slice(0, 40));
+  }
+}
+
+// 静默刷新番剧库（GitHub Action 写入仓库的最新 TMDB 数据，随站点部署到同源 ./data/anime.json）。
+// 我的追番据此实时跟随"最新集数"，而非添加时冻结的值。
+async function refreshAnimeDb() {
+  try {
+    const resp = await fetch('./data/anime.json', { cache: 'no-store' });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (!Array.isArray(data)) return;
+    const changed = data.length !== animeDb.length ||
+      data.some(d => {
+        const old = animeDb.find(x => String(x.tmdbId) === String(d.tmdbId));
+        return !old || old.latestEpisode !== d.latestEpisode;
+      });
+    animeDb = data;
+    updateBadges();
+    if (changed) {
+      const mylistVisible = !document.getElementById('tabMylist').classList.contains('hidden');
+      const browseVisible = !document.getElementById('tabBrowse').classList.contains('hidden');
+      const updatesVisible = !document.getElementById('tabUpdates').classList.contains('hidden');
+      if (mylistVisible) renderMylist();
+      if (browseVisible) renderBrowse();
+      if (updatesVisible) renderUpdates();
+    }
+  } catch (e) { /* 保留旧数据，不弹错 */ }
+}
+
+// 打开「设置 / 同步中心」弹窗，并刷新云端同步状态展示
+function showSettings() {
+  updateSyncStatus();
+  openModal('settingsModal');
+}
+
+// 刷新「同步中心」里的状态数字（追番数量 + 上次同步时间）
+function updateSyncStatus() {
+  const cEl = document.getElementById('syncCount');
+  const tEl = document.getElementById('syncTime');
+  if (cEl) cEl.textContent = `${watchlist.length} 部`;
+  if (tEl) tEl.textContent = settings.lastSyncAt ? fmtSyncTime(settings.lastSyncAt) : '尚未同步';
+}
+
+// 把 ISO 时间格式化为「MM-DD HH:mm」的简短本地时间
+function fmtSyncTime(iso) {
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '—';
+    const p = n => String(n).padStart(2, '0');
+    return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  } catch (_) { return '—'; }
+}
+
+// 「同步中心」按钮：立即从云端拉取
+async function pullFromCloud() {
+  showToast('🔄 正在从云端拉取…');
+  await pullWatchlist(true);
+  updateSyncStatus();
+}
+
+// 「同步中心」按钮：立即上传到云端
+async function pushToCloud() {
+  showToast('🔄 正在上传到云端…');
+  await pushWatchlist();
+  updateSyncStatus();
+}
+
+// ======================== STATUS ========================
+function getStatusForAnime(a) {
+  if (!a.latestEpisode || a.latestEpisode === 0) return 'unreleased';
+  if (a.totalEpisodes && a.latestEpisode >= a.totalEpisodes) return 'finished';
+  return 'raising';
+}
+
+const STATUS_TEXT = {
+  raising: '追番中', caughtup: '已追完', finished: '已完结',
+  dropped: '已弃番', unreleased: '未开播'
+};
+
+// 平台品牌色（来自原小程序 utils/platform.wxs）
+const PLATFORM_INFO = {
+  bilibili: { name: '哔哩哔哩', short: 'B', color: '#FB7299' },
+  tencent:  { name: '腾讯视频', short: '腾', color: '#FF7028' },
+  iqiyi:    { name: '爱奇艺',   short: '奇', color: '#00BE06' },
+  youku:    { name: '优酷',     short: '优', color: '#1492FF' },
+  migu:     { name: '咪咕',     short: 'M', color: '#FF4F4F' },
+  bilibili_intl: { name: 'B站国际', short: 'B', color: '#FB7299' },
+  wukong:     { name: '悟空浏览器', short: '悟', color: '#FF6B35' },
+};
+
+function updateBadges() {
+  const all = animeDb.length;
+  const jpAnime = animeDb.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP').length;
+  const cnAnime = animeDb.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN').length;
+  const cdrama = animeDb.filter(a => a.category === 'cdrama').length;
+  const kdrama = animeDb.filter(a => a.category === 'kdrama').length;
+  document.querySelectorAll('#browseFilters .sub-tab').forEach(t => {
+    const f = t.dataset.bfilter;
+    let count = 0;
+    if (f === 'all') count = all;
+    else if (f === 'jp-anime') count = jpAnime;
+    else if (f === 'cn-anime') count = cnAnime;
+    else if (f === 'cdrama') count = cdrama;
+    else if (f === 'kdrama') count = kdrama;
+    let badge = t.querySelector('.tab-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'tab-badge';
+      t.appendChild(badge);
+    }
+    if (count > 0) { badge.style.display = ''; badge.textContent = count; }
+    else { badge.style.display = 'none'; }
+  });
+}
+
+function updateMylistBadges() {
+  // 我的追番 badge：按各状态统计（与 getMylistStatus 保持一致）
+  // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
+  const total = watchlist.length;
+  const enriched = watchlist.map(enrichWatchlistItem);
+  const allCount = enriched.filter(it => it.status !== 'dropped').length;
+  const counts = {
+    all: allCount,
+    raising: enriched.filter(it => it.status === 'raising').length,
+    caughtup: enriched.filter(it => it.status === 'caughtup' || it.status === 'finished').length,
+  };
+  const tabs = document.querySelectorAll('#mylistFilters .sub-tab');
+  tabs.forEach(t => {
+    const f = t.dataset.mfilter;
+    const c = counts[f] || 0;
+    const badge = t.querySelector('.tab-badge');
+    if (badge) {
+      if (c > 0) {
+        badge.style.display = '';
+        badge.textContent = c;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  });
+}
+
+// ======================== RENDER BROWSE (list) ========================
+function renderBrowse() {
+  const q = (document.getElementById('browseSearchInput')?.value || '').trim().toLowerCase();
+  let localItems = animeDb;
+  if (q) localItems = localItems.filter(a => (a.name || '').toLowerCase().includes(q));
+  if (currentBrowseFilter !== 'all') {
+    if (currentBrowseFilter === 'jp-anime') localItems = localItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP');
+    else if (currentBrowseFilter === 'cn-anime') localItems = localItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN');
+    else localItems = localItems.filter(a => (a.category || 'anime') === currentBrowseFilter);
+  }
+
+  // 实时搜索结果（仅在有查询词时合并；已按 tmdbId 排除本地库重复项）
+  let liveItems = [];
+  if (q && liveResults.length) {
+    liveItems = liveResults.filter(x => (x.name || '').toLowerCase().includes(q));
+    if (currentBrowseFilter !== 'all') {
+      if (currentBrowseFilter === 'jp-anime') liveItems = liveItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'JP');
+      else if (currentBrowseFilter === 'cn-anime') liveItems = liveItems.filter(a => (a.category || 'anime') === 'anime' && a.region === 'CN');
+      else liveItems = liveItems.filter(a => (a.category || 'anime') === currentBrowseFilter);
+    }
+    liveItems = liveItems.filter(x => !localItems.some(a => String(a.tmdbId) === String(x.tmdbId)));
+  }
+
+  const list = document.getElementById('browseList');
+  if (localItems.length === 0 && liveItems.length === 0) {
+    list.innerHTML = liveLoading
+      ? '<div class="loading"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在搜索全网剧集…</p></div>'
+      : '<div class="empty-state"><div class="icon">🔍</div><p class="text">未找到匹配的剧集</p><p class="sub">试试其他关键词或分类</p></div>';
+    return;
+  }
+
+  let html = localItems.map(a => browseCard(a)).join('');
+  if (liveItems.length) {
+    html += `<div class="browse-net-divider">🌐 全网结果（TMDB）· 点击即可追</div>` + liveItems.map(a => browseCard(a)).join('');
+  }
+  list.innerHTML = html;
+}
+
+// 单卡片渲染（本地剧库 / 实时搜索结果共用）
+function browseCard(a) {
+  const inList = watchlist.some(w => String(w.tmdbId) === String(a.tmdbId));
+  const w = inList ? watchlist.find(w => String(w.tmdbId) === String(a.tmdbId)) : null;
+  const status = getStatusForAnime(a);
+  const statusText = STATUS_TEXT[status];
+  const banked = a.latestEpisode && w ? a.latestEpisode - w.watchedEpisode : 0;
+  const hasCover = a.cover && (a.cover.startsWith('http://') || a.cover.startsWith('https://') || a.cover.startsWith('/api/img?p=') || a.cover.startsWith('/api/img?u=') || a.cover.startsWith('data:'));
+
+  // 平台：取第一个
+  const primaryPlatform = (a.platforms && a.platforms[0]) || null;
+  const platformInfo = primaryPlatform ? PLATFORM_INFO[primaryPlatform.platform] : null;
+
+  // 更新频率：从 nextAirDate 推断（仅 raising 显示）
+  const updateFreq = computeUpdateFrequency(a);
+
+  // 右侧操作：追番状态
+  let actionHtml;
+  if (status === 'finished' || status === 'unreleased') {
+    // 已完结 / 未开播：显示状态 badge
+    actionHtml = `<div class="btn-status ${status === 'finished' ? 'finished' : 'unreleased'}">${statusText}</div>`;
+  } else if (inList && w) {
+    // 已追番：添加页整体置灰，操作区改为「已添加」禁用态
+    actionHtml = `<div class="btn-catch added">已添加</div>`;
+  } else {
+    // 未追番：+ 追番按钮
+    actionHtml = `<div class="btn-catch" onclick="event.stopPropagation();addToList('${a.tmdbId}')">+ 追番</div>`;
+  }
+
+  const cat = a.category || 'anime';
+  const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧', jdrama: '日剧' };
+  const catBadge = catLabels[cat] || cat;
+  return `<div class="anime-card${inList ? ' in-list' : ''}" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">
+    <div class="card-deco"></div>
+    <div class="cover-wrap">
+      ${hasCover
+        ? `<img class="cover" src="${esc(proxyCover(a.cover))}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(a.name||'?').charAt(0)}</div>`
+        : `<div class="cover-placeholder">${(a.name||'?').charAt(0)}</div>`}
+      <div class="cover-glow"></div>
+    </div>
+    <div class="anime-info">
+      <div class="anime-name">
+        <span class="name-text">${esc(a.name || a.displayName || '')}</span>
+        ${primaryPlatform ? `<span class="go-watch-icon" title="点击查看播放平台" onclick="event.stopPropagation();openDetail('${a.tmdbId}')">🔗</span>` : ''}
+      </div>
+      <div class="anime-meta">
+        <span class="category-tag">${catBadge}</span>
+        ${platformInfo
+          ? `<span class="platform-tag">
+              <span class="platform-icon" style="background:${platformInfo.color}">${platformInfo.short}</span>
+              <span class="platform-name">${esc(platformInfo.name)}</span>
+            </span>`
+          : `<span class="platform-empty">暂无平台</span>`}
+        ${updateFreq ? `<span class="anime-schedule">${updateFreq}</span>` : ''}
+      </div>
+      <div class="anime-episode-info">
+        ${w ? `<span class="ep-current">追至${formatEpisode(w.watchedEpisode, w.watchedSeason)}</span>` : ''}
+        <span>${a.latestEpisode ? '更新至' + formatEpisode(a.latestEpisode, a.latestSeason) : '暂无更新'}</span>
+      </div>
+    </div>
+    <div class="anime-actions">${actionHtml}</div>
+  </div>`;
+}
+
+// 格式化集数显示（S1 E20 / E20）
+function formatEpisode(ep, season) {
+  if (season && season > 1) return ` S${season} E${ep} `;
+  return ` E${ep} `;
+}
+
+// 计算更新频率文案
+function computeUpdateFrequency(a) {
+  if (a.nextAirDate) {
+    // 按本地零点解析 nextAirDate：日期串 'YYYY-MM-DD' 直接 new Date 会被当 UTC 零点，
+    // 在 GMT+8 傍晚会把"今天"误算成过去(返回 null 而回退到 updateFrequency)，
+    // 故补 'T00:00:00' 并按本地零点归零 today
+    const next = new Date(a.nextAirDate + 'T00:00:00');
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const days = Math.round((next - today) / 86400000);
+    if (days < 0) return null;
+    if (days === 0) return '今日更新';
+    if (days === 1) return '明日更新';
+    if (days <= 7) return `${days}天后更新`;
+  }
+  if (a.updateFrequency) return a.updateFrequency + '更新';
+  return null;
+}
+
+// ======================== RENDER BROWSE (list) ========================// ======================== ADD / REMOVE ========================
+function addToList(tmdbId) {
+  // 兼容本地剧库 + 实时搜索结果（resolveAnime 三级回退）
+  const a = resolveAnime(tmdbId);
+  if (!a) return;
+  if (watchlist.some(w => String(w.tmdbId) === String(tmdbId))) {
+    showToast('已在追番列表中');
+    return;
+  }
+  if (a.name && watchlist.some(w => (w.name || '') === a.name)) {
+    showToast('已在追番列表中');
+    return;
+  }
+  watchlist.push({
+    tmdbId: tmdbId,   // 保持原类型（TMDB 数字 id 或本地字符串 id），后续均按 String() 比较
+    name: a.name || a.displayName || '',
+    watchedSeason: 1,
+    watchedEpisode: 0,
+    latestSeason: a.latestSeason || 1,
+    latestEpisode: a.latestEpisode || 0,
+    threshold: 0,
+    notifyEnabled: true,
+    lastNotifiedAt: '',
+    lastNotifiedEpisode: 0,
+    // platforms: 保留 url 字段（来自 anime.json / TMDB 搜索结果的 platforms[].url 或空字符串）
+    platforms: (a.platforms || []).map((p, i) => ({
+      platform: p.platform,
+      name: p.name || p.platform,
+      url: p.url || '',
+      isPrimary: p.isPrimary || i === 0,
+    })),
+    platform: a.platforms && a.platforms[0] ? a.platforms[0].platform : '',
+    updateFrequency: '',
+    // 元数据快照：实时搜索/本地补充剧加进追番后，刷新页面仍能在 animeDb 缺失时还原封面/平台/集数
+    meta: {
+      tmdbId: tmdbId,
+      name: a.name || a.displayName || '',
+      cover: a.cover || '',
+      category: a.category || 'anime',
+      categoryLabel: a.categoryLabel || '',
+      region: a.region || '',
+      regionLabel: a.regionLabel || '',
+      latestSeason: a.latestSeason || 1,
+      latestEpisode: a.latestEpisode || 0,
+      seasonEpisodeCounts: a.seasonEpisodeCounts || {},
+      totalEpisodes: a.totalEpisodes || 0,
+      platforms: a.platforms || [],
+      overview: a.overview || '',
+      firstAirDate: a.firstAirDate || '',
+      voteAverage: a.voteAverage || 0,
+      originCountry: a.originCountry || '',
+      nextAirDate: a.nextAirDate || '',
+      updateFrequency: a.updateFrequency || '',
+    },
+  });
+  saveWatchlist();
+  renderBrowse();
+  renderMylist();
+  showToast(`✨ 已添加「${a.name}」`);
+}
+
+function removeFromList(tmdbId) {
+  const a = watchlist.find(w => String(w.tmdbId) === String(tmdbId));
+  watchlist = watchlist.filter(w => String(w.tmdbId) !== String(tmdbId));
+  saveWatchlist();
+  renderBrowse();
+  renderMylist();
+  showToast(`已移除「${a ? a.name : ''}」`);
+}
+
+// ======================== 更多操作（详情弹窗内） ========================
+function toggleMoreActions(tmdbId) {
+  const el = document.getElementById('moreActions');
+  if (el) { el.remove(); return; }
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  const inList = !!w;
+  const isDropped = w && w.status === 'dropped';
+  const a = resolveAnime(tmdbId);
+  if (!a && !w) return;
+
+  const div = document.createElement('div');
+  div.id = 'moreActions';
+  div.className = 'more-actions';
+  if (inList) {
+    div.innerHTML = `
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openPlatformPopup('${tmdbId}')">🎬 平台 / 去看</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
+      ${isDropped
+        ? `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();restoreFromDropped('${tmdbId}')">♻️ 恢复追番</button>`
+        : `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();markDropped('${tmdbId}')">💔 标记弃番</button>`}
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">📺 更新进度</button>
+    `;
+  } else {
+    div.innerHTML = `
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">➕ 加入追番</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
+    `;
+  }
+  document.getElementById('detailModal')?.querySelector('.modal')?.appendChild(div);
+}
+function markDropped(tmdbId) {
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  watchlist[idx].status = 'dropped';
+  saveWatchlist();
+  renderMylist();
+  showToast('💔 已弃番');
+}
+function restoreFromDropped(tmdbId) {
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  watchlist[idx].status = 'raising';
+  saveWatchlist();
+  renderMylist();
+  showToast('♻️ 已恢复追番');
+}
+
+// ======================== EDIT PLATFORMS（编辑平台 / 链接） ========================
+// 一个番剧可挂多个平台（bilibili / tencent / iqiyi / youku / migu / 自定义）
+// 每个平台有：name（显示名）、url（"去看"链接，留空则降级为"复制链接"）、isPrimary（主平台，决定卡片上显示哪个）
+function editPlatforms(tmdbId) {
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  const w = watchlist[idx];
+  if (!Array.isArray(w.platforms)) w.platforms = [];
+
+  document.getElementById('editPlatformsModal')?.remove();
+
+  // 平台下拉选项
+  const knownKeys = Object.keys(PLATFORM_BRAND);
+  const optionsHtml = knownKeys.map(k =>
+    `<option value="${k}">${PLATFORM_BRAND[k].name}</option>`
+  ).join('');
+
+  function buildRows() {
+    if (w.platforms.length === 0) {
+      return '<div class="ep-empty">还没有平台，点下方"添加平台"</div>';
+    }
+    return w.platforms.map((p, i) => {
+      const brand = PLATFORM_BRAND[p.platform];
+      const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
+      const color = brand ? brand.color : '#8B7AA8';
+      const isPrimary = p.isPrimary ? 'checked' : '';
+      return `<div class="ep-row" data-idx="${i}">
+        <div class="ep-row-head">
+          <span class="ep-row-icon">${logo}</span>
+          <select class="ep-platform-select" onchange="epChangePlatform(${i}, this.value)">
+            ${knownKeys.map(k => `<option value="${k}" ${k===p.platform?'selected':''}>${PLATFORM_BRAND[k].name}</option>`).join('')}
+            ${!knownKeys.includes(p.platform) && p.platform ? `<option value="${esc(p.platform)}" selected>${esc(p.name||p.platform)}</option>` : ''}
+          </select>
+          <label class="ep-primary-label" title="设为主平台（卡片上显示）">
+            <input type="radio" name="ep-primary" ${isPrimary} onchange="epSetPrimary(${i})">
+            <span>主</span>
+          </label>
+          <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
+        </div>
+        <input class="ep-url-input" placeholder="去看的链接（可留空，留空则点"复制链接"）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
+      </div>`;
+    }).join('');
+  }
+
+  const div = document.createElement('div');
+  div.id = 'editPlatformsModal';
+  div.className = 'modal-overlay';
+  div.onclick = function(e) { if (e.target === this) epClose(false); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">✏️ 编辑平台 · ${esc(w.name || '')}</div>
+      <button class="modal-close" onclick="epClose(false)">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">一个番剧可挂多个平台。设置链接后，卡片"平台 / 去看"可直接跳转；留空则点"复制链接"。</p>
+      <div id="epList">${buildRows()}</div>
+      <button class="ep-add-btn" onclick="epAddRow()">
+        <span style="font-size:16px;line-height:1">＋</span> 添加平台
+      </button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="epClose(false)">取消</button>
+      <button class="btn btn-primary" onclick="epClose(true)">保存</button>
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+  window._epIdx = idx; // 保存当前编辑的 watchlist index
+}
+
+// 平台编辑弹窗的 CRUD 助手（直接操作 watchlist + 局部重渲染）
+window._epIdx = -1;
+function epChangePlatform(rowIdx, newKey) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  const p = w.platforms[rowIdx];
+  if (!p) return;
+  p.platform = newKey;
+  if (PLATFORM_BRAND[newKey]) p.name = PLATFORM_BRAND[newKey].name;
+  epRefreshList();
+}
+function epChangeUrl(rowIdx, val) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  if (w.platforms[rowIdx]) w.platforms[rowIdx].url = val.trim();
+}
+function epSetPrimary(rowIdx) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  w.platforms.forEach((p, i) => { p.isPrimary = (i === rowIdx); });
+  // 同步到 watchlist[].platform（主平台 key）
+  w.platform = w.platforms[rowIdx].platform || '';
+  epRefreshList();
+}
+function epDeleteRow(rowIdx) {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  const wasPrimary = w.platforms[rowIdx] && w.platforms[rowIdx].isPrimary;
+  w.platforms.splice(rowIdx, 1);
+  // 删的是主平台 → 把第一个降级为主
+  if (wasPrimary && w.platforms[0]) {
+    w.platforms[0].isPrimary = true;
+    w.platform = w.platforms[0].platform || '';
+  }
+  epRefreshList();
+}
+function epAddRow() {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  // 找第一个未用的 known key
+  const used = new Set(w.platforms.map(p => p.platform));
+  const candidate = Object.keys(PLATFORM_BRAND).find(k => !used.has(k)) || 'bilibili';
+  const newRow = {
+    platform: candidate,
+    name: PLATFORM_BRAND[candidate].name,
+    url: '',
+    isPrimary: w.platforms.length === 0, // 第一个自动主
+  };
+  w.platforms.push(newRow);
+  if (newRow.isPrimary) w.platform = candidate;
+  epRefreshList();
+}
+function epRefreshList() {
+  const w = watchlist[window._epIdx];
+  if (!w) return;
+  const list = document.getElementById('epList');
+  if (!list) return;
+  // 整体刷新：输入框保持焦点（阻止刷新），选择框允许刷新（logo 需更新）
+  if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+  // 简单重写
+  const knownKeys = Object.keys(PLATFORM_BRAND);
+  if (w.platforms.length === 0) {
+    list.innerHTML = '<div class="ep-empty">还没有平台，点下方"添加平台"</div>';
+    return;
+  }
+  list.innerHTML = w.platforms.map((p, i) => {
+    const brand = PLATFORM_BRAND[p.platform];
+    const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
+    const color = brand ? brand.color : '#8B7AA8';
+    const isPrimary = p.isPrimary ? 'checked' : '';
+    return `<div class="ep-row" data-idx="${i}">
+      <div class="ep-row-head">
+        <span class="ep-row-icon">${logo}</span>
+        <select class="ep-platform-select" onchange="epChangePlatform(${i}, this.value)">
+          ${knownKeys.map(k => `<option value="${k}" ${k===p.platform?'selected':''}>${PLATFORM_BRAND[k].name}</option>`).join('')}
+        </select>
+        <label class="ep-primary-label" title="设为主平台（卡片上显示）">
+          <input type="radio" name="ep-primary" ${isPrimary} onchange="epSetPrimary(${i})">
+          <span>主</span>
+        </label>
+        <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
+      </div>
+      <input class="ep-url-input" placeholder="去看的链接（可留空）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
+    </div>`;
+  }).join('');
+}
+function epClose(save) {
+  if (save) {
+    const w = watchlist[window._epIdx];
+    if (w) {
+      // 清理空平台（既没 name 也没 url）
+      w.platforms = w.platforms.filter(p => (p.name && p.name.trim()) || (p.url && p.url.trim()) || p.platform);
+      // 确保至少有一个 isPrimary
+      if (w.platforms.length > 0 && !w.platforms.some(p => p.isPrimary)) {
+        w.platforms[0].isPrimary = true;
+        w.platform = w.platforms[0].platform;
+      } else if (w.platforms.length === 0) {
+        w.platform = '';
+      }
+      saveWatchlist();
+      renderMylist();
+      showToast('✅ 平台已保存');
+    }
+  }
+  document.getElementById('editPlatformsModal')?.remove();
+  window._epIdx = -1;
+}
+
+// ======================== PLATFORM POPUP（仿小程序 platform-popup） ========================
+function openPlatformPopup(tmdbId) {
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!w) return;
+  const enriched = enrichWatchlistItem(w);
+  const { name, cover, status, currentEpisode, latestEpisode, platforms, platform, platformName, updateFrequency, hasCover } = enriched;
+  const rawName = (name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+  const seasonMulti = enriched.latestSeason > 1 || enriched.currentSeason > 1;
+  const currentLabel = seasonMulti
+    ? `S${enriched.currentSeason}·E${currentEpisode}`
+    : (currentEpisode ? `第${currentEpisode}集` : '-');
+  const latestLabel = seasonMulti
+    ? `S${enriched.latestSeason}·E${latestEpisode}`
+    : (latestEpisode ? `第${latestEpisode}集` : '?');
+  const platBrand = platform ? PLATFORM_BRAND[platform] : null;
+  const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
+  const platColor = platBrand ? platBrand.color : '#8B7AA8';
+  const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+
+  // 过滤有效平台
+  const validPlatforms = platforms.filter(p => p && p.platform);
+
+  // 平台列表 HTML
+  // 按钮逻辑：
+  //   - 有 url → 直接打开该 URL
+  //   - 无 url → 打开平台搜索页（用番名作为关键词）
+  //   - 统一文案「前往」
+  const platformListHtml = validPlatforms.length === 0
+    ? '<div class="platform-empty-tip">该番暂无平台信息<br>点上方「一键搜索」去各平台搜</div>'
+    : `<div class="platform-list">${validPlatforms.map(p => {
+        const brand = PLATFORM_BRAND[p.platform] || null;
+        const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
+        const color = brand ? brand.color : '#8B7AA8';
+        const pName = p.name || (brand ? brand.name : p.platform);
+        const pUrl = (p.url || '').trim();
+        // 统一「前往」按钮：有 url 直跳；无 url 用平台搜索 URL
+        const targetUrl = pUrl
+          || (PLATFORM_SEARCH_URL[p.platform] ? PLATFORM_SEARCH_URL[p.platform] + encodeURIComponent(w.name || '') : '');
+        const btnHtml = targetUrl
+          ? `<button class="platform-action-btn link" onclick="window.open('${esc(targetUrl)}','_blank','noopener')">前往 ›</button>`
+          : `<button class="platform-action-btn copy" disabled style="opacity:.5;cursor:not-allowed">暂不可用</button>`;
+        // 截断 URL 用于显示（最多 40 字符）
+        const urlPreview = targetUrl.length > 40 ? targetUrl.slice(0, 40) + '…' : targetUrl;
+        return `<div class="platform-item">
+          <span class="platform-item-icon">${logo}</span>
+          <div class="platform-item-body">
+            <div class="platform-item-name">${esc(pName)}</div>
+            ${targetUrl ? `<div class="platform-item-url" title="${esc(targetUrl)}">${esc(urlPreview)}</div>` : ''}
+          </div>
+          <div class="platform-item-actions">
+            ${btnHtml}
+            ${targetUrl ? `<button class="platform-action-btn copyurl" onclick="copyToClipboard('${esc(targetUrl)}','🔗 已复制链接')" title="复制链接">📋</button>` : ''}
+          </div>
+        </div>`;
+      }).join('')}</div>`;
+
+  // 移除已存在的
+  document.getElementById('platformPopup')?.remove();
+
+  const div = document.createElement('div');
+  div.id = 'platformPopup';
+  div.className = 'modal-overlay';
+  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">🎬 ${esc(name || '')}</div>
+      <button class="modal-close" onclick="document.getElementById('platformPopup')?.remove()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="platform-card">
+        <div class="platform-card-cover">
+          ${hasCover
+            ? `<img src="${esc(proxyCover(cover))}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+            : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
+          <div class="platform-card-status ${status}">${statusText}</div>
+        </div>
+        <div class="platform-card-info">
+          <div class="platform-card-title">${esc(name || '')}</div>
+          <div class="platform-card-meta">
+            ${platform
+              ? `<span class="platform-card-platform-icon">${platLogo}</span>
+                 <span class="platform-card-platform-name">${esc(platLabel)}</span>`
+              : '<span class="platform-card-platform-name">暂无平台</span>'}
+            ${updateFrequency ? `<span class="platform-card-schedule">· ${esc(updateFrequency)}</span>` : ''}
+          </div>
+          <div class="platform-card-episode">
+            <span style="color:#C44AFF;font-weight:700">追至${currentLabel || '-'}</span>
+            · 更新至${latestLabel}
+          </div>
+        </div>
+      </div>
+      <button class="platform-copy-all" onclick="window.open('https://search.bilibili.com/all?keyword=' + encodeURIComponent('${rawName}'), '_blank', 'noopener')">
+        <span class="platform-copy-all-icon">🔍</span>
+        <span class="platform-copy-all-text">一键搜索：${esc(name || '')}</span>
+      </button>
+      <div class="platform-divider"></div>
+      ${platformListHtml}
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+}
+
+// 复制搜索词
+function copyPlatformSearch(name) {
+  if (!name) return;
+  copyToClipboard(name, '📋 已复制「' + name + '」');
+}
+
+// 复制平台搜索链接（无 url 时的兜底）
+function copyPlatformLink(platform, name) {
+  const searchPrefix = PLATFORM_SEARCH_URL[platform] || 'https://www.bing.com/search?q=';
+  const url = searchPrefix + encodeURIComponent(name || '');
+  copyToClipboard(url, '🔗 已复制 ' + (PLATFORM_BRAND[platform] ? PLATFORM_BRAND[platform].name : platform) + ' 搜索链接');
+}
+
+function copyToClipboard(text, successMsg) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast(successMsg), () => fallbackCopy(text, successMsg));
+  } else {
+    fallbackCopy(text, successMsg);
+  }
+}
+function fallbackCopy(text, successMsg) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast(successMsg); }
+  catch (e) { showToast('❌ 复制失败，请手动选中'); }
+  document.body.removeChild(ta);
+}
+
+// ======================== PROGRESS MODAL (catch-modal style) ========================
+function openProgress(tmdbId) {
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  if (!w) return;
+  const a = resolveAnime(tmdbId);
+  const enriched = enrichWatchlistItem(w);
+  const { latestEpisode, latestSeason, currentSeason } = enriched;
+
+  // 多季支持：优先用 watchlist.latestSeason，否则用 animeDb.seasonEpisodeCounts 长度
+  const seasonCounts = a && a.seasonEpisodeCounts ? a.seasonEpisodeCounts : null;
+  const totalSeasons = Math.max(
+    latestSeason || 1,
+    currentSeason || 1,
+    seasonCounts ? Object.keys(seasonCounts).length : 1
+  );
+
+  // 每季最新集数（用于"更新至"展示）
+  const seasonLatest = (s) => {
+    if (s === latestSeason) return latestEpisode;
+    if (seasonCounts && seasonCounts[String(s)]) return seasonCounts[String(s)];
+    if (seasonCounts && seasonCounts[s]) return seasonCounts[s];
+    return 0;
+  };
+
+  // 季选择 chip
+  const seasonChips = [];
+  for (let i = 1; i <= totalSeasons; i++) {
+    seasonChips.push(`<button class="season-chip ${i === currentSeason ? 'active' : ''}" data-season="${i}" onclick="pickSeason(${i})">第${i}季</button>`);
+  }
+
+  activeSeason = currentSeason || 1;
+  const activeLatest = seasonLatest(activeSeason) || latestEpisode;
+  // 存了多少集 = 全剧已播出总集数 - 已看集数（跨季累计，不受当前选中季影响）
+  let totalReleased = activeLatest;
+  if (seasonCounts) {
+    const vals = Object.values(seasonCounts);
+    if (vals.length > 0) totalReleased = vals.reduce((a, b) => a + b, 0);
+  }
+  const banked = totalReleased ? totalReleased - w.watchedEpisode : 0;
+  _progressCtx = { w, seasonLatest, seasonCounts };
+
+  // closeProgressModal 已提升为全局函数（见 MODAL HELPERS），供内联 onclick 调用
+
+  const div = document.createElement('div');
+  div.className = 'modal-overlay';
+  div.id = 'progressModal';
+  div.onclick = function(e) { if (e.target === this) closeProgressModal(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📺 ${esc(w.name)}</div>
+      <button class="modal-close" onclick="closeProgressModal()">✕</button>
+    </div>
+    <div class="progress-tmdb" title="点击复制 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','已复制 TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
+    <div class="modal-body progress-body">
+      <p class="progress-hint">更新你的追番进度</p>
+      ${totalSeasons > 1 ? `<div class="season-row" id="seasonRow">${seasonChips.join('')}</div>` : ''}
+      <div class="progress-input-row">
+        <span class="progress-suffix">已看到</span>
+        <div class="progress-input-wrap">
+          <input id="popupEpisode" type="number" min="0" max="${activeLatest || 999}" value="${w.watchedEpisode}" class="progress-input">
+        </div>
+        <span class="progress-suffix">集</span>
+      </div>
+      ${activeLatest ? `<span class="progress-reminder">最新 ${activeLatest} 集 · 存了 ${Math.max(0, banked)} 集</span>` : ''}
+      ${banked > 0 ? `<button class="progress-catchup" onclick="document.getElementById('popupEpisode').value=${activeLatest};showToast('⚡ 已追到最新')">⚡ 已追到最新</button>` : ''}
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeProgressModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveProgress('${tmdbId}')">保存</button>
+    </div>
+  </div>`;
+  syncBodyScroll();
+  document.body.appendChild(div);
+  setTimeout(() => {
+    const inp = document.getElementById('popupEpisode');
+    if (inp) { inp.focus(); inp.select(); }
+  }, 400);
+}
+
+
+function pickSeason(s) {
+  activeSeason = s;
+  document.querySelectorAll('.season-chip').forEach(c => {
+    c.classList.toggle('active', Number(c.dataset.season) === s);
+  });
+  const ctx = _progressCtx;
+  if (!ctx) return;
+  const activeLatest = ctx.seasonLatest(s);
+  // 存了集数跨季不变，此处只刷新「最新」显示 + input max + 追到最新按钮
+  let totalReleased = activeLatest;
+  if (ctx.seasonCounts) {
+    const vals = Object.values(ctx.seasonCounts);
+    if (vals.length > 0) totalReleased = vals.reduce((a, b) => a + b, 0);
+  }
+  const banked = Math.max(0, totalReleased - ctx.w.watchedEpisode);
+  const inp = document.getElementById('popupEpisode');
+  if (inp) inp.max = activeLatest || 999;
+  const reminder = document.querySelector('#progressModal .progress-reminder');
+  if (reminder) {
+    reminder.innerHTML = '最新 ' + (activeLatest || '?') + ' 集 · 存了 ' + banked + ' 集';
+  }
+  const catchupBtn = document.querySelector('#progressModal .progress-catchup');
+  if (catchupBtn) {
+    if (banked > 0 && activeLatest) {
+      catchupBtn.style.display = '';
+      catchupBtn.setAttribute('onclick', 'document.getElementById(\'popupEpisode\').value=' + activeLatest + ';showToast(\'⚡ 已追到最新\')');
+    } else {
+      catchupBtn.style.display = 'none';
+    }
+  }
+}
+
+function saveProgress(tmdbId) {
+  const ep = parseInt(document.getElementById('popupEpisode').value);
+  if (isNaN(ep) || ep < 0) { showToast('请输入有效集数'); return; }
+  const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
+  if (idx === -1) return;
+  watchlist[idx].watchedEpisode = ep;
+  if (activeSeason) watchlist[idx].watchedSeason = activeSeason;
+  // status 不再由 saveProgress 计算，由 enrichWatchlistItem 动态算（只保留 dropped）
+  if (watchlist[idx].status !== 'dropped') delete watchlist[idx].status;
+  saveWatchlist();
+  closeProgressModal();
+  renderBrowse();
+  renderMylist();
+  showToast('✅ 进度已更新');
+}
+
+// ======================== ANIME DETAIL ========================
+function openDetail(tmdbId) {
+  const a = resolveAnime(tmdbId);
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  const inList = !!w;
+  if (!a && !w) return;
+  const name = a ? (a.name || a.displayName || '') : (w ? w.name : '');
+  const cover = a ? a.cover : (w ? w.cover : '');
+  const hasCover = cover && (cover.startsWith('http://') || cover.startsWith('https://') || cover.startsWith('/api/img?p=') || cover.startsWith('/api/img?u=') || cover.startsWith('data:'));
+  const status = a ? getStatusForAnime(a) : (w.status || 'raising');
+  const statusText = STATUS_TEXT[status] || '追番中';
+  const platforms = (a ? a.platforms : w ? w.platforms : []) || [];
+  const categoryLabel = a ? (a.categoryLabel || (a.category === 'cdrama' ? '国产剧' : a.category === 'kdrama' ? '韩剧' : '番剧')) : '番剧';
+
+  const div = document.createElement('div');
+  div.className = 'modal-overlay';
+  div.id = 'detailModal';
+  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-body" style="text-align:center;padding-top:16px">
+      ${hasCover
+        ? `<img class="detail-cover" src="${esc(proxyCover(cover))}" loading="lazy" onerror="this.style.display='none'">`
+        : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(name||'?').charAt(0)}</div>`}
+      <div class="detail-name">${esc(name)}</div>
+      <div class="detail-tmdb" title="点击复制 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','已复制 TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
+      <div class="detail-meta">
+        <span class="cover-status ${status}" style="position:static;display:inline-block;margin-right:4px">${statusText}</span>
+        <span style="font-size:10px;font-weight:600;color:var(--orange,#ff9f43);margin-right:4px">${esc(categoryLabel)}</span>
+        ${a && a.regionLabel ? esc(a.regionLabel) : ''}
+        ${a && a.latestEpisode ? ' · 更新至 E' + a.latestEpisode : ''}
+        ${a && a.totalEpisodes ? ' · 共 ' + a.totalEpisodes + ' 集' : ''}
+        ${a && a.voteAverage ? ' · ⭐ ' + a.voteAverage.toFixed(1) : ''}
+      </div>
+      ${w ? `<div style="margin-top:6px;font-size:12px;color:var(--purple);font-weight:700">追至 E${w.watchedEpisode}</div>` : ''}
+      ${a && a.overview ? `<div class="detail-overview">${esc(a.overview)}</div>` : ''}
+      ${platforms.length > 0 ? `<div class="detail-platforms">${platforms.map(p => '<span class="detail-platform-tag">' + esc(p.platform) + '</span>').join('')}</div>` : ''}
+    </div>
+    <div class="modal-actions">
+      ${inList
+        ? `<button class="btn btn-danger" onclick="document.getElementById('detailModal')?.remove();removeFromList('${tmdbId}')">移除追番</button>
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">更新进度</button>
+           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">更多操作</button>`
+        : `<button class="btn btn-cancel" onclick="document.getElementById('detailModal')?.remove()">关闭</button>
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">+ 加入追番</button>
+           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">更多操作</button>`}
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+}
+
+// ======================== RENDER MY LIST (仿小程序 pages/index) ========================
+// 状态判定：按小程序 processAnimeList 逻辑，但只看 watchlist + animeDb
+function getMylistStatus(w) {
+  if (w.status === 'dropped') return 'dropped';
+  // 用 animeDb 的最新数据（每次同步自动更新）判断番本身是否已完结
+  const a = resolveAnime(w.tmdbId);
+  const latestEp = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
+  const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
+  // 多季且所有季都到顶 = 已完结；用 seasonEpisodeCounts
+  if (a && a.seasonEpisodeCounts) {
+    const totalS = a.totalSeasons || 1;
+    let allDone = true;
+    for (let s = 1; s <= totalS; s++) {
+      const max = a.seasonEpisodeCounts[String(s)] || a.seasonEpisodeCounts[s] || 0;
+      const cur = (s === w.watchedSeason) ? w.watchedEpisode : 0;
+      if (cur < max) { allDone = false; break; }
+    }
+    if (allDone && totalS > 0) return 'finished';
+  } else if (latestEp && w.watchedEpisode >= latestEp && (w.watchedSeason || 1) >= latestSeason) {
+    return 'finished';
+  }
+  // 追到最新 = caughtup（已追完本轮）
+  if (latestEp && w.watchedEpisode >= latestEp) return 'caughtup';
+  return 'raising';
+}
+
+const MYLIST_STATUS_TEXT = {
+  raising: '追番中', caughtup: '已追完', finished: '已追完', dropped: '已弃番', unknown: '追番中'
+};
+
+// 平台信息（带 logo SVG + 品牌色 + 中文名 + 短字符）
+// SVG 来源（全部 raw 抓自公开 CDN，viewBox 各异）：
+//   - bilibili: simple-icons (24×24) - https://dl.svgcdn.com/svg/simple-icons/bilibili.svg
+//   - iqiyi:    arcticons   (48×48) - https://dl.svgcdn.com/svg/arcticons/iqiyi.svg
+//   - migu:     arcticons   (48×48) - https://dl.svgcdn.com/svg/arcticons/migu.svg
+//   - youku:    brandico    (1000×1000) - https://dl.svgcdn.com/svg/brandico/youku.svg
+//   - tencent:  自画        (48×48) - 三色播放三角（橙 #FA8036 + 绿 #74CA12 + 蓝 #168CF5）
+//   - bilibili_intl: 复用 bilibili
+// 全部 SVG 已内嵌具体颜色（不依赖 currentColor），外层无染色背景。
+const PLATFORM_BRAND = {
+  wukong: {
+    name: '悟空浏览器', short: '悟', color: '#FF6B35',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#FF6B35"/><path fill="none" stroke="#FFD23F" stroke-width="2.6" stroke-linecap="round" d="M11.5 17.5 Q24 11 36.5 17.5"/><path fill="#FFF1E6" d="M24 15.5c-3.2-3.6-9.6-1.9-9 4.2.5 5 4 9 9 10.3 5-1.3 8.5-5.3 9-10.3.6-6.1-5.8-7.8-9-4.2z"/><circle cx="20.3" cy="21" r="1.7" fill="#3A2A1A"/><circle cx="27.7" cy="21" r="1.7" fill="#3A2A1A"/><path fill="none" stroke="#3A2A1A" stroke-width="1.6" stroke-linecap="round" d="M20.5 26.5 Q24 29 27.5 26.5"/></svg>'
+  },
+  bilibili: {
+    name: '哔哩哔哩', short: 'B', color: '#00A1D6',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
+  },
+  tencent: {
+    name: '腾讯视频', short: '腾', color: '#168CF5',
+    // 三色播放三角：橙(左) + 绿(中) + 蓝(右) + 中间白色播放图标
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FA8036" d="M4 8 L20 8 L20 40 L4 40 Z"/><path fill="#74CA12" d="M16 8 L32 8 L32 40 L16 40 Z"/><path fill="#168CF5" d="M28 8 L44 8 L44 40 L28 40 Z"/><polygon fill="#FFFFFF" points="20,16 32,24 20,32"/></svg>'
+  },
+  iqiyi: {
+    name: '爱奇艺', short: '爱', color: '#00DC5A',
+    // 来自 arcticons iqiyi.svg (line 版)，整体染绿
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="none" stroke="#00DC5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M9.5 5.5h29c2.216 0 4 1.784 4 4v29c0 2.216-1.784 4-4 4h-29c-2.216 0-4-1.784-4-4v-29c0-2.216 1.784-4 4-4"/><path fill="#00DC5A" d="M11.836 19.016c0 .414-.333.75-.744.75a.747.747 0 0 1-.744-.75c0-.414.333-.75.744-.75c.41 0 .744.336.744.75"/><path fill="none" stroke="#00DC5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M11.092 22.216v7.199m10.197 0l-3.438-3.6m-.001 3.6c-1.983 0-3.437-1.6-3.437-3.466v-3.6c0-2 1.586-3.6 3.438-3.6h0c1.983 0 3.438 1.6 3.438 3.6v3.466c0 2-1.455 3.6-3.438 3.6m6.494-10.665v10.665m9.933-10.665l-3.438 5.332l-3.438-5.332m3.438 10.665v-5.333m6.494-5.332v10.665"/></svg>'
+  },
+  youku: {
+    name: '优酷', short: '优', color: '#1492FF',
+    // 来自 brandico youku.svg (mono 单色), 整体染蓝
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#1492FF" d="M449.69 139.688c-15.29.025-30.615 4.098-43.781 13.188c-28.992 20.037-45.122 81.793-64.594 125.75c-21.444 48.358-40.259 97.095-61.156 132.594c-56.519-64.128-95.077-206.254-163.156-258.344c-21.959-16.783-70.099-16.305-91.781 0c-58.645 44.149.194 122.203 23.781 163.156c51.773 89.789 109.164 185.937 152.969 268.531c-28.476 75.092-172.29 287.292 20.406 275.313c46.636-30.14 66.384-92.854 91.75-149.594c51.861-116.102 95.923-216.406 149.563-336.469c22.294-49.908 76-123.645 64.594-180.156c-6.391-31.499-42.38-54.028-78.594-53.969zm466.219 46.063c-27.866.279-55.968 13.293-68.125 38.5c-20.112 22.945-41.65 44.45-64.594 64.563c-11.023 13.893-23.501 26.333-37.375 37.375c-16.133 16.783-29.222 36.525-51 47.625V241.251c-.497-72.107-135.42-72.107-135.938 0v377.313c5.893 26.925 18.13 47.511 47.563 50.938h40.813c27.977-4.861 43.889-21.793 47.563-50.938V536.97c0-28.284-5.294-76.032 13.594-47.594c27.691 27.098 66.712 56.252 102 88.344c33.872 30.887 66.285 80.739 101.938 88.375c73.005 15.653 105.208-54.421 78.188-105.344c-28.534-53.832-110.717-88.282-146.156-135.969c23.883-54.654 153.715-88.23 142.75-183.531c-4.322-37.644-37.587-55.837-71.219-55.5z"/></svg>'
+  },
+  migu: {
+    name: '咪咕', short: 'M', color: '#FF4F4F',
+    // 来自 arcticons migu.svg (line 单色), 整体染红
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="37" height="37" x="5.5" y="5.5" fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" rx="4" ry="4"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m11.572 28.149l-.654-8.965l5.142 8.647l3.833-9.288l.654 8.96m8.916-6.627l.49 6.73a2.25 2.25 0 0 1-2.079 2.408h0a2.24 2.24 0 0 1-1.634-.542"/><rect width="4.499" height="5.961" x="25.186" y="21.032" fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" rx="2.249" ry="2.249" transform="rotate(175.825 27.436 24.012)"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m31.997 20.69l.27 3.703a2.25 2.25 0 0 0 2.407 2.08h0a2.25 2.25 0 0 0 2.08-2.408l-.27-3.702m.27 3.702l.164 2.243"/><circle cx="22.344" cy="18.632" r=".75" fill="#FF4F4F"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m22.544 21.381l.434 5.945"/></svg>'
+  },
+  bilibili_intl: {
+    name: 'B站国际', short: 'Bi', color: '#00A1D6',
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
+  },
+};
+// 平台搜索 URL 兜底（当 platforms[i].url 为空时使用）
+const PLATFORM_SEARCH_URL = {
+  bilibili: 'https://search.bilibili.com/all?keyword=',
+  tencent:  'https://v.qq.com/x/search/?q=',
+  iqiyi:    'https://search.iqiyi.com/o?key=',
+  youku:    'https://so.youku.com/search_video/q_',
+  migu:     'https://www.migu.cn/search?keyword=',
+  // 悟空浏览器是 iOS 浏览器（非视频站）：无直链时回退到网页搜索，链接在悟空内打开
+  wukong:   'https://www.baidu.com/s?wd=',
+};
+// 给未知平台兜底（"其他" 用灰色问号圆）
+const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#DFE6E9"/><text x="24" y="32" text-anchor="middle" fill="#636E72" font-size="22" font-weight="bold" font-family="sans-serif">?</text></svg>';
+
+// "enrich"：把 watchlist 的一条 + 关联的 animeDb 项合并成"后端视图"，
+// 跟小程序 processAnimeList 输出对齐（currentEpisode/latestEpisode/status/platforms 等）
+// 自愈标记：enrich 时若靠名字纠正了错的 tmdbId，置位后在 render 末尾写回 localStorage
+let _watchlistIdDirty = false;
+
+// 统一解析某剧元数据：先查本地剧库(animeDb)，再查实时搜索结果(liveResults)，最后回退到追番条目自带的 meta
+// 封面代理：image.tmdb.org 在国内常被墙/不稳定，统一改走 Cloudflare 边缘代理 /api/img，
+// 浏览器只访问 anime-coze-cyy.pages.dev（国内可达），由 CF 回源拉图。
+function proxyCover(url) {
+  if (!url) return '';
+  if (url.startsWith('/api/img') || url.startsWith('data:') || url.startsWith('./') || url.startsWith('/')) return url;
+  if (url.includes('image.tmdb.org')) return '/api/img?u=' + encodeURIComponent(url);
+  return url;
+}
+
+// 这样实时搜到的剧加进追番后，刷新页面仍能在 animeDb 缺失时还原封面/平台/集数
+function resolveAnime(tmdbId) {
+  let a = animeDb.find((x) => String(x.tmdbId) === String(tmdbId));
+  if (a) return a;
+  a = liveResults.find((x) => String(x.tmdbId) === String(tmdbId));
+  if (a) return a;
+  const w = watchlist.find((x) => String(x.tmdbId) === String(tmdbId));
+  if (w && w.meta) return w.meta;
+  return null;
+}
+
+function enrichWatchlistItem(w) {
+  // 优先按 tmdbId 精确匹配（存的就是 TMDB 的 id，后续直接对应）
+  let a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
+  if (!a && w.meta) a = w.meta;   // 实时搜索/本地补充剧的元数据快照（刷新后仍可用）
+  // 存的 tmdbId 错/缺失时，按名字兜底找到真身，并自愈写回正确 id
+  if (!a && w.name) {
+    a = animeDb.find(x => x.name && x.name === w.name);
+    if (a && String(w.tmdbId) !== String(a.tmdbId)) {
+      w.tmdbId = a.tmdbId;       // 持久化为 TMDB 正确 id，下次起纯 id 匹配
+      _watchlistIdDirty = true;  // 标记待保存
+    }
+  }
+  // latestEpisode 优先取 animeDb（每次同步自动更新），watchlist 兜底
+  const latestEpisode = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
+  const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
+  // 平台列表：watchlist 优先，animeDb 兜底
+  const platforms = (w.platforms && w.platforms.length) ? w.platforms : (a && a.platforms ? a.platforms : []);
+  const primaryPlatform = platforms.find(p => p.isPrimary) || platforms[0] || null;
+  // 状态：dropped 保留用户标记，其余始终按最新数据重新计算
+  const status = w.status === 'dropped' ? 'dropped' : getMylistStatus(w);
+  // 剩余集数 = latestEpisode - watchedEpisode
+  const remaining = status === 'finished' ? 0 : Math.max(0, latestEpisode - w.watchedEpisode);
+  // 更新频率：优先用番剧库 anime 的 nextAirDate 实时推算（与添加页 browseCard 一致），追番自带值兜底
+  const updateFrequency = (a ? computeUpdateFrequency(a) : '') || w.updateFrequency || '';
+  const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧', jdrama: '日剧' };
+  const acat = (a && a.category) || 'anime';
+  return {
+    ...w,
+    animeId: w.tmdbId,
+    name: w.name,
+    cover: a ? a.cover : '',
+    category: acat,
+    categoryLabel: a && a.categoryLabel ? a.categoryLabel : (catLabels[acat] || acat),
+    status,
+    currentEpisode: w.watchedEpisode,
+    currentSeason: w.watchedSeason,
+    latestEpisode,
+    latestSeason,
+    remaining,
+    platforms,
+    platform: primaryPlatform ? primaryPlatform.platform : '',
+    platformName: primaryPlatform ? (primaryPlatform.name || primaryPlatform.platform) : '',
+    updateFrequency,
+    // 封面是否可用
+    hasCover: !!(a && a.cover && (a.cover.startsWith('http') || a.cover.startsWith('/api/img') || a.cover.startsWith('data:'))),
+  };
+}
+
+// ======================== RENDER UPDATES（追番列表中最新集数有更新的） ========================
+function renderUpdates() {
+  const list = document.getElementById('updatesList');
+
+  if (watchlist.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有追番呢~</p><p class="sub">先去添加剧集吧 💕</p></div>';
+    return;
+  }
+
+  const enriched = watchlist.map(enrichWatchlistItem);
+  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlistLocal(); }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  // 过滤：追番列表中非弃番的、最新集数在昨日或今日更新的（通过 nextAirDate 判断最新一集的播出日）
+  const updated = enriched.filter(it => {
+    if (it.status === 'dropped') return false;
+    const a = resolveAnime(it.tmdbId);
+    if (!a || !a.nextAirDate) return false;
+    const next = new Date(a.nextAirDate + 'T00:00:00');
+    return next.getTime() >= yesterday.getTime() && next.getTime() < tomorrow.getTime();
+  });
+
+  if (updated.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">昨日和今日没有更新的追番</p><p class="sub">等番剧更新后再来看看吧~</p></div>';
+    return;
+  }
+
+  // 排序：今日更新在前，再按剧名排序
+  updated.sort((a, b) => {
+    const aIsToday = (() => { const aa = resolveAnime(a.tmdbId); if (!aa || !aa.nextAirDate) return false; return new Date(aa.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
+    const bIsToday = (() => { const ba = resolveAnime(b.tmdbId); if (!ba || !ba.nextAirDate) return false; return new Date(ba.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
+    if (aIsToday && !bIsToday) return -1;
+    if (!aIsToday && bIsToday) return 1;
+    return (a.name || '').localeCompare(b.name || '', 'zh');
+  });
+
+  list.innerHTML = updated.map(it => {
+    const { tmdbId, name, cover, status, hasCover, currentEpisode, latestEpisode, currentSeason, latestSeason, remaining, platforms, platform, platformName, updateFrequency } = it;
+    const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+    const seasonMulti = latestSeason > 1 || currentSeason > 1;
+    const currentLabel = seasonMulti
+      ? 'S' + currentSeason + '·E' + currentEpisode
+      : (currentEpisode ? '第' + currentEpisode + '集' : '-');
+    const latestLabel = seasonMulti
+      ? 'S' + latestSeason + '·E' + latestEpisode
+      : (latestEpisode ? '第' + latestEpisode + '集' : '?');
+    const platBrand = platform ? PLATFORM_BRAND[platform] : null;
+    const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
+    const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+
+    let actionHtml = '';
+    if (status === 'raising') {
+      actionHtml = '<div class="btn-catch-wrap">' +
+        '<button class="btn-catch" onclick="event.stopPropagation();openProgress(\'' + tmdbId + '\')" title="更新进度">' +
+        '<span class="catch-label">追更</span></button>' +
+        (remaining > 0 ? '<span class="catch-badge">' + remaining + '</span>' : '') +
+        '</div>';
+    } else if (status === 'dropped') {
+      actionHtml = '<button class="btn-status dropped" onclick="event.stopPropagation();openDetail(\'' + tmdbId + '\')" title="操作">已弃番</button>';
+    } else if (status === 'caughtup' || status === 'finished') {
+      actionHtml = '<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress(\'' + tmdbId + '\')" title="查看进度">已追完</button>';
+    }
+
+    const linkIcon = platforms.length > 0
+      ? '<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23C44AFF\' stroke-width=\'2.5\' stroke-linecap=\'round\'><path d=\'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\'/><path d=\'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\'/></svg>" onclick="event.stopPropagation();openPlatformPopup(\'' + tmdbId + '\')" title="查看播放平台">'
+      : '';
+
+    let goWatchBtn = '';
+    if (platforms.length > 0) {
+      const primaryPlat = platforms.find(function(p) { return p.isPrimary; }) || platforms[0];
+      const pu = (primaryPlat.url || '').trim();
+      const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
+      if (goUrl) {
+        const goLabel = pu ? '去看' : '搜看';
+        goWatchBtn = '<button class="btn-go-watch" onclick="event.stopPropagation();window.open(\'' + esc(goUrl) + '\',\'_blank\',\'noopener\')" title="前往' + esc(platLabel) + '观看">' + goLabel + '</button>';
+      }
+    }
+
+    // 更新日期标签
+    const a = resolveAnime(tmdbId);
+    const nextDate = a && a.nextAirDate ? a.nextAirDate : '';
+    const isToday = nextDate ? (new Date(nextDate + 'T00:00:00').getTime() === today.getTime()) : false;
+    const updateTag = nextDate ? (isToday ? '🆕 今日更新' : '📅 昨日更新') : '';
+
+    return '<div class="wl-item" onclick="openDetail(\'' + tmdbId + '\')">' +
+      '<div class="card-deco"></div>' +
+      '<div class="cover-wrap">' +
+      (hasCover
+        ? '<img class="cover" src="' + esc(proxyCover(cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="cover-placeholder" style="display:none">' + (name || '?').charAt(0) + '</div>'
+        : '<div class="cover-placeholder">' + (name || '?').charAt(0) + '</div>') +
+      '<div class="cover-glow"></div>' +
+      '<div class="cover-status ' + status + '">' + statusText + '</div>' +
+      '</div>' +
+      '<div class="info">' +
+      '<div class="anime-name">' +
+      '<span class="name-text">' + esc(name || '') + '</span>' +
+      (updateTag ? '<span class="update-badge" style="display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;background:' + (isToday ? 'linear-gradient(135deg,#FF6B9D,#C44AFF)' : 'rgba(196,74,255,0.12)') + ';color:' + (isToday ? '#fff' : '#C44AFF') + ';margin-left:6px;flex-shrink:0;white-space:nowrap">' + updateTag + '</span>' : '') +
+      linkIcon +
+      '</div>' +
+      '<div class="anime-meta">' +
+      (platform
+        ? '<span class="platform-tag"><span class="platform-icon platform-icon-svg" aria-label="' + esc(platLabel) + '" title="' + esc(platLabel) + '">' + platLogo + '</span><span class="platform-name">' + esc(platLabel) + '</span></span>'
+        : '<span class="platform-empty">暂无平台</span>') +
+      (updateFrequency ? '<span class="anime-schedule">' + esc(updateFrequency) + '</span>' : '') +
+      '</div>' +
+      '<div class="anime-episode-info">' +
+      '<span><span class="ep-current">追至' + (currentLabel || '-') + '</span></span>' +
+      '<span>更新至' + latestLabel + '</span>' +
+      '</div>' +
+      '</div>' +
+      '<div class="anime-actions">' + actionHtml + goWatchBtn + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderMylist() {
+  updateMylistBadges();
+  const list = document.getElementById('mylistList');
+
+  if (watchlist.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有番剧呢~</p><p class="sub">点右上角 + 添加番剧吧 💕</p></div>';
+    return;
+  }
+
+  // enrich + 状态筛选 + 搜索过滤
+  const enriched = watchlist.map(enrichWatchlistItem);
+  // 自愈：若本次纠正了错的 tmdbId，写回 localStorage（下次纯 id 匹配，不再靠名字兜底）
+  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlistLocal(); }
+  // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
+  let filtered = enriched;
+  if (currentMylistFilter === 'all') {
+    filtered = filtered.filter(it => it.status !== 'dropped');
+  } else if (currentMylistFilter === 'raising') {
+    filtered = filtered.filter(it => it.status === 'raising');
+  } else if (currentMylistFilter === 'caughtup') {
+    filtered = filtered.filter(it => it.status === 'caughtup' || it.status === 'finished');
+  }
+  const q = (document.getElementById('mylistSearchInput')?.value || '').trim().toLowerCase();
+  if (q) {
+    filtered = filtered.filter(it => (it.name || '').toLowerCase().includes(q));
+  }
+  // 排序：追番中(raising) 在前，已追完(caughtup/finished) 在后
+  const _statusOrder = { raising: 0, caughtup: 1, finished: 1, dropped: 2, unknown: 0 };
+  filtered.sort((a, b) => (_statusOrder[a.status] ?? 0) - (_statusOrder[b.status] ?? 0));
+  if (filtered.length === 0) {
+    const emptyMsg = q ? `没有找到包含「${q}」的追番` : '该分类下没有追番';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">' + emptyMsg + '</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(it => {
+    const { tmdbId, name, cover, status, hasCover, currentEpisode, latestEpisode, currentSeason, latestSeason, remaining, platforms, platform, platformName, updateFrequency } = it;
+    const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+    // 多季 vs 单季
+    const seasonMulti = latestSeason > 1 || currentSeason > 1;
+    // "追至第Y集" / "更新至第Y集"
+    const currentLabel = seasonMulti
+      ? `S${currentSeason}·E${currentEpisode}`
+      : (currentEpisode ? `第${currentEpisode}集` : '-');
+    const latestLabel = seasonMulti
+      ? `S${latestSeason}·E${latestEpisode}`
+      : (latestEpisode ? `第${latestEpisode}集` : '?');
+    // 平台 tag: 用 inline SVG 渲染 logo（替代原来的色块字符）
+    const platBrand = platform ? PLATFORM_BRAND[platform] : null;
+    const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
+    const platShort = platBrand ? platBrand.short : (platform ? platform.charAt(0).toUpperCase() : '');
+    const platColor = platBrand ? platBrand.color : '#8B7AA8';
+    const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+    // 右侧操作：raising/已追完+remaining>0 显示"追更"按钮 + 角标；caughtup/finished 统一显示"已追完"；dropped 显示"已弃番"
+    let actionHtml = '';
+    if (status === 'raising') {
+      actionHtml = `<div class="btn-catch-wrap">
+        <button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="更新进度">
+          <span class="catch-label">追更</span>
+        </button>
+        ${remaining > 0 ? `<span class="catch-badge">${remaining}</span>` : ''}
+      </div>`;
+    } else if (status === 'dropped') {
+      actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="操作">已弃番</button>`;
+    } else if (status === 'caughtup' || status === 'finished') {
+      actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追完</button>`;
+    }
+    // 链接 icon（点开平台弹窗）—— 如果没有 platforms 数据则不渲染
+    const linkIcon = platforms.length > 0
+      ? `<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C44AFF' stroke-width='2.5' stroke-linecap='round'><path d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/><path d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/></svg>" onclick="event.stopPropagation();openPlatformPopup('${tmdbId}')" title="查看播放平台">`
+      : '';
+    // 主平台「去看」按钮：点击直接跳转主平台链接（无直链时回退到平台搜索页）
+    let goWatchBtn = '';
+    if (platforms.length > 0) {
+      const primaryPlat = platforms.find(p => p.isPrimary) || platforms[0];
+      const pu = (primaryPlat.url || '').trim();
+      const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
+      if (goUrl) {
+        const goLabel = pu ? '去看' : '搜看';
+        goWatchBtn = `<button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button>`;
+      }
+    }
+    return `<div class="wl-item" onclick="openDetail('${tmdbId}')">
+      <div class="card-deco"></div>
+      <div class="cover-wrap">
+        ${hasCover
+          ? `<img class="cover" src="${esc(proxyCover(cover))}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="cover-placeholder" style="display:none">${(name||'?').charAt(0)}</div>`
+          : `<div class="cover-placeholder">${(name||'?').charAt(0)}</div>`}
+        <div class="cover-glow"></div>
+        <div class="cover-status ${status}">${statusText}</div>
+      </div>
+      <div class="info">
+        <div class="anime-name">
+          <span class="name-text">${esc(name || '')}</span>
+          ${linkIcon}
+        </div>
+        <div class="anime-meta">
+          ${platform
+            ? `<span class="platform-tag">
+                <span class="platform-icon platform-icon-svg" aria-label="${esc(platLabel)}" title="${esc(platLabel)}">${platLogo}</span>
+                <span class="platform-name">${esc(platLabel)}</span>
+              </span>`
+            : `<span class="platform-empty">暂无平台</span>`}
+          ${updateFrequency ? `<span class="anime-schedule">${esc(updateFrequency)}</span>` : ''}
+        </div>
+        <div class="anime-episode-info">
+          <span><span class="ep-current">追至${currentLabel || '-'}</span></span>
+          <span>更新至${latestLabel}</span>
+        </div>
+      </div>
+      <div class="anime-actions">${actionHtml}${goWatchBtn}</div>
+    </div>`;
+  }).join('');
+}
+
+// ======================== PERSIST (LOCAL) ========================
+// 用户单条操作（加/删/改进度/弃番/编辑平台等）保存：本机持久化 + 立即上传 Gitee，
+// 上传期间整页加载动画锁定，结果返回前不可继续操作。
+function saveWatchlist() {
+  saveWatchlistLocal();
+  pushWatchlist(true);
+}
+// 按名字去重追番列表（番剧库偶有同名不同 tmdbId 的条目，避免"我的列表"出现重复番剧）
+// 同名多条时保留：在库内(有正确 tmdbId) 且 latestEpisode 更高的一条
+function dedupeWatchlistByName() {
+  if (watchlist.length < 2) return false;
+  const seen = new Set();
+  const result = [];
+  let changed = false;
+  const score = (x) => ((animeDb.find(a => String(a.tmdbId) === String(x.tmdbId))) ? 100000 : 0) + (Number(x.latestEpisode) || 0);
+  for (const w of watchlist) {
+    const n = (w.name || '').trim();
+    if (!n) { result.push(w); continue; }
+    if (!seen.has(n)) { seen.add(n); result.push(w); }
+    else {
+      changed = true;
+      const idx = result.findIndex(r => (r.name || '').trim() === n);
+      if (idx >= 0 && score(w) > score(result[idx])) result[idx] = w;
+    }
+  }
+  if (changed) watchlist = result;
+  return changed;
+}
+function saveSettings() {
+  localStorage.setItem('anime_coze_settings', JSON.stringify(settings));
+}
+
+// ======================== CLOUD WATCHLIST SYNC (Gitee via CF proxy) ========================
+// 浏览器同源调用 /api/proxy，由 Cloudflare 边缘转发到 Gitee API（避开 CORS，前端不保存任何 Token）。
+// Gitee token / 仓库写在 Cloudflare Pages 环境变量，不进前端源码。
+const GITEE_WATCHLIST_PATH = 'data/watchlist.json';
+const PROXY_BASE = '/api/proxy';
+
+let _syncTimer = null;
+
+// 从 Gitee 拉取最新追剧记录；代理不可用时回退到站点同源快照（每日工作流镜像的 data/watchlist.json）
+async function pullWatchlist(showMsg = false) {
+  try {
+    const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, { cache: 'no-store' });
+    if (resp.status === 404) { if (showMsg) showToast('☁️ 云端还没有追剧记录'); return; }
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const text = await resp.text();
+    const data = text ? JSON.parse(text) : [];
+    if (!Array.isArray(data)) return;
+    mergeWatchlist(data);
+    markSynced();
+    if (showMsg) showToast(`🔄 已刷新，当前 ${watchlist.length} 条追剧记录`);
+  } catch (e) {
+    if (await tryFallbackSnapshot(showMsg)) return;
+    if (showMsg) showToast('❌ 云端刷新失败，已保留本机数据');
+  }
+}
+
+// 保存追剧记录到 Gitee（经代理）
+let _uploadingToGitee = false;   // 上传 Gitee 进行中标志（防重入 + 整页锁定）
+// 整页锁定遮罩开关（上传 Gitee 期间禁止继续操作）
+function setUploadLock(on) {
+  const overlay = document.getElementById('uploadBlockOverlay');
+  if (overlay) overlay.classList.toggle('hidden', !on);
+}
+
+// 上传本机追番列表到 Gitee（经 /api/proxy）。
+// block=true（默认）：整页加载动画 + 锁定，结果返回前不可操作；防重入。
+async function pushWatchlist(block = true) {
+  if (block) {
+    if (_uploadingToGitee) return;   // 上一次上传未结束，忽略重复触发
+    _uploadingToGitee = true;
+    setUploadLock(true);
+  }
+  try {
+    const content = JSON.stringify(watchlist, null, 2);
+    const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: content,
+    });
+    if (resp.ok) {
+      markSynced();
+      showToast('☁️ 已保存到 Gitee');
+    } else {
+      const err = await resp.json().catch(() => ({}));
+      console.warn('push watchlist failed', err);
+      const detail = (err && err.error) ? String(err.error).slice(0, 32) : `HTTP ${resp.status}`;
+      showToast(`⚠️ 同步 Gitee 失败（${detail}），已保留本机`);
+    }
+  } catch (e) {
+    console.warn('push watchlist error', e);
+    showToast('⚠️ 同步 Gitee 失败（网络），已保留本机');
+  } finally {
+    if (block) { setUploadLock(false); _uploadingToGitee = false; }
+  }
+}
+
+// 用云端/快照数据替换本机追番列表（按 tmdbId 去重）；仅本机持久化，不回推避免回环
+function mergeWatchlist(data) {
+  if (!Array.isArray(data)) return;
+  // 安全网：云端返回空数组时不覆盖（避免云端空数据清空本机）。
+  if (data.length === 0) return;
+  const map = new Map();
+  data.forEach(cw => { if (cw && cw.tmdbId != null) map.set(String(cw.tmdbId), cw); });
+  watchlist = Array.from(map.values());
+  dedupeWatchlistByName();
+  saveWatchlistLocal();
+  renderMylist();
+}
+
+// 代理不可用时，尝试用站点同源快照（每日工作流从 Gitee 镜像）
+async function tryFallbackSnapshot(showMsg) {
+  try {
+    const fb = await fetch('./data/watchlist.json', { cache: 'no-store' });
+    if (!fb.ok) return false;
+    const data = await fb.json();
+    if (!Array.isArray(data) || !data.length) return false;
+    mergeWatchlist(data);
+    if (showMsg) showToast(`🔄 已用站点快照刷新（${watchlist.length} 条）`);
+    return true;
+  } catch (_) { return false; }
+}
+
+// 记录一次成功同步的时间戳（供「同步中心」展示）
+function markSynced() {
+  settings.lastSyncAt = new Date().toISOString();
+  saveSettings();
+  updateSyncStatus();
+}
+
+// 本机保存后 3 秒自动同步到云端
+function scheduleSync() {
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(() => pushWatchlist(true), 3000);
+}
+
+// 仅本机持久化（不触发网络）
+function saveWatchlistLocal() {
+  localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
+}
+
+// 导出「追番记录」为 JSON 文本（适配手机端：不依赖文件，直接复制）
+function exportConfig() {
+  const text = JSON.stringify(watchlist, null, 2);
+  const ta = document.getElementById('cfgTextArea');
+  if (ta) ta.value = text;
+  const cp = document.getElementById('copyCfgBtn');
+  if (cp) cp.style.display = '';
+  showToast(`📤 已生成备份（${watchlist.length} 部），可点「复制」保存`);
+}
+
+// 复制配置文本到剪贴板
+function copyConfigText() {
+  const ta = document.getElementById('cfgTextArea');
+  if (!ta || !ta.value) return;
+  const done = () => showToast('📋 已复制配置文本');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(done).catch(() => fallbackCopy(ta, done));
+  } else {
+    fallbackCopy(ta, done);
+  }
+}
+function fallbackCopy(ta, done) {
+  ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+  try { document.execCommand('copy'); done(); } catch (e) { showToast('❌ 复制失败，请手动选择'); }
+  if (window.getSelection) window.getSelection().removeAllRanges();
+}
+
+// 从 JSON 文本导入「追番记录」并按剧集智能合并，随后上传云端，适配手机端
+function importConfigFromText() {
+  const ta = document.getElementById('cfgTextArea');
+  const raw = (ta && ta.value || '').trim();
+  if (!raw) { showToast('❌ 请先粘贴追番备份 JSON'); return; }
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (err) {
+    showToast('❌ 备份 JSON 无效'); return;
+  }
+  if (!Array.isArray(data)) { showToast('❌ 这不是追番备份（应为 JSON 数组）'); return; }
+  const before = watchlist.length;
+  mergeWatchlist(data);          // 按 tmdbId/名字合并，不覆盖已有记录
+  updateSyncStatus();
+  showToast(`✅ 已导入并合并（${before} → ${watchlist.length} 部）`);
+  scheduleSync();               // 合并结果自动同步回云端
+}
+
+// ======================== REFRESH ========================
+function refreshWatchlist() {
+  // 整页刷新：等价于浏览器 F5 / 重新加载，保证追番列表与番剧库都从最新部署重新加载
+  location.reload();
+}
+
+// ======================== UPLOAD (兜底) ========================
+// 手动把本机最新追剧列表上传到 Gitee（经 /api/proxy）。
+// 用于自动 3 秒同步未触发、或想立刻强制覆盖云端时的兜底。
+async function uploadWatchlist() {
+  if (_uploadingToGitee) return;            // 已有上传在进行，避免重复点击
+  const btn = document.getElementById('uploadBtn');
+  const prevText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 上传中'; }
+  try {
+    await pushWatchlist(true);              // 内部处理整页锁定/解锁 + 成功失败 toast
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = prevText; }
+  }
+}
+
+// ======================== MODAL HELPERS ========================
+// 滚动锁改为"派生状态"：只要有任意弹窗可见就锁，关闭任一个都基于实际状态还原，
+// 避免嵌套弹窗（如详情→进度）关闭时误把滚动锁永久留下导致页面无法滑动。
+let _scrollLockY = 0;
+function syncBodyScroll() {
+  // 只要页面上存在任意「可见」的弹窗层就锁住背景滚动；
+  // 不再逐个列举弹窗 id，避免新增弹窗（platformPopup / editPlatformsModal 等）漏锁导致背景仍可滑动。
+  const anyOpen = !!document.querySelector('.modal-overlay:not(.hidden)');
+  if (anyOpen) {
+    if (!document.body.classList.contains('modal-locked')) {
+      _scrollLockY = window.scrollY || window.pageYOffset || 0;
+      document.body.style.top = `-${_scrollLockY}px`;
+      document.body.classList.add('modal-locked');
+    }
+  } else if (document.body.classList.contains('modal-locked')) {
+    document.body.classList.remove('modal-locked');
+    document.body.style.top = '';
+    window.scrollTo(0, _scrollLockY);
+  }
+}
+// 自动同步：任意弹窗 append / remove 时重新计算滚动锁，彻底规避「漏调 syncBodyScroll」导致的背景可滑。
+const _scrollLockObserver = new MutationObserver(syncBodyScroll);
+_scrollLockObserver.observe(document.body, { childList: true });
+function closeProgressModal() {
+  const el = document.getElementById('progressModal');
+  if (el) el.remove();
+  syncBodyScroll();
+}
+function openModal(id) {
+  document.getElementById(id).classList.remove('hidden');
+  syncBodyScroll();
+}
+function closeModal(id) {
+  document.getElementById(id).classList.add('hidden');
+  syncBodyScroll();
+}
+
+// ======================== UTILITY ========================
+function esc(s) {
+  if (!s && s !== 0) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+// ======================== START ========================
+init();
+</script>
+</body>
 </html>
