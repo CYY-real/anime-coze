@@ -401,5 +401,97 @@
       "latestSeason": 1,
       "latestEpisode": 15
     }
+  ],
+  "2026-07-16": [
+    {
+      "tmdbId": "52823",
+      "name": "一周偶像",
+      "latestSeason": 1,
+      "latestEpisode": 706
+    },
+    {
+      "tmdbId": "67915",
+      "name": "孤单又灿烂的神：鬼怪",
+      "latestSeason": 1,
+      "latestEpisode": 16
+    },
+    {
+      "tmdbId": "70311",
+      "name": "全职法师",
+      "latestSeason": 7,
+      "latestEpisode": 6
+    },
+    {
+      "tmdbId": "91791",
+      "name": "少女突击队泉",
+      "latestSeason": 1,
+      "latestEpisode": 15
+    },
+    {
+      "tmdbId": "97426",
+      "name": "巴塔木儿歌",
+      "latestSeason": 1,
+      "latestEpisode": 1
+    },
+    {
+      "tmdbId": "105903",
+      "name": "Eternity ～深夜的濡戀頻道～",
+      "latestSeason": 1,
+      "latestEpisode": 12
+    },
+    {
+      "tmdbId": "109096",
+      "name": "密室大逃脱 大神版",
+      "latestSeason": 8,
+      "latestEpisode": 2
+    },
+    {
+      "tmdbId": "220850",
+      "name": "炼气十万年",
+      "latestSeason": 1,
+      "latestEpisode": 357
+    },
+    {
+      "tmdbId": "233541",
+      "name": "厕所的花子VS倔强驱魔师 汉语 (zh-CN)",
+      "latestSeason": 1,
+      "latestEpisode": 0
+    },
+    {
+      "tmdbId": "279388",
+      "name": "逐玉",
+      "latestSeason": 1,
+      "latestEpisode": 40
+    },
+    {
+      "tmdbId": "281233",
+      "name": "光阴之外",
+      "latestSeason": 1,
+      "latestEpisode": 30
+    },
+    {
+      "tmdbId": "290196",
+      "name": "꼬모와 장난감",
+      "latestSeason": 1,
+      "latestEpisode": 195
+    },
+    {
+      "tmdbId": "291392",
+      "name": "野狗骨头",
+      "latestSeason": 1,
+      "latestEpisode": 19
+    },
+    {
+      "tmdbId": "297438",
+      "name": "朱音落语",
+      "latestSeason": 1,
+      "latestEpisode": 12
+    },
+    {
+      "tmdbId": "301412",
+      "name": "给你梦想",
+      "latestSeason": 1,
+      "latestEpisode": 2
+    }
   ]
 }
