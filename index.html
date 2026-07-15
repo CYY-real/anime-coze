@@ -1428,6 +1428,7 @@ let currentBrowseFilter = 'all'; // all / jp-anime / cn-anime / cdrama / kdrama
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
 let searchTimer;
 let activeSeason = 1;
+let _progressCtx = null;
 // 添加页实时搜索(TMDB)结果缓存 + 加载态
 let liveResults = [];
 let liveLoading = false;
@@ -1665,6 +1666,7 @@ const PLATFORM_INFO = {
   youku:    { name: '优酷',     short: '优', color: '#1492FF' },
   migu:     { name: '咪咕',     short: 'M', color: '#FF4F4F' },
   bilibili_intl: { name: 'B站国际', short: 'B', color: '#FB7299' },
+  wukong:     { name: '悟空浏览器', short: '悟', color: '#FF6B35' },
 };
 
 function updateBadges() {
@@ -2146,6 +2148,7 @@ function openPlatformPopup(tmdbId) {
   if (!w) return;
   const enriched = enrichWatchlistItem(w);
   const { name, cover, status, currentEpisode, latestEpisode, platforms, platform, platformName, updateFrequency, hasCover } = enriched;
+  const rawName = (name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
   const seasonMulti = enriched.latestSeason > 1 || enriched.currentSeason > 1;
   const currentLabel = seasonMulti
@@ -2232,7 +2235,7 @@ function openPlatformPopup(tmdbId) {
           </div>
         </div>
       </div>
-      <button class="platform-copy-all" onclick="window.open('https://search.bilibili.com/all?keyword=' + encodeURIComponent('${esc(name || '')}'), '_blank', 'noopener')">
+      <button class="platform-copy-all" onclick="window.open('https://search.bilibili.com/all?keyword=' + encodeURIComponent('${rawName}'), '_blank', 'noopener')">
         <span class="platform-copy-all-icon">🔍</span>
         <span class="platform-copy-all-text">一键搜索：${esc(name || '')}</span>
       </button>
@@ -2306,7 +2309,14 @@ function openProgress(tmdbId) {
 
   activeSeason = currentSeason || 1;
   const activeLatest = seasonLatest(activeSeason) || latestEpisode;
-  const banked = activeLatest ? activeLatest - w.watchedEpisode : 0;
+  // 存了多少集 = 全剧已播出总集数 - 已看集数（跨季累计，不受当前选中季影响）
+  let totalReleased = activeLatest;
+  if (seasonCounts) {
+    const vals = Object.values(seasonCounts);
+    if (vals.length > 0) totalReleased = vals.reduce((a, b) => a + b, 0);
+  }
+  const banked = totalReleased ? totalReleased - w.watchedEpisode : 0;
+  _progressCtx = { w, seasonLatest, seasonCounts };
 
   // closeProgressModal 已提升为全局函数（见 MODAL HELPERS），供内联 onclick 调用
 
@@ -2353,6 +2363,31 @@ function pickSeason(s) {
   document.querySelectorAll('.season-chip').forEach(c => {
     c.classList.toggle('active', Number(c.dataset.season) === s);
   });
+  const ctx = _progressCtx;
+  if (!ctx) return;
+  const activeLatest = ctx.seasonLatest(s);
+  // 存了集数跨季不变，此处只刷新「最新」显示 + input max + 追到最新按钮
+  let totalReleased = activeLatest;
+  if (ctx.seasonCounts) {
+    const vals = Object.values(ctx.seasonCounts);
+    if (vals.length > 0) totalReleased = vals.reduce((a, b) => a + b, 0);
+  }
+  const banked = Math.max(0, totalReleased - ctx.w.watchedEpisode);
+  const inp = document.getElementById('popupEpisode');
+  if (inp) inp.max = activeLatest || 999;
+  const reminder = document.querySelector('#progressModal .progress-reminder');
+  if (reminder) {
+    reminder.innerHTML = '最新 ' + (activeLatest || '?') + ' 集 · 存了 ' + banked + ' 集';
+  }
+  const catchupBtn = document.querySelector('#progressModal .progress-catchup');
+  if (catchupBtn) {
+    if (banked > 0 && activeLatest) {
+      catchupBtn.style.display = '';
+      catchupBtn.setAttribute('onclick', 'document.getElementById(\'popupEpisode\').value=' + activeLatest + ';showToast(\'⚡ 已追到最新\')');
+    } else {
+      catchupBtn.style.display = 'none';
+    }
+  }
 }
 
 function saveProgress(tmdbId) {
@@ -2637,7 +2672,7 @@ function renderMylist() {
     const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
     // 右侧操作：raising/已追完+remaining>0 显示"追更"按钮 + 角标；caughtup/finished 统一显示"已追完"；dropped 显示"已弃番"
     let actionHtml = '';
-    if (status === 'raising' || (status === 'caughtup' && remaining > 0)) {
+    if (status === 'raising') {
       actionHtml = `<div class="btn-catch-wrap">
         <button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="更新进度">
           <span class="catch-label">追更</span>
@@ -2795,12 +2830,11 @@ async function pushWatchlist(block = true) {
   }
 }
 
-// 合并云端/快照数据到本机（按 tmdbId 去重，云端优先）；仅本机持久化，不回推避免回环
+// 用云端/快照数据替换本机追番列表（按 tmdbId 去重）；仅本机持久化，不回推避免回环
 function mergeWatchlist(data) {
   if (!Array.isArray(data)) return;
-  // 云端为准：直接用云端数据替换本机（按 tmdbId 去重），清除 mock 残留 / 历史脏数据。
   // 安全网：云端返回空数组时不覆盖（避免云端空数据清空本机）。
-  if (!Array.isArray(data) || data.length === 0) return;
+  if (data.length === 0) return;
   const map = new Map();
   data.forEach(cw => { if (cw && cw.tmdbId != null) map.set(String(cw.tmdbId), cw); });
   watchlist = Array.from(map.values());
