@@ -2637,7 +2637,7 @@ function enrichWatchlistItem(w) {
   };
 }
 
-// ======================== RENDER UPDATES（昨日 & 今日更新的追番） ========================
+// ======================== RENDER UPDATES（追番列表中最新集数有更新的） ========================
 function renderUpdates() {
   const list = document.getElementById('updatesList');
 
@@ -2656,40 +2656,27 @@ function renderUpdates() {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  // 过滤：只看追番列表里的、非弃番的、昨日或今日更新的（通过 nextAirDate 判断）
-  let updated = enriched.filter(it => {
+  // 过滤：追番列表中非弃番的、最新集数在昨日或今日更新的（通过 nextAirDate 判断最新一集的播出日）
+  const updated = enriched.filter(it => {
     if (it.status === 'dropped') return false;
     const a = resolveAnime(it.tmdbId);
     if (!a || !a.nextAirDate) return false;
     const next = new Date(a.nextAirDate + 'T00:00:00');
-    return next.getTime() === today.getTime() || next.getTime() === yesterday.getTime();
+    return next.getTime() >= yesterday.getTime() && next.getTime() < tomorrow.getTime();
   });
-
-  // 如果没直接命中，尝试宽松匹配：nextAirDate 在今天前后 1 天内 且 追番中有剩余集数
-  if (updated.length === 0) {
-    updated = enriched.filter(it => {
-      if (it.status === 'dropped' || it.status !== 'raising') return false;
-      if (it.remaining <= 0) return false;
-      const a = resolveAnime(it.tmdbId);
-      if (!a || !a.nextAirDate) return false;
-      const next = new Date(a.nextAirDate + 'T00:00:00');
-      const diffDays = Math.round((next.getTime() - today.getTime()) / 86400000);
-      return diffDays >= -1 && diffDays <= 1;
-    });
-  }
 
   if (updated.length === 0) {
     list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">昨日和今日没有更新的追番</p><p class="sub">等番剧更新后再来看看吧~</p></div>';
     return;
   }
 
-  // 排序：今日更新在前，剩余集数多的在前
+  // 排序：今日更新在前，再按剧名排序
   updated.sort((a, b) => {
     const aIsToday = (() => { const aa = resolveAnime(a.tmdbId); if (!aa || !aa.nextAirDate) return false; return new Date(aa.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
     const bIsToday = (() => { const ba = resolveAnime(b.tmdbId); if (!ba || !ba.nextAirDate) return false; return new Date(ba.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
     if (aIsToday && !bIsToday) return -1;
     if (!aIsToday && bIsToday) return 1;
-    return b.remaining - a.remaining;
+    return (a.name || '').localeCompare(b.name || '', 'zh');
   });
 
   list.innerHTML = updated.map(it => {
