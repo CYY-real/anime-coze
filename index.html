@@ -1311,6 +1311,16 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
     </div>
   </div>
 
+  <!-- Content: Updates（昨日 & 今日更新的追番） -->
+  <div id="tabUpdates" class="hidden">
+    <div class="mylist-header">
+      <div class="mylist-header-left">
+        <div class="mylist-title">📺 更新</div>
+      </div>
+    </div>
+    <div id="updatesList" class="anime-list"></div>
+  </div>
+
   <!-- Content: My List -->
   <div id="tabMylist">
     <div class="mylist-header">
@@ -1336,7 +1346,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
         <span class="sub-tab-icon">🌿</span><span>已追完</span>
         <span class="tab-badge" id="badgeMylistCaughtup" style="display:none">0</span>
       </span>
-      <span class="add-anime-btn" onclick="switchTab('browse', document.querySelectorAll('.bottom-nav a')[1])" title="添加剧集">
+      <span class="add-anime-btn" onclick="switchTab('browse', document.querySelectorAll('.bottom-nav a')[2])" title="添加剧集">
         <span class="add-anime-icon">+</span>
       </span>
     </div>
@@ -1356,6 +1366,10 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   <a href="#" class="active" onclick="switchTab('mylist',this)">
     <span class="icon">⭐</span>
     <span class="label">我的追番</span>
+  </a>
+  <a href="#" onclick="switchTab('updates',this)">
+    <span class="icon">🆕</span>
+    <span class="label">更新</span>
   </a>
   <a href="#" onclick="switchTab('browse',this)">
     <span class="icon">➕</span>
@@ -1452,7 +1466,8 @@ function init() {
   // 恢复上次激活的 tab，刷新/重载后停留在当前页
   const savedTab = localStorage.getItem('anime_coze_active_tab') || 'mylist';
   const navLinks = document.querySelectorAll('.bottom-nav a');
-  switchTab(savedTab, savedTab === 'browse' ? navLinks[1] : navLinks[0]);
+  const navIdx = savedTab === 'browse' ? 2 : (savedTab === 'updates' ? 1 : 0);
+  switchTab(savedTab, navLinks[navIdx]);
 }
 
 // ======================== TOAST ========================
@@ -1471,12 +1486,15 @@ function switchTab(tab, el) {
   if (el) el.classList.add('active');
   document.getElementById('tabBrowse').classList.toggle('hidden', tab !== 'browse');
   document.getElementById('tabMylist').classList.toggle('hidden', tab !== 'mylist');
+  document.getElementById('tabUpdates').classList.toggle('hidden', tab !== 'updates');
   document.body.style.overflow = '';
 
   if (tab === 'mylist') {
     renderMylist();
   } else if (tab === 'browse') {
     initBrowseTab();
+  } else if (tab === 'updates') {
+    renderUpdates();
   }
   // 切 tab 时刷新番剧库，保证页面上的 TMDB 数据是最新的（GitHub Action 跑的结果）
   refreshAnimeDb();
@@ -1602,8 +1620,10 @@ async function refreshAnimeDb() {
     if (changed) {
       const mylistVisible = !document.getElementById('tabMylist').classList.contains('hidden');
       const browseVisible = !document.getElementById('tabBrowse').classList.contains('hidden');
+      const updatesVisible = !document.getElementById('tabUpdates').classList.contains('hidden');
       if (mylistVisible) renderMylist();
       if (browseVisible) renderBrowse();
+      if (updatesVisible) renderUpdates();
     }
   } catch (e) { /* 保留旧数据，不弹错 */ }
 }
@@ -2615,6 +2635,140 @@ function enrichWatchlistItem(w) {
     // 封面是否可用
     hasCover: !!(a && a.cover && (a.cover.startsWith('http') || a.cover.startsWith('/api/img') || a.cover.startsWith('data:'))),
   };
+}
+
+// ======================== RENDER UPDATES（昨日 & 今日更新的追番） ========================
+function renderUpdates() {
+  const list = document.getElementById('updatesList');
+
+  if (watchlist.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有追番呢~</p><p class="sub">先去添加剧集吧 💕</p></div>';
+    return;
+  }
+
+  const enriched = watchlist.map(enrichWatchlistItem);
+  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlistLocal(); }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  // 过滤：只看追番列表里的、非弃番的、昨日或今日更新的（通过 nextAirDate 判断）
+  let updated = enriched.filter(it => {
+    if (it.status === 'dropped') return false;
+    const a = resolveAnime(it.tmdbId);
+    if (!a || !a.nextAirDate) return false;
+    const next = new Date(a.nextAirDate + 'T00:00:00');
+    return next.getTime() === today.getTime() || next.getTime() === yesterday.getTime();
+  });
+
+  // 如果没直接命中，尝试宽松匹配：nextAirDate 在今天前后 1 天内 且 追番中有剩余集数
+  if (updated.length === 0) {
+    updated = enriched.filter(it => {
+      if (it.status === 'dropped' || it.status !== 'raising') return false;
+      if (it.remaining <= 0) return false;
+      const a = resolveAnime(it.tmdbId);
+      if (!a || !a.nextAirDate) return false;
+      const next = new Date(a.nextAirDate + 'T00:00:00');
+      const diffDays = Math.round((next.getTime() - today.getTime()) / 86400000);
+      return diffDays >= -1 && diffDays <= 1;
+    });
+  }
+
+  if (updated.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">昨日和今日没有更新的追番</p><p class="sub">等番剧更新后再来看看吧~</p></div>';
+    return;
+  }
+
+  // 排序：今日更新在前，剩余集数多的在前
+  updated.sort((a, b) => {
+    const aIsToday = (() => { const aa = resolveAnime(a.tmdbId); if (!aa || !aa.nextAirDate) return false; return new Date(aa.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
+    const bIsToday = (() => { const ba = resolveAnime(b.tmdbId); if (!ba || !ba.nextAirDate) return false; return new Date(ba.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
+    if (aIsToday && !bIsToday) return -1;
+    if (!aIsToday && bIsToday) return 1;
+    return b.remaining - a.remaining;
+  });
+
+  list.innerHTML = updated.map(it => {
+    const { tmdbId, name, cover, status, hasCover, currentEpisode, latestEpisode, currentSeason, latestSeason, remaining, platforms, platform, platformName, updateFrequency } = it;
+    const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+    const seasonMulti = latestSeason > 1 || currentSeason > 1;
+    const currentLabel = seasonMulti
+      ? 'S' + currentSeason + '·E' + currentEpisode
+      : (currentEpisode ? '第' + currentEpisode + '集' : '-');
+    const latestLabel = seasonMulti
+      ? 'S' + latestSeason + '·E' + latestEpisode
+      : (latestEpisode ? '第' + latestEpisode + '集' : '?');
+    const platBrand = platform ? PLATFORM_BRAND[platform] : null;
+    const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
+    const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+
+    let actionHtml = '';
+    if (status === 'raising') {
+      actionHtml = '<div class="btn-catch-wrap">' +
+        '<button class="btn-catch" onclick="event.stopPropagation();openProgress(\'' + tmdbId + '\')" title="更新进度">' +
+        '<span class="catch-label">追更</span></button>' +
+        (remaining > 0 ? '<span class="catch-badge">' + remaining + '</span>' : '') +
+        '</div>';
+    } else if (status === 'dropped') {
+      actionHtml = '<button class="btn-status dropped" onclick="event.stopPropagation();openDetail(\'' + tmdbId + '\')" title="操作">已弃番</button>';
+    } else if (status === 'caughtup' || status === 'finished') {
+      actionHtml = '<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress(\'' + tmdbId + '\')" title="查看进度">已追完</button>';
+    }
+
+    const linkIcon = platforms.length > 0
+      ? '<img class="go-watch-icon" src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23C44AFF\' stroke-width=\'2.5\' stroke-linecap=\'round\'><path d=\'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\'/><path d=\'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\'/></svg>" onclick="event.stopPropagation();openPlatformPopup(\'' + tmdbId + '\')" title="查看播放平台">'
+      : '';
+
+    let goWatchBtn = '';
+    if (platforms.length > 0) {
+      const primaryPlat = platforms.find(function(p) { return p.isPrimary; }) || platforms[0];
+      const pu = (primaryPlat.url || '').trim();
+      const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
+      if (goUrl) {
+        const goLabel = pu ? '去看' : '搜看';
+        goWatchBtn = '<button class="btn-go-watch" onclick="event.stopPropagation();window.open(\'' + esc(goUrl) + '\',\'_blank\',\'noopener\')" title="前往' + esc(platLabel) + '观看">' + goLabel + '</button>';
+      }
+    }
+
+    // 更新日期标签
+    const a = resolveAnime(tmdbId);
+    const nextDate = a && a.nextAirDate ? a.nextAirDate : '';
+    const isToday = nextDate ? (new Date(nextDate + 'T00:00:00').getTime() === today.getTime()) : false;
+    const updateTag = nextDate ? (isToday ? '🆕 今日更新' : '📅 昨日更新') : '';
+
+    return '<div class="wl-item" onclick="openDetail(\'' + tmdbId + '\')">' +
+      '<div class="card-deco"></div>' +
+      '<div class="cover-wrap">' +
+      (hasCover
+        ? '<img class="cover" src="' + esc(proxyCover(cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="cover-placeholder" style="display:none">' + (name || '?').charAt(0) + '</div>'
+        : '<div class="cover-placeholder">' + (name || '?').charAt(0) + '</div>') +
+      '<div class="cover-glow"></div>' +
+      '<div class="cover-status ' + status + '">' + statusText + '</div>' +
+      '</div>' +
+      '<div class="info">' +
+      '<div class="anime-name">' +
+      '<span class="name-text">' + esc(name || '') + '</span>' +
+      (updateTag ? '<span class="update-badge" style="display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;background:' + (isToday ? 'linear-gradient(135deg,#FF6B9D,#C44AFF)' : 'rgba(196,74,255,0.12)') + ';color:' + (isToday ? '#fff' : '#C44AFF') + ';margin-left:6px;flex-shrink:0;white-space:nowrap">' + updateTag + '</span>' : '') +
+      linkIcon +
+      '</div>' +
+      '<div class="anime-meta">' +
+      (platform
+        ? '<span class="platform-tag"><span class="platform-icon platform-icon-svg" aria-label="' + esc(platLabel) + '" title="' + esc(platLabel) + '">' + platLogo + '</span><span class="platform-name">' + esc(platLabel) + '</span></span>'
+        : '<span class="platform-empty">暂无平台</span>') +
+      (updateFrequency ? '<span class="anime-schedule">' + esc(updateFrequency) + '</span>' : '') +
+      '</div>' +
+      '<div class="anime-episode-info">' +
+      '<span><span class="ep-current">追至' + (currentLabel || '-') + '</span></span>' +
+      '<span>更新至' + latestLabel + '</span>' +
+      '</div>' +
+      '</div>' +
+      '<div class="anime-actions">' + actionHtml + goWatchBtn + '</div>' +
+      '</div>';
+  }).join('');
 }
 
 function renderMylist() {
