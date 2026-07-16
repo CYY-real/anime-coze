@@ -25,6 +25,7 @@ if (typeof fetch === 'undefined') {
 const TMDB_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 const TMDB_BASE = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 const LANG = process.env.TMDB_LANG || 'zh-CN';
+const GENRE_ANIMATION = 16; // TMDB genre id for 动画
 
 // 可选：配置了 GITEE_* 环境变量时，额外镜像一份到 Gitee（前端读取的是 GitHub 同源 data/anime.json）
 const GITEE_TOKEN = process.env.GITEE_ACCESS_TOKEN;
