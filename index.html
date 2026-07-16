@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>杩界暘涓嶈糠璺?- 閰嶇疆</title>
+<title>追番不迷路 - 配置</title>
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <meta name="theme-color" content="#FF6B9D">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="杩界暘涓嶈糠璺?>
+<meta name="apple-mobile-web-app-title" content="追番不迷路">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="/manifest.webmanifest">
 <style>
 /* ============================================
-   馃巰 杩界暘涓嶈糠璺?- 浜屾鍏冩ⅵ骞婚鏍艰璁＄郴缁?
-   锛堢Щ妞嶈嚜鍘熷皬绋嬪簭 rpx/2 = px锛?
+   🎀 追番不迷路 - 二次元梦幻风格设计系统
+   （移植自原小程序 rpx/2 = px）
    ============================================ */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
@@ -75,7 +75,7 @@ html,body{
 .hidden{display:none!important}
 
 /* ============================================
-   椤堕儴 App Bar锛堟诞璧峰崱鐗囷紝涓庝笅鏂瑰唴瀹瑰尯鍒嗗眰娆★級
+   顶部 App Bar（浮起卡片，与下方内容区分层次）
    ============================================ */
 .appbar{
   position:relative;overflow:hidden;
@@ -132,7 +132,7 @@ html,body{
 .header-actions{display:flex;align-items:center;gap:6px}
 
 /* ============================================
-   Sub Tabs锛堝榻愬皬绋嬪簭锛?
+   Sub Tabs（对齐小程序）
    ============================================ */
 .sub-tabs{
   display:flex;align-items:center;gap:7px;
@@ -172,7 +172,7 @@ html,body{
 .add-anime-btn:active{transform:scale(0.94)}
 
 /* ============================================
-   Buttons锛堝榻愬皬绋嬪簭锛?
+   Buttons（对齐小程序）
    ============================================ */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;
@@ -217,7 +217,7 @@ html,body{
 .btn-block{width:100%;padding:12px 0;font-size:14px;border-radius:25px}
 
 /* ============================================
-   Catch Button锛堣拷鏇存寜閽紝瀵归綈灏忕▼搴忥級
+   Catch Button（追更按钮，对齐小程序）
    ============================================ */
 .btn-catch{
   display:flex;align-items:center;justify-content:center;
@@ -237,14 +237,14 @@ html,body{
   background:var(--bg-soft);color:var(--text-soft);
   box-shadow:none;
 }
-/* 宸叉坊鍔狅細娣诲姞椤电疆鐏板悗鐨勭鐢ㄦ€?*/
+/* 已添加：添加页置灰后的禁用态 */
 .btn-catch.added{
   background:rgba(150,150,160,0.15);color:var(--text-secondary);
   box-shadow:none;cursor:default;
 }
 .btn-catch.added:active{transform:none;opacity:1}
 
-/* 鐘舵€佹搷浣滄寜閽細宸插畬缁?/ 鏈紑鎾紙鐙珛锛屼笉涓庛€屽幓杩界暘銆嶇矇绱舰鎴愬姣旓級 */
+/* 状态操作按钮：已完结 / 未开播（独立，不与「去追番」粉紫形成对比） */
 .btn-status{
   display:inline-flex;align-items:center;justify-content:center;
   height:28px;padding:0 12px;border-radius:14px;
@@ -304,7 +304,7 @@ html,body{
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ============================================
-   Empty State锛堝榻愬皬绋嬪簭 acg-empty锛?
+   Empty State（对齐小程序 acg-empty）
    ============================================ */
 .empty-state{
   display:flex;flex-direction:column;align-items:center;
@@ -321,7 +321,7 @@ html,body{
 }
 
 /* ============================================
-   Anime Card锛堝垪琛ㄦā寮?- 瀵归綈灏忕▼搴忥級
+   Anime Card（列表模式 - 对齐小程序）
    ============================================ */
 .anime-list{
   display:flex;flex-direction:column;gap:10px;
@@ -347,11 +347,11 @@ html,body{
   position:relative;overflow:hidden;
   transition:transform .15s,box-shadow .15s;
   cursor:pointer;
-  /* 闀挎寜鏃朵笉瑙﹀彂鏂囨湰閫夋嫨 / 绯荤粺鑿滃崟 */
+  /* 长按时不触发文本选择 / 系统菜单 */
   user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .anime-card:active{transform:scale(0.985);opacity:.95}
-/* 宸叉坊鍔犲埌銆屾垜鐨勭暘鍓с€嶏細娣诲姞椤电疆鐏?*/
+/* 已添加到「我的番剧」：添加页置灰 */
 .anime-card.in-list{filter:grayscale(.85);opacity:.6}
 .anime-card.in-list:active{transform:none;opacity:.6}
 .anime-card.in-list .cover-glow{box-shadow:inset 0 0 10px rgba(150,150,160,0.2)}
@@ -383,7 +383,7 @@ html,body{
   pointer-events:none;
 }
 
-/* 鐘舵€佸窘绔?- 灏侀潰宸︿笂瑙?*/
+/* 状态徽章 - 封面左上角 */
 .cover-status{
   position:absolute;top:4px;left:4px;
   padding:2px 7px;border-radius:6px;
@@ -397,7 +397,7 @@ html,body{
 .cover-status.dropped{background:linear-gradient(135deg,rgba(255,138,138,0.85),rgba(255,138,138,0.7))}
 .cover-status.unreleased{background:linear-gradient(135deg,rgba(180,180,200,0.85),rgba(180,180,200,0.7))}
 
-/* 淇℃伅鍖?*/
+/* 信息区 */
 .anime-info{
   flex:1;min-width:0;display:flex;flex-direction:column;
   gap:4px;justify-content:center;
@@ -457,15 +457,15 @@ html,body{
 .ep-current{color:var(--purple);font-weight:700}
 .anime-schedule{font-size:11px;color:var(--text-faint);font-weight:500}
 
-/* 鍙充晶鎿嶄綔 */
+/* 右侧操作 */
 .anime-actions{
   flex-shrink:0;display:flex;flex-direction:column;
   align-items:center;gap:6px;
 }
 
 /* ============================================
-   Watchlist Item锛堟垜鐨勮拷鐣垪琛?鈥?浠垮皬绋嬪簭 .anime-card锛?
-   rpx鈫抪x: 1rpx=0.5px锛?50rpx 璁捐绋匡級
+   Watchlist Item（我的追番列表 — 仿小程序 .anime-card）
+   rpx→px: 1rpx=0.5px（750rpx 设计稿）
    ============================================ */
 .wl-item{
   display:flex;align-items:center;gap:10px;
@@ -478,8 +478,8 @@ html,body{
   position:relative;overflow:hidden;
   cursor:pointer;
   transition:transform .15s;
-  /* 闀挎寜鏃朵笉瑙﹀彂鏂囨湰閫夋嫨 (iOS Safari / Android Chrome 榛樿浼氶珮浜懆鍥存枃鏈?,
-     鍚屾椂闃绘 iOS 闀挎寜寮瑰嚭绯荤粺鑿滃崟 (澶嶅埗/鍒嗕韩) */
+  /* 长按时不触发文本选择 (iOS Safari / Android Chrome 默认会高亮周围文本),
+     同时阻止 iOS 长按弹出系统菜单 (复制/分享) */
   user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .wl-item:active{transform:scale(0.985);opacity:0.95}
@@ -490,7 +490,7 @@ html,body{
   pointer-events:none;
 }
 
-/* 灏侀潰鍖?*/
+/* 封面区 */
 .wl-item .cover-wrap{
   position:relative;flex-shrink:0;
   width:70px;height:90px;border-radius:9px;overflow:hidden;
@@ -509,7 +509,7 @@ html,body{
   position:absolute;inset:0;border-radius:9px;
   box-shadow:inset 0 0 10px rgba(255,107,157,0.15);pointer-events:none;
 }
-/* 灏侀潰鐘舵€佽鏍?*/
+/* 封面状态角标 */
 .wl-item .cover-status{
   position:absolute;top:4px;left:4px;
   padding:2px 7px;border-radius:6px;
@@ -521,7 +521,7 @@ html,body{
 .wl-item .cover-status.finished{background:linear-gradient(135deg,rgba(184,176,200,0.85),rgba(184,176,200,0.7))}
 .wl-item .cover-status.dropped{background:linear-gradient(135deg,rgba(255,138,138,0.85),rgba(255,138,138,0.7))}
 
-/* 淇℃伅鍖?*/
+/* 信息区 */
 .wl-item .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
 .wl-item .anime-name{
   display:flex;align-items:center;gap:4px;min-width:0;
@@ -536,7 +536,7 @@ html,body{
 .wl-item .go-watch-icon:hover{opacity:1}
 .wl-item .go-watch-icon:active{opacity:0.55}
 
-/* 骞冲彴 tag + 鏇存柊棰戠巼 */
+/* 平台 tag + 更新频率 */
 .wl-item .anime-meta{
   display:flex;align-items:center;gap:7px;
 }
@@ -558,13 +558,13 @@ html,body{
 }
 .wl-item .anime-schedule{font-size:11px;color:#B8B0C8}
 
-/* 闆嗘暟淇℃伅 */
+/* 集数信息 */
 .wl-item .anime-episode-info{
   font-size:11px;color:#A8A0B8;display:flex;flex-direction:column;gap:2px;
 }
 .wl-item .ep-current{color:#C44AFF;font-weight:700}
 
-/* 鍙充晶鎿嶄綔鍖?*/
+/* 右侧操作区 */
 .wl-item .anime-actions{
   flex-shrink:0;display:flex;flex-direction:column;
   align-items:center;gap:6px;
@@ -612,7 +612,7 @@ html,body{
 }
 .wl-item .btn-go-watch:active{transform:scale(0.94);opacity:0.85}
 
-/* 鏃х殑鍐呰仈鎺т欢锛堜笉鍐嶄娇鐢紝淇濈暀浠ラ槻鍏煎锛?*/
+/* 旧的内联控件（不再使用，保留以防兼容） */
 .wl-item .controls{display:none}
 .remove-btn{
   width:28px;height:28px;border-radius:50%;
@@ -624,7 +624,7 @@ html,body{
 .remove-btn:active{background:rgba(255,138,138,0.30);transform:scale(0.9)}
 
 /* ============================================
-   Update Group Headers (浠婃棩/鏄ㄦ棩)
+   Update Group Headers (今日/昨日)
    ============================================ */
 .update-group-header{
   margin:14px 0 8px;padding:6px 12px;
@@ -642,8 +642,8 @@ html,body{
 
 /* ============================================
    My List Header
-   娉細鐢ㄦ埛瑕佹眰"涓嶇疆椤讹紝璺熷唴瀹逛竴璧锋粴璧?鈥斺€旀墍浠ヤ笉鍔?sticky/fixed銆?
-   淇濇寔鏅€氭枃妗ｆ祦鍗冲彲銆?
+   注：用户要求"不置顶，跟内容一起滚走"——所以不加 sticky/fixed。
+   保持普通文档流即可。
    ============================================ */
 .mylist-header{
   display:flex;align-items:center;justify-content:space-between;
@@ -729,7 +729,7 @@ html,body{
 .ep-badge.caughtup{background:#E6F8EE;color:#1F9D57}
 
 /* ============================================
-   Source Card (鍙偣鍑荤殑鏁版嵁婧愰€夋嫨鍣?
+   Source Card (可点击的数据源选择器)
    ============================================ */
 .source-card{
   display:flex;align-items:center;gap:10px;
@@ -768,7 +768,7 @@ html,body{
 .source-card.loaded .source-meta{color:var(--green);font-weight:600}
 
 /* ============================================
-   Source Presets (鏁版嵁婧愰璁?
+   Source Presets (数据源预设)
    ============================================ */
 .source-presets{
   display:flex;flex-direction:column;gap:8px;
@@ -837,7 +837,7 @@ html,body{
   max-width:80vw;
 }
 
-/* 涓婁紶 Gitee 鎴愬姛鏃剁殑閱掔洰鎻愮ず鍗＄墖锛堟瘮鏅€?toast 鏇寸獊鍑恒€佸甫鏄庣粏锛?*/
+/* 上传 Gitee 成功时的醒目提示卡片（比普通 toast 更突出、带明细） */
 .success-toast{
   position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-14px);
   display:flex;align-items:flex-start;gap:11px;
@@ -857,7 +857,7 @@ html,body{
 .success-title{font-size:14px;font-weight:700;color:#1f1633;line-height:1.2;}
 .success-sub{font-size:12px;font-weight:500;color:#6b6280;line-height:1.45;}
 
-/* 涓婁紶鍒?Gitee 鏃剁殑鏁撮〉閿佸畾閬僵 */
+/* 上传到 Gitee 时的整页锁定遮罩 */
 .upload-block-overlay{
   position:fixed;inset:0;z-index:9998;
   background:rgba(20,18,32,0.55);
@@ -879,7 +879,7 @@ html,body{
 .upload-block-text{color:#3a3a4a;font-size:15px;font-weight:600;letter-spacing:.3px;}
 
 /* ============================================
-   Modal - 搴曢儴鎶藉眽椋庢牸锛堝榻愬皬绋嬪簭锛?
+   Modal - 底部抽屉风格（对齐小程序）
    ============================================ */
 .modal-overlay{
   position:fixed;inset:0;background:rgba(30,10,50,0.45);
@@ -887,8 +887,8 @@ html,body{
   z-index:200;
   animation:fadeIn .25s;
 }
-/* 寮圭獥鎵撳紑鏃堕攣鑳屾櫙婊氬姩锛歱osition:fixed 鏂规锛屽吋瀹?iOS Safari
-   锛堜粎璁?body overflow:hidden 鍦ㄧЩ鍔ㄧ鏃犳硶闃绘鑳屾櫙婊戝姩锛?*/
+/* 弹窗打开时锁背景滚动：position:fixed 方案，兼容 iOS Safari
+   （仅设 body overflow:hidden 在移动端无法阻止背景滑动） */
 body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modal{
@@ -963,7 +963,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 }
 
 /* ============================================
-   Progress Modal锛坈atch-modal 椋庢牸锛?
+   Progress Modal（catch-modal 风格）
    ============================================ */
 .progress-body{text-align:center;padding:8px 0 0}
 .progress-hint{
@@ -1004,7 +1004,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   background:linear-gradient(135deg,rgba(255,107,157,0.12),rgba(196,74,255,0.12));
 }
 
-/* 瀛ｉ€夋嫨 chip */
+/* 季选择 chip */
 .season-row{
   display:flex;flex-wrap:wrap;gap:7px;
   margin-bottom:12px;justify-content:center;
@@ -1025,7 +1025,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 }
 
 /* ============================================
-   Platform Popup锛堜豢灏忕▼搴?platform-popup锛?
+   Platform Popup（仿小程序 platform-popup）
    ============================================ */
 .platform-card{
   display:flex;gap:10px;padding:10px;
@@ -1133,7 +1133,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   border:none;cursor:pointer;font-family:inherit;
 }
 .platform-action-btn.link:active{transform:scale(0.94);opacity:0.85}
-/* 鏃?url 鏃剁殑"澶嶅埗閾炬帴"鎸夐挳 鈥?鐢ㄦ绾ч厤鑹查伩鍏嶅拰"鍘荤湅"鎾?*/
+/* 无 url 时的"复制链接"按钮 — 用次级配色避免和"去看"撞 */
 .platform-action-btn.copy{
   padding:5px 11px;border-radius:10px;
   background:linear-gradient(135deg,rgba(196,74,255,0.10),rgba(255,107,157,0.08));
@@ -1149,7 +1149,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 }
 
 /* ============================================
-   Edit Platforms Modal锛堢紪杈戝钩鍙?/ 閾炬帴锛?
+   Edit Platforms Modal（编辑平台 / 链接）
    ============================================ */
 .ep-empty{
   text-align:center;padding:18px 0;
@@ -1311,31 +1311,31 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 <body>
 
 <div class="container">
-  <!-- 椤堕儴 App Bar锛堢櫧搴?+ 褰╄壊妯嚎 + 鍥炬姘村嵃锛?-->
+  <!-- 顶部 App Bar（白底 + 彩色横线 + 图案水印） -->
   <div class="appbar">
     <div class="header">
       <div class="header-left">
-        <span class="deco-star">鉁?/span>
-        <span class="header-title">杩界暘涓嶈糠璺?/span>
+        <span class="deco-star">✨</span>
+        <span class="header-title">追番不迷路</span>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" onclick="refreshWatchlist()" title="鍒锋柊" aria-label="鍒锋柊">馃攧</button>
-        <button class="icon-btn" onclick="showSettings()" title="璁剧疆" aria-label="璁剧疆">鈿欙笍</button>
+        <button class="icon-btn" onclick="refreshWatchlist()" title="刷新" aria-label="刷新">🔄</button>
+        <button class="icon-btn" onclick="showSettings()" title="设置" aria-label="设置">⚙️</button>
       </div>
     </div>
   </div>
 
   <!-- Content: Browse (list mode) -->
-  <!-- Content: Updates锛堟槰鏃?& 浠婃棩鏇存柊鐨勮拷鐣級 -->
+  <!-- Content: Updates（昨日 & 今日更新的追番） -->
   <div id="tabUpdates" class="hidden">
     <div class="mylist-header">
       <div class="mylist-header-left">
-        <div class="mylist-title">馃摵 鏇存柊</div>
+        <div class="mylist-title">📺 更新</div>
       </div>
     </div>
     <div class="sub-tabs" id="updateFilters">
-      <span id="updateTabToday" class="sub-tab active" data-ufilter="today" onclick="switchUpdateFilter(this)">馃啎 浠婃棩鏇存柊</span>
-      <span id="updateTabYesterday" class="sub-tab" data-ufilter="yesterday" onclick="switchUpdateFilter(this)">馃搮 鏄ㄦ棩鏇存柊</span>
+      <span id="updateTabToday" class="sub-tab active" data-ufilter="today" onclick="switchUpdateFilter(this)">🆕 今日更新</span>
+      <span id="updateTabYesterday" class="sub-tab" data-ufilter="yesterday" onclick="switchUpdateFilter(this)">📅 昨日更新</span>
     </div>
     <div id="updatesList" class="anime-list"></div>
   </div>
@@ -1344,55 +1344,55 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   <div id="tabMylist">
     <div class="mylist-header">
       <div class="mylist-header-left">
-        <div class="mylist-title">鎴戠殑杩界暘</div>
+        <div class="mylist-title">我的追番</div>
       </div>
       <div class="mylist-header-actions">
-        <button class="btn btn-primary btn-sm" onclick="openAddModal()" id="addBtn" title="鑱旂綉鎼滅储娣诲姞鍓ч泦">+ 娣诲姞鍓ч泦</button>
-        <button class="btn btn-primary btn-sm" onclick="uploadWatchlist()" id="uploadBtn" title="鎶婃湰鍦版渶鏂拌拷鍓у垪琛ㄤ笂浼犲埌 Gitee">鈽侊笍 涓婁紶鍒?Gitee</button>
+        <button class="btn btn-primary btn-sm" onclick="openAddModal()" id="addBtn" title="联网搜索添加剧集">+ 添加剧集</button>
+        <button class="btn btn-primary btn-sm" onclick="uploadWatchlist()" id="uploadBtn" title="把本地最新追剧列表上传到 Gitee">☁️ 上传到 Gitee</button>
       </div>
     </div>
 
-    <!-- My list status filters锛堜豢灏忕▼搴忥細鍏ㄩ儴 / 杩界暘涓?/ 宸茶拷瀹岋級 -->
+    <!-- My list status filters（仿小程序：全部 / 追番中 / 已追完） -->
     <div class="sub-tabs" id="mylistFilters">
       <span class="sub-tab active" data-mfilter="all" onclick="switchMylistFilter(this)">
-        <span class="sub-tab-icon">馃搵</span><span>鍏ㄩ儴</span>
+        <span class="sub-tab-icon">📋</span><span>全部</span>
         <span class="tab-badge" id="badgeMylistAll" style="display:none">0</span>
       </span>
       <span class="sub-tab" data-mfilter="raising" onclick="switchMylistFilter(this)">
-        <span class="sub-tab-icon">馃尭</span><span>杩界暘涓?/span>
+        <span class="sub-tab-icon">🌸</span><span>追番中</span>
         <span class="tab-badge" id="badgeMylistRaising" style="display:none">0</span>
       </span>
       <span class="sub-tab" data-mfilter="caughtup" onclick="switchMylistFilter(this)">
-        <span class="sub-tab-icon">馃尶</span><span>宸茶拷瀹?/span>
+        <span class="sub-tab-icon">🌿</span><span>已追完</span>
         <span class="tab-badge" id="badgeMylistCaughtup" style="display:none">0</span>
       </span>
     </div>
 
     <!-- My list search -->
     <div class="search-box">
-      <span class="search-icon">馃攳</span>
-      <input id="mylistSearchInput" placeholder="鍦ㄦ垜鐨勮拷鐣腑鎼滅储..." oninput="renderMylist();toggleClear('mylistSearchInput')">
-      <button class="search-clear" type="button" onclick="clearSearch('mylistSearchInput', renderMylist)" aria-label="娓呴櫎">鉁?/button>
+      <span class="search-icon">🔍</span>
+      <input id="mylistSearchInput" placeholder="在我的追番中搜索..." oninput="renderMylist();toggleClear('mylistSearchInput')">
+      <button class="search-clear" type="button" onclick="clearSearch('mylistSearchInput', renderMylist)" aria-label="清除">✕</button>
     </div>
     <div id="mylistList" class="anime-list"></div>
   </div>
 </div>
 
-<!-- Add / Search Modal锛堣仈缃戞悳绱?TMDB 娣诲姞鍓ч泦锛?-->
+<!-- Add / Search Modal（联网搜索 TMDB 添加剧集） -->
 <div id="addSearchModal" class="modal-overlay hidden" onclick="if(event.target===this)closeAddModal()">
   <div class="modal add-search-modal" onclick="event.stopPropagation()" style="max-height:90vh;display:flex;flex-direction:column">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">馃攳 鎼滅储娣诲姞鍓ч泦</div>
-      <button class="modal-close" onclick="closeAddModal()">鉁?/button>
+      <div class="modal-title">🔍 搜索添加剧集</div>
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
     </div>
     <div class="search-box" style="margin:0 16px">
-      <span class="search-icon">馃攳</span>
-      <input id="addSearchInput" placeholder="杈撳叆鍓у悕鎼滅储锛堝锛氬拻鏈洖鎴樸€侀鐏箣鍒冿級..." oninput="debounceAddSearch()">
-      <button class="search-clear" type="button" onclick="clearSearch('addSearchInput', null)" aria-label="娓呴櫎">鉁?/button>
+      <span class="search-icon">🔍</span>
+      <input id="addSearchInput" placeholder="输入剧名搜索（如：咒术回战、鬼灭之刃）..." oninput="debounceAddSearch()">
+      <button class="search-clear" type="button" onclick="clearSearch('addSearchInput', null)" aria-label="清除">✕</button>
     </div>
     <div class="modal-body" id="addSearchResults" style="flex:1;overflow-y:auto;min-height:100px;padding:0 16px">
-      <div class="empty-state"><div class="icon">馃攳</div><p class="text">杈撳叆鍏抽敭璇嶆悳绱綘瑕佽拷鐨勫墽闆?/p></div>
+      <div class="empty-state"><div class="icon">🔍</div><p class="text">输入关键词搜索你要追的剧集</p></div>
     </div>
   </div>
 </div>
@@ -1400,21 +1400,21 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 <!-- Bottom Nav -->
 <nav class="bottom-nav">
   <a href="#" class="active" onclick="switchTab('mylist',this)">
-    <span class="icon">猸?/span>
-    <span class="label">鎴戠殑杩界暘</span>
+    <span class="icon">⭐</span>
+    <span class="label">我的追番</span>
   </a>
   <a href="#" onclick="switchTab('updates',this)">
-    <span class="icon">馃啎</span>
-    <span class="label">鏇存柊</span>
+    <span class="icon">🆕</span>
+    <span class="label">更新</span>
   </a>
 </nav>
 
 <!-- Toast -->
 <div id="toast" class="toast" style="opacity:0"></div>
 
-<!-- 涓婁紶 Gitee 鎴愬姛閱掔洰鎻愮ず -->
+<!-- 上传 Gitee 成功醒目提示 -->
 <div id="successToast" class="success-toast">
-  <div class="success-ico">鉁?/div>
+  <div class="success-ico">✓</div>
   <div class="success-body">
     <div class="success-title" id="successTitle"></div>
     <div class="success-sub" id="successSub"></div>
@@ -1426,60 +1426,60 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">鈿欙笍 璁剧疆</div>
-      <button class="modal-close" onclick="closeModal('settingsModal')">鉁?/button>
+      <div class="modal-title">⚙️ 设置</div>
+      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     </div>
     <div class="modal-body">
       <div class="set-section">
-        <div class="set-label">鈽侊笍 浜戠鍚屾</div>
+        <div class="set-label">☁️ 云端同步</div>
         <div class="sync-status">
           <div class="sync-status-row">
-            <span class="sync-status-key">褰撳墠杩界暘</span>
-            <span class="sync-status-val" id="syncCount">鈥?/span>
+            <span class="sync-status-key">当前追番</span>
+            <span class="sync-status-val" id="syncCount">—</span>
           </div>
           <div class="sync-status-row">
-            <span class="sync-status-key">涓婃鍚屾</span>
-            <span class="sync-status-val" id="syncTime">鈥?/span>
+            <span class="sync-status-key">上次同步</span>
+            <span class="sync-status-val" id="syncTime">—</span>
           </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-          <button class="btn btn-sm" style="flex:1" onclick="pullFromCloud()">鈽侊笍 浠庝簯绔媺鍙?/button>
-          <button class="btn btn-sm" style="flex:1" onclick="pushToCloud()">猬嗭笍 涓婁紶鍒颁簯绔?/button>
+          <button class="btn btn-sm" style="flex:1" onclick="pullFromCloud()">☁️ 从云端拉取</button>
+          <button class="btn btn-sm" style="flex:1" onclick="pushToCloud()">⬆️ 上传到云端</button>
         </div>
-        <div class="set-hint" style="margin-top:8px">杩界暘璁板綍鑷姩淇濆瓨鍒?Gitee锛堢粡 Cloudflare 浠ｇ悊杞彂锛屾祻瑙堝櫒鏃犻渶浠讳綍 Token锛夛紱姣忔棩鑷姩浠?TMDB 鍒锋柊杩界暘鍓ч泦鐨勬渶鏂拌繘搴︺€?/div>
+        <div class="set-hint" style="margin-top:8px">追番记录自动保存到 Gitee（经 Cloudflare 代理转发，浏览器无需任何 Token）；每日自动从 TMDB 刷新追番剧集的最新进度。</div>
       </div>
       <div class="set-section">
-        <div class="set-label">馃捑 杩界暘璁板綍澶囦唤锛圝SON 鏂囨湰锛?/div>
-        <div class="set-hint">瀵煎嚭鐨勬槸浣犵殑瀹屾暣杩界暘鍒楄〃锛屽彲澶嶅埗淇濆瓨鍒板蹇樺綍绛夊锛涙崲璁惧鎴栬鍒犳椂锛岀矘璐村洖鏉ャ€屽鍏ュ苟鍚堝苟銆嶅嵆鍙仮澶嶏紙涓嶄細瑕嗙洊宸叉湁璁板綍锛屾寜鍓ч泦鏅鸿兘鍚堝苟锛夈€?/div>
+        <div class="set-label">💾 追番记录备份（JSON 文本）</div>
+        <div class="set-hint">导出的是你的完整追番列表，可复制保存到备忘录等处；换设备或误删时，粘贴回来「导入并合并」即可恢复（不会覆盖已有记录，按剧集智能合并）。</div>
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-          <button class="btn btn-sm" onclick="exportConfig()">鐢熸垚澶囦唤鏂囨湰</button>
-          <button class="btn btn-sm" id="copyCfgBtn" style="display:none" onclick="copyConfigText()">澶嶅埗</button>
+          <button class="btn btn-sm" onclick="exportConfig()">生成备份文本</button>
+          <button class="btn btn-sm" id="copyCfgBtn" style="display:none" onclick="copyConfigText()">复制</button>
         </div>
-        <textarea id="cfgTextArea" class="set-textarea" placeholder="鐐广€岀敓鎴愬浠芥枃鏈€嶅鍑猴紱鎴栧湪姝ょ矘璐翠箣鍓嶅浠界殑杩界暘 JSON 鍚庣偣銆屽鍏ュ苟鍚堝苟銆?></textarea>
-        <button class="btn btn-sm btn-block" style="margin-top:8px" onclick="importConfigFromText()">瀵煎叆骞跺悎骞?/button>
+        <textarea id="cfgTextArea" class="set-textarea" placeholder="点「生成备份文本」导出；或在此粘贴之前备份的追番 JSON 后点「导入并合并」"></textarea>
+        <button class="btn btn-sm btn-block" style="margin-top:8px" onclick="importConfigFromText()">导入并合并</button>
       </div>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">鍏抽棴</button>
+      <button class="btn btn-cancel" onclick="closeModal('settingsModal')">关闭</button>
     </div>
   </div>
 </div>
 
-<!-- 涓婁紶鍒?Gitee 鏃舵暣椤甸攣瀹氾紝鐩村埌杩斿洖缁撴灉鎵嶅厑璁哥户缁搷浣?-->
+<!-- 上传到 Gitee 时整页锁定，直到返回结果才允许继续操作 -->
 <div id="uploadBlockOverlay" class="upload-block-overlay hidden">
   <div class="upload-block-box">
     <div class="upload-spinner"></div>
-    <div class="upload-block-text">姝ｅ湪涓婁紶鍒?Gitee鈥?/div>
+    <div class="upload-block-text">正在上传到 Gitee…</div>
   </div>
 </div>
 
 <script>
 // ======================== STATE ========================
-let animeDb = [];   // 鍙惈杩界暘涓墽闆嗙殑 TMDB 鏁版嵁锛堟瘡鏃ヨ嚜鍔ㄥ埛鏂帮級
+let animeDb = [];   // 只含追番中剧集的 TMDB 数据（每日自动刷新）
 let watchlist = [];
 let settings = { lastSyncAt: '', lastAnimeCount: 0 };
-let currentMylistFilter = 'all';  // 鎴戠殑杩界暘鐘舵€? all / raising / caughtup / finished / dropped
-let currentUpdateFilter = 'today'; // 鏇存柊椤? today / yesterday
+let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
+let currentUpdateFilter = 'today'; // 更新页: today / yesterday
 let searchTimer;
 let activeSeason = 1;
 let _progressCtx = null;
@@ -1491,11 +1491,11 @@ async function init() {
   if (dedupeWatchlistByName()) saveWatchlistLocal();
   const savedSettings = localStorage.getItem('anime_coze_settings');
   if (savedSettings) { try { Object.assign(settings, JSON.parse(savedSettings)); } catch(e) {} }
-  // 鍏堝姞杞藉皝闈㈠厓鏁版嵁锛屽啀娓叉煋鍒楄〃锛岄伩鍏嶅皝闈㈢┖鐧介棯鐑?
+  // 先加载封面元数据，再渲染列表，避免封面空白闪烁
   await refreshAnimeDb();
   renderMylist();
   pullWatchlist();
-  // 鎭㈠涓婃婵€娲荤殑 tab
+  // 恢复上次激活的 tab
   const savedTab = localStorage.getItem('anime_coze_active_tab') || 'mylist';
   const navLinks = document.querySelectorAll('.bottom-nav a');
   const navIdx = savedTab === 'updates' ? 1 : 0;
@@ -1511,7 +1511,7 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.style.opacity = '0', 2200);
 }
 
-// 涓婁紶 Gitee 鎴愬姛鏃剁殑閱掔洰鎻愮ず锛堝甫浠撳簱/鍒嗘敮/璁板綍鏁?鎻愪氦绛夋槑缁嗭級
+// 上传 Gitee 成功时的醒目提示（带仓库/分支/记录数/提交等明细）
 let _successTimer;
 function showSuccessToast(title, sub) {
   const el = document.getElementById('successToast');
@@ -1537,12 +1537,12 @@ function switchTab(tab, el) {
   } else if (tab === 'updates') {
     renderUpdates();
   }
-  // 鍒?tab 鏃跺埛鏂拌拷鐣墽闆嗙殑鏈€鏂?TMDB 鏁版嵁
+  // 切 tab 时刷新追番剧集的最新 TMDB 数据
   refreshAnimeDb();
   syncBodyScroll();
 }
 
-// 鎼滅储妗嗕竴閿竻闄?
+// 搜索框一键清除
 function toggleClear(inputId) {
   const input = document.getElementById(inputId);
   const btn = input.closest('.search-box').querySelector('.search-clear');
@@ -1557,7 +1557,7 @@ function clearSearch(inputId, rerender) {
 }
 
 // ======================== FILTERS ========================
-// 鎴戠殑杩界暘锛氱姸鎬佺瓫閫?
+// 我的追番：状态筛选
 function switchMylistFilter(el) {
   document.querySelectorAll('#mylistFilters .sub-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -1565,7 +1565,7 @@ function switchMylistFilter(el) {
   renderMylist();
 }
 
-// 鏇存柊椤碉細浠婃棩/鏄ㄦ棩鍒囨崲
+// 更新页：今日/昨日切换
 function switchUpdateFilter(el) {
   document.querySelectorAll('#updateFilters .sub-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -1573,7 +1573,7 @@ function switchUpdateFilter(el) {
   renderUpdates();
 }
 
-// 闈欓粯鍔犺浇杩界暘鍓ч泦鐨勬渶鏂?TMDB 鏁版嵁锛堜粎鍚拷鐣腑鐨勫墽锛屾瘡鏃?GitHub Action 鍒锋柊 data/anime.json锛? 
+// 静默加载追番剧集的最新 TMDB 数据（仅含追番中的剧，每日 GitHub Action 刷新 data/anime.json）  
 async function refreshAnimeDb() {
   try {
     const resp = await fetch('./data/anime.json', { cache: 'no-store' });
@@ -1593,43 +1593,43 @@ async function refreshAnimeDb() {
     const updatesVisible = !document.getElementById('tabUpdates').classList.contains('hidden');
     if (mylistVisible) renderMylist();
     if (updatesVisible) renderUpdates();
-  } catch (e) { /* 淇濈暀鏃ф暟鎹?*/ }
+  } catch (e) { /* 保留旧数据 */ }
 }
 
-// 鎵撳紑銆岃缃?/ 鍚屾涓績銆嶅脊绐楋紝骞跺埛鏂颁簯绔悓姝ョ姸鎬佸睍绀?
+// 打开「设置 / 同步中心」弹窗，并刷新云端同步状态展示
 function showSettings() {
   updateSyncStatus();
   openModal('settingsModal');
 }
 
-// 鍒锋柊銆屽悓姝ヤ腑蹇冦€嶉噷鐨勭姸鎬佹暟瀛楋紙杩界暘鏁伴噺 + 涓婃鍚屾鏃堕棿锛?
+// 刷新「同步中心」里的状态数字（追番数量 + 上次同步时间）
 function updateSyncStatus() {
   const cEl = document.getElementById('syncCount');
   const tEl = document.getElementById('syncTime');
-  if (cEl) cEl.textContent = `${watchlist.length} 閮╜;
-  if (tEl) tEl.textContent = settings.lastSyncAt ? fmtSyncTime(settings.lastSyncAt) : '灏氭湭鍚屾';
+  if (cEl) cEl.textContent = `${watchlist.length} 部`;
+  if (tEl) tEl.textContent = settings.lastSyncAt ? fmtSyncTime(settings.lastSyncAt) : '尚未同步';
 }
 
-// 鎶?ISO 鏃堕棿鏍煎紡鍖栦负銆孧M-DD HH:mm銆嶇殑绠€鐭湰鍦版椂闂?
+// 把 ISO 时间格式化为「MM-DD HH:mm」的简短本地时间
 function fmtSyncTime(iso) {
   try {
     const d = new Date(iso);
-    if (isNaN(d.getTime())) return '鈥?;
+    if (isNaN(d.getTime())) return '—';
     const p = n => String(n).padStart(2, '0');
     return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
-  } catch (_) { return '鈥?; }
+  } catch (_) { return '—'; }
 }
 
-// 銆屽悓姝ヤ腑蹇冦€嶆寜閽細绔嬪嵆浠庝簯绔媺鍙?
+// 「同步中心」按钮：立即从云端拉取
 async function pullFromCloud() {
-  showToast('馃攧 姝ｅ湪浠庝簯绔媺鍙栤€?);
+  showToast('🔄 正在从云端拉取…');
   await pullWatchlist(true);
   updateSyncStatus();
 }
 
-// 銆屽悓姝ヤ腑蹇冦€嶆寜閽細绔嬪嵆涓婁紶鍒颁簯绔?
+// 「同步中心」按钮：立即上传到云端
 async function pushToCloud() {
-  showToast('馃攧 姝ｅ湪涓婁紶鍒颁簯绔€?);
+  showToast('🔄 正在上传到云端…');
   await pushWatchlist();
   updateSyncStatus();
 }
@@ -1642,24 +1642,24 @@ function getStatusForAnime(a) {
 }
 
 const STATUS_TEXT = {
-  raising: '杩界暘涓?, caughtup: '宸茶拷瀹?, finished: '宸插畬缁?,
-  dropped: '宸插純鐣?, unreleased: '鏈紑鎾?
+  raising: '追番中', caughtup: '已追完', finished: '已完结',
+  dropped: '已弃番', unreleased: '未开播'
 };
 
-// 骞冲彴鍝佺墝鑹诧紙鏉ヨ嚜鍘熷皬绋嬪簭 utils/platform.wxs锛?
+// 平台品牌色（来自原小程序 utils/platform.wxs）
 const PLATFORM_INFO = {
-  bilibili: { name: '鍝斿摡鍝斿摡', short: 'B', color: '#FB7299' },
-  tencent:  { name: '鑵捐瑙嗛', short: '鑵?, color: '#FF7028' },
-  iqiyi:    { name: '鐖卞鑹?,   short: '濂?, color: '#00BE06' },
-  youku:    { name: '浼橀叿',     short: '浼?, color: '#1492FF' },
-  migu:     { name: '鍜挄',     short: 'M', color: '#FF4F4F' },
-  bilibili_intl: { name: 'B绔欏浗闄?, short: 'B', color: '#FB7299' },
-  wukong:     { name: '鎮熺┖娴忚鍣?, short: '鎮?, color: '#FF6B35' },
+  bilibili: { name: '哔哩哔哩', short: 'B', color: '#FB7299' },
+  tencent:  { name: '腾讯视频', short: '腾', color: '#FF7028' },
+  iqiyi:    { name: '爱奇艺',   short: '奇', color: '#00BE06' },
+  youku:    { name: '优酷',     short: '优', color: '#1492FF' },
+  migu:     { name: '咪咕',     short: 'M', color: '#FF4F4F' },
+  bilibili_intl: { name: 'B站国际', short: 'B', color: '#FB7299' },
+  wukong:     { name: '悟空浏览器', short: '悟', color: '#FF6B35' },
 };
 
 function updateMylistBadges() {
-  // 鎴戠殑杩界暘 badge锛氭寜鍚勭姸鎬佺粺璁★紙涓?getMylistStatus 淇濇寔涓€鑷达級
-  // 鍏ㄩ儴 = 鎺掗櫎 dropped 鍗冲彲锛坮aising + caughtup + finished 鍏ㄦ樉绀猴紝涓庛€屽凡杩藉畬銆嶆爣绛惧舰鎴愬寘鍚叧绯伙級
+  // 我的追番 badge：按各状态统计（与 getMylistStatus 保持一致）
+  // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
   const total = watchlist.length;
   const enriched = watchlist.map(enrichWatchlistItem);
   const allCount = enriched.filter(it => it.status !== 'dropped').length;
@@ -1684,45 +1684,45 @@ function updateMylistBadges() {
   });
 }
 
-// 鏍煎紡鍖栭泦鏁版樉绀猴紙S1 E20 / E20锛?
+// 格式化集数显示（S1 E20 / E20）
 function formatEpisode(ep, season) {
   if (season && season > 1) return ` S${season} E${ep} `;
   return ` E${ep} `;
 }
 
-// 璁＄畻鏇存柊棰戠巼鏂囨
+// 计算更新频率文案
 function computeUpdateFrequency(a) {
   if (a.nextAirDate) {
-    // 鎸夋湰鍦伴浂鐐硅В鏋?nextAirDate锛氭棩鏈熶覆 'YYYY-MM-DD' 鐩存帴 new Date 浼氳褰?UTC 闆剁偣锛?
-    // 鍦?GMT+8 鍌嶆櫄浼氭妸"浠婂ぉ"璇畻鎴愯繃鍘?杩斿洖 null 鑰屽洖閫€鍒?updateFrequency)锛?
-    // 鏁呰ˉ 'T00:00:00' 骞舵寜鏈湴闆剁偣褰掗浂 today
+    // 按本地零点解析 nextAirDate：日期串 'YYYY-MM-DD' 直接 new Date 会被当 UTC 零点，
+    // 在 GMT+8 傍晚会把"今天"误算成过去(返回 null 而回退到 updateFrequency)，
+    // 故补 'T00:00:00' 并按本地零点归零 today
     const next = new Date(a.nextAirDate + 'T00:00:00');
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const days = Math.round((next - today) / 86400000);
     if (days < 0) return null;
-    if (days === 0) return '浠婃棩鏇存柊';
-    if (days === 1) return '鏄庢棩鏇存柊';
-    if (days <= 7) return `${days}澶╁悗鏇存柊`;
+    if (days === 0) return '今日更新';
+    if (days === 1) return '明日更新';
+    if (days <= 7) return `${days}天后更新`;
   }
-  if (a.updateFrequency) return a.updateFrequency + '鏇存柊';
+  if (a.updateFrequency) return a.updateFrequency + '更新';
   return null;
 }
 
-// ======================== ADD SEARCH MODAL锛堣仈缃?TMDB 鎼滅储娣诲姞鍓ч泦锛?========================
+// ======================== ADD SEARCH MODAL（联网 TMDB 搜索添加剧集） ========================
 let _addSearchTimer;
-let _addSearchResults = []; // 褰撳墠鎼滅储缁撴灉缂撳瓨
+let _addSearchResults = []; // 当前搜索结果缓存
 
 function openAddModal() {
   document.getElementById('addSearchModal').classList.remove('hidden');
   document.getElementById('addSearchInput').value = '';
-  document.getElementById('addSearchResults').innerHTML = '<div class="empty-state"><div class="icon">馃攳</div><p class="text">杈撳叆鍏抽敭璇嶆悳绱綘瑕佽拷鐨勫墽闆?/p></div>';
-  syncBodyScroll(); // 閿佽儗鏅粴鍔紝閬垮厤寮圭獥鍐呮粦鍔ㄧ┛閫忓埌涓嬫柟椤甸潰
+  document.getElementById('addSearchResults').innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">输入关键词搜索你要追的剧集</p></div>';
+  syncBodyScroll(); // 锁背景滚动，避免弹窗内滑动穿透到下方页面
   setTimeout(() => document.getElementById('addSearchInput').focus(), 200);
 }
 
 function closeAddModal() {
   document.getElementById('addSearchModal').classList.add('hidden');
-  syncBodyScroll(); // 杩樺師鑳屾櫙婊氬姩閿?
+  syncBodyScroll(); // 还原背景滚动锁
 }
 
 function debounceAddSearch() {
@@ -1733,10 +1733,10 @@ function debounceAddSearch() {
   if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
   if (!q) {
     _addSearchResults = [];
-    results.innerHTML = '<div class="empty-state"><div class="icon">馃攳</div><p class="text">杈撳叆鍏抽敭璇嶆悳绱綘瑕佽拷鐨勫墽闆?/p></div>';
+    results.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">输入关键词搜索你要追的剧集</p></div>';
     return;
   }
-  results.innerHTML = '<div class="loading" style="padding:20px"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">姝ｅ湪鎼滅储 TMDB鈥?/p></div>';
+  results.innerHTML = '<div class="loading" style="padding:20px"><div class="spinner"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">正在搜索 TMDB…</p></div>';
 
   _addSearchTimer = setTimeout(async () => {
     const q2 = (document.getElementById('addSearchInput')?.value || '').trim();
@@ -1750,24 +1750,24 @@ function debounceAddSearch() {
       if (q3 !== q2) return;
       _addSearchResults = items;
       if (items.length === 0) {
-        results.innerHTML = '<div class="empty-state"><div class="icon">馃槙</div><p class="text">鏈壘鍒扮浉鍏冲墽闆?/p><p class="sub">璇曡瘯鍏朵粬鍏抽敭璇?/p></div>';
+        results.innerHTML = '<div class="empty-state"><div class="icon">😕</div><p class="text">未找到相关剧集</p><p class="sub">试试其他关键词</p></div>';
         return;
       }
       results.innerHTML = items.map((a, i) => addSearchResultCard(a, i)).join('');
     } catch (e) {
       const q3 = (document.getElementById('addSearchInput')?.value || '').trim();
       if (q3 !== q2) return;
-      results.innerHTML = '<div class="empty-state"><div class="icon">馃樀</div><p class="text">鎼滅储澶辫触</p><p class="sub">' + esc(e.message) + '锛岃绋嶅悗閲嶈瘯</p></div>';
+      results.innerHTML = '<div class="empty-state"><div class="icon">😵</div><p class="text">搜索失败</p><p class="sub">' + esc(e.message) + '，请稍后重试</p></div>';
     }
-  }, 400);
+  }, 200);
 }
 
 function addSearchResultCard(a, idx) {
   const inList = watchlist.some(w => String(w.tmdbId) === String(a.tmdbId));
   const hasCover = a.cover && (a.cover.startsWith('http') || a.cover.startsWith('/api/img'));
-  const cats = { anime: '鐣墽', cdrama: '鍥戒骇鍓?, kdrama: '闊╁墽', jdrama: '鏃ュ墽' };
+  const cats = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧', jdrama: '日剧' };
   const catLabel = cats[a.category] || a.regionLabel || a.category || '';
-  const epInfo = a.latestEpisode ? '鏇存柊鑷砈' + (a.latestSeason || 1) + 'E' + a.latestEpisode : '鏆傛棤鏇存柊';
+  const epInfo = a.latestEpisode ? '更新至S' + (a.latestSeason || 1) + 'E' + a.latestEpisode : (a.firstAirDate ? '首播 ' + a.firstAirDate : '');
   const primaryPlatform = (a.platforms && a.platforms[0]) || null;
   const platInfo = primaryPlatform ? PLATFORM_INFO[primaryPlatform.platform] : null;
   const platHtml = platInfo
@@ -1792,8 +1792,8 @@ function addSearchResultCard(a, idx) {
     </div>
     <div class="anime-actions">
       ${inList
-        ? '<button class="btn-status caughtup">宸叉坊鍔?/button>'
-        : '<button class="btn-catch" onclick="event.stopPropagation();addFromSearch(' + idx + ')"><span class="catch-label">+ 杩界暘</span></button>'}
+        ? '<button class="btn-status caughtup">已添加</button>'
+        : '<button class="btn-catch" onclick="event.stopPropagation();addFromSearch(' + idx + ')"><span class="catch-label">+ 追番</span></button>'}
     </div>
   </div>`;
 }
@@ -1802,18 +1802,18 @@ function addFromSearch(idx) {
   const a = _addSearchResults[idx];
   if (!a) return;
   addToList(a);
-  // 鍒锋柊鎼滅储缁撴灉鐨勫崱鐗囩姸鎬?
+  // 刷新搜索结果的卡片状态
   const results = document.getElementById('addSearchResults');
   if (results && idx >= 0) {
     const cards = results.querySelectorAll('.wl-item');
     if (cards[idx]) {
-      cards[idx].querySelector('.anime-actions').innerHTML = '<button class="btn-status caughtup">宸叉坊鍔?/button>';
+      cards[idx].querySelector('.anime-actions').innerHTML = '<button class="btn-status caughtup">已添加</button>';
     }
   }
 }
 
 // ======================== ADD / REMOVE ========================
-// addToList 鎺ュ彈涓ょ鍙傛暟锛氬畬鏁寸殑 TMDB 鎼滅储缁撴灉瀵硅薄锛屾垨绾?tmdbId 瀛楃涓诧紙鍏煎鐩存帴璋冪敤锛?
+// addToList 接受两种参数：完整的 TMDB 搜索结果对象，或纯 tmdbId 字符串（兼容直接调用）
 function addToList(tmdbInput) {
   const a = (typeof tmdbInput === 'object' && tmdbInput)
     ? tmdbInput
@@ -1821,11 +1821,11 @@ function addToList(tmdbInput) {
   if (!a) return;
   const id = a.tmdbId;
   if (watchlist.some(w => String(w.tmdbId) === String(id))) {
-    showToast('宸插湪杩界暘鍒楄〃涓?);
+    showToast('已在追番列表中');
     return;
   }
   if (a.name && watchlist.some(w => (w.name || '') === a.name)) {
-    showToast('宸插湪杩界暘鍒楄〃涓?);
+    showToast('已在追番列表中');
     return;
   }
   watchlist.push({
@@ -1870,9 +1870,9 @@ function addToList(tmdbInput) {
   });
   saveWatchlist();
   renderMylist();
-  showToast(`鉁?宸叉坊鍔犮€?{a.name}銆峘);
+  showToast(`✨ 已添加「${a.name}」`);
 
-  // 鍚屾椂鎶婃柊鍔犲墽闆嗙殑鏁版嵁骞跺叆 animeDb锛屼娇鍒楄〃椤佃兘绔嬪嵆鏄剧ず鏈€鏂颁俊鎭?
+  // 同时把新加剧集的数据并入 animeDb，使列表页能立即显示最新信息
   if (!animeDb.some(x => String(x.tmdbId) === String(id))) {
     animeDb.push(a);
   }
@@ -1883,10 +1883,10 @@ function removeFromList(tmdbId) {
   watchlist = watchlist.filter(w => String(w.tmdbId) !== String(tmdbId));
   saveWatchlist();
   renderMylist();
-  showToast(`宸茬Щ闄ゃ€?{a ? a.name : ''}銆峘);
+  showToast(`已移除「${a ? a.name : ''}」`);
 }
 
-// ======================== 鏇村鎿嶄綔锛堣鎯呭脊绐楀唴锛?========================
+// ======================== 更多操作（详情弹窗内） ========================
 function toggleMoreActions(tmdbId) {
   const el = document.getElementById('moreActions');
   if (el) { el.remove(); return; }
@@ -1901,17 +1901,17 @@ function toggleMoreActions(tmdbId) {
   div.className = 'more-actions';
   if (inList) {
     div.innerHTML = `
-      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openPlatformPopup('${tmdbId}')">馃幀 骞冲彴 / 鍘荤湅</button>
-      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">鉁忥笍 缂栬緫骞冲彴</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openPlatformPopup('${tmdbId}')">🎬 平台 / 去看</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
       ${isDropped
-        ? `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();restoreFromDropped('${tmdbId}')">鈾伙笍 鎭㈠杩界暘</button>`
-        : `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();markDropped('${tmdbId}')">馃挃 鏍囪寮冪暘</button>`}
-      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">馃摵 鏇存柊杩涘害</button>
+        ? `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();restoreFromDropped('${tmdbId}')">♻️ 恢复追番</button>`
+        : `<button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();markDropped('${tmdbId}')">💔 标记弃番</button>`}
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">📺 更新进度</button>
     `;
   } else {
     div.innerHTML = `
-      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">鉃?鍔犲叆杩界暘</button>
-      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">鉁忥笍 缂栬緫骞冲彴</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">➕ 加入追番</button>
+      <button class="action-menu-item" onclick="document.getElementById('moreActions')?.remove();document.getElementById('detailModal')?.remove();editPlatforms('${tmdbId}')">✏️ 编辑平台</button>
     `;
   }
   document.getElementById('detailModal')?.querySelector('.modal')?.appendChild(div);
@@ -1922,7 +1922,7 @@ function markDropped(tmdbId) {
   watchlist[idx].status = 'dropped';
   saveWatchlist();
   renderMylist();
-  showToast('馃挃 宸插純鐣?);
+  showToast('💔 已弃番');
 }
 function restoreFromDropped(tmdbId) {
   const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
@@ -1930,12 +1930,12 @@ function restoreFromDropped(tmdbId) {
   watchlist[idx].status = 'raising';
   saveWatchlist();
   renderMylist();
-  showToast('鈾伙笍 宸叉仮澶嶈拷鐣?);
+  showToast('♻️ 已恢复追番');
 }
 
-// ======================== EDIT PLATFORMS锛堢紪杈戝钩鍙?/ 閾炬帴锛?========================
-// 涓€涓暘鍓у彲鎸傚涓钩鍙帮紙bilibili / tencent / iqiyi / youku / migu / 鑷畾涔夛級
-// 姣忎釜骞冲彴鏈夛細name锛堟樉绀哄悕锛夈€乽rl锛?鍘荤湅"閾炬帴锛岀暀绌哄垯闄嶇骇涓?澶嶅埗閾炬帴"锛夈€乮sPrimary锛堜富骞冲彴锛屽喅瀹氬崱鐗囦笂鏄剧ず鍝釜锛?
+// ======================== EDIT PLATFORMS（编辑平台 / 链接） ========================
+// 一个番剧可挂多个平台（bilibili / tencent / iqiyi / youku / migu / 自定义）
+// 每个平台有：name（显示名）、url（"去看"链接，留空则降级为"复制链接"）、isPrimary（主平台，决定卡片上显示哪个）
 function editPlatforms(tmdbId) {
   const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
   if (idx === -1) return;
@@ -1944,7 +1944,7 @@ function editPlatforms(tmdbId) {
 
   document.getElementById('editPlatformsModal')?.remove();
 
-  // 骞冲彴涓嬫媺閫夐」
+  // 平台下拉选项
   const knownKeys = Object.keys(PLATFORM_BRAND);
   const optionsHtml = knownKeys.map(k =>
     `<option value="${k}">${PLATFORM_BRAND[k].name}</option>`
@@ -1952,7 +1952,7 @@ function editPlatforms(tmdbId) {
 
   function buildRows() {
     if (w.platforms.length === 0) {
-      return '<div class="ep-empty">杩樻病鏈夊钩鍙帮紝鐐逛笅鏂?娣诲姞骞冲彴"</div>';
+      return '<div class="ep-empty">还没有平台，点下方"添加平台"</div>';
     }
     return w.platforms.map((p, i) => {
       const brand = PLATFORM_BRAND[p.platform];
@@ -1966,13 +1966,13 @@ function editPlatforms(tmdbId) {
             ${knownKeys.map(k => `<option value="${k}" ${k===p.platform?'selected':''}>${PLATFORM_BRAND[k].name}</option>`).join('')}
             ${!knownKeys.includes(p.platform) && p.platform ? `<option value="${esc(p.platform)}" selected>${esc(p.name||p.platform)}</option>` : ''}
           </select>
-          <label class="ep-primary-label" title="璁句负涓诲钩鍙帮紙鍗＄墖涓婃樉绀猴級">
+          <label class="ep-primary-label" title="设为主平台（卡片上显示）">
             <input type="radio" name="ep-primary" ${isPrimary} onchange="epSetPrimary(${i})">
-            <span>涓?/span>
+            <span>主</span>
           </label>
-          <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="鍒犻櫎">鉁?/button>
+          <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
         </div>
-        <input class="ep-url-input" placeholder="鍘荤湅鐨勯摼鎺ワ紙鍙暀绌猴紝鐣欑┖鍒欑偣"澶嶅埗閾炬帴"锛? value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
+        <input class="ep-url-input" placeholder="去看的链接（可留空，留空则点"复制链接"）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
       </div>`;
     }).join('');
   }
@@ -1984,26 +1984,26 @@ function editPlatforms(tmdbId) {
   div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">鉁忥笍 缂栬緫骞冲彴 路 ${esc(w.name || '')}</div>
-      <button class="modal-close" onclick="epClose(false)">鉁?/button>
+      <div class="modal-title">✏️ 编辑平台 · ${esc(w.name || '')}</div>
+      <button class="modal-close" onclick="epClose(false)">✕</button>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">涓€涓暘鍓у彲鎸傚涓钩鍙般€傝缃摼鎺ュ悗锛屽崱鐗?骞冲彴 / 鍘荤湅"鍙洿鎺ヨ烦杞紱鐣欑┖鍒欑偣"澶嶅埗閾炬帴"銆?/p>
+      <p class="modal-desc">一个番剧可挂多个平台。设置链接后，卡片"平台 / 去看"可直接跳转；留空则点"复制链接"。</p>
       <div id="epList">${buildRows()}</div>
       <button class="ep-add-btn" onclick="epAddRow()">
-        <span style="font-size:16px;line-height:1">锛?/span> 娣诲姞骞冲彴
+        <span style="font-size:16px;line-height:1">＋</span> 添加平台
       </button>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="epClose(false)">鍙栨秷</button>
-      <button class="btn btn-primary" onclick="epClose(true)">淇濆瓨</button>
+      <button class="btn btn-cancel" onclick="epClose(false)">取消</button>
+      <button class="btn btn-primary" onclick="epClose(true)">保存</button>
     </div>
   </div>`;
   document.body.appendChild(div);
-  window._epIdx = idx; // 淇濆瓨褰撳墠缂栬緫鐨?watchlist index
+  window._epIdx = idx; // 保存当前编辑的 watchlist index
 }
 
-// 骞冲彴缂栬緫寮圭獥鐨?CRUD 鍔╂墜锛堢洿鎺ユ搷浣?watchlist + 灞€閮ㄩ噸娓叉煋锛?
+// 平台编辑弹窗的 CRUD 助手（直接操作 watchlist + 局部重渲染）
 window._epIdx = -1;
 function epChangePlatform(rowIdx, newKey) {
   const w = watchlist[window._epIdx];
@@ -2023,7 +2023,7 @@ function epSetPrimary(rowIdx) {
   const w = watchlist[window._epIdx];
   if (!w) return;
   w.platforms.forEach((p, i) => { p.isPrimary = (i === rowIdx); });
-  // 鍚屾鍒?watchlist[].platform锛堜富骞冲彴 key锛?
+  // 同步到 watchlist[].platform（主平台 key）
   w.platform = w.platforms[rowIdx].platform || '';
   epRefreshList();
 }
@@ -2032,7 +2032,7 @@ function epDeleteRow(rowIdx) {
   if (!w) return;
   const wasPrimary = w.platforms[rowIdx] && w.platforms[rowIdx].isPrimary;
   w.platforms.splice(rowIdx, 1);
-  // 鍒犵殑鏄富骞冲彴 鈫?鎶婄涓€涓檷绾т负涓?
+  // 删的是主平台 → 把第一个降级为主
   if (wasPrimary && w.platforms[0]) {
     w.platforms[0].isPrimary = true;
     w.platform = w.platforms[0].platform || '';
@@ -2042,14 +2042,14 @@ function epDeleteRow(rowIdx) {
 function epAddRow() {
   const w = watchlist[window._epIdx];
   if (!w) return;
-  // 鎵剧涓€涓湭鐢ㄧ殑 known key
+  // 找第一个未用的 known key
   const used = new Set(w.platforms.map(p => p.platform));
   const candidate = Object.keys(PLATFORM_BRAND).find(k => !used.has(k)) || 'bilibili';
   const newRow = {
     platform: candidate,
     name: PLATFORM_BRAND[candidate].name,
     url: '',
-    isPrimary: w.platforms.length === 0, // 绗竴涓嚜鍔ㄤ富
+    isPrimary: w.platforms.length === 0, // 第一个自动主
   };
   w.platforms.push(newRow);
   if (newRow.isPrimary) w.platform = candidate;
@@ -2060,12 +2060,12 @@ function epRefreshList() {
   if (!w) return;
   const list = document.getElementById('epList');
   if (!list) return;
-  // 鏁翠綋鍒锋柊锛氳緭鍏ユ淇濇寔鐒︾偣锛堥樆姝㈠埛鏂帮級锛岄€夋嫨妗嗗厑璁稿埛鏂帮紙logo 闇€鏇存柊锛?
+  // 整体刷新：输入框保持焦点（阻止刷新），选择框允许刷新（logo 需更新）
   if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
-  // 绠€鍗曢噸鍐?
+  // 简单重写
   const knownKeys = Object.keys(PLATFORM_BRAND);
   if (w.platforms.length === 0) {
-    list.innerHTML = '<div class="ep-empty">杩樻病鏈夊钩鍙帮紝鐐逛笅鏂?娣诲姞骞冲彴"</div>';
+    list.innerHTML = '<div class="ep-empty">还没有平台，点下方"添加平台"</div>';
     return;
   }
   list.innerHTML = w.platforms.map((p, i) => {
@@ -2079,13 +2079,13 @@ function epRefreshList() {
         <select class="ep-platform-select" onchange="epChangePlatform(${i}, this.value)">
           ${knownKeys.map(k => `<option value="${k}" ${k===p.platform?'selected':''}>${PLATFORM_BRAND[k].name}</option>`).join('')}
         </select>
-        <label class="ep-primary-label" title="璁句负涓诲钩鍙帮紙鍗＄墖涓婃樉绀猴級">
+        <label class="ep-primary-label" title="设为主平台（卡片上显示）">
           <input type="radio" name="ep-primary" ${isPrimary} onchange="epSetPrimary(${i})">
-          <span>涓?/span>
+          <span>主</span>
         </label>
-        <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="鍒犻櫎">鉁?/button>
+        <button class="ep-del-btn" onclick="epDeleteRow(${i})" title="删除">✕</button>
       </div>
-      <input class="ep-url-input" placeholder="鍘荤湅鐨勯摼鎺ワ紙鍙暀绌猴級" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
+      <input class="ep-url-input" placeholder="去看的链接（可留空）" value="${esc(p.url||'')}" onchange="epChangeUrl(${i}, this.value)">
     </div>`;
   }).join('');
 }
@@ -2093,9 +2093,9 @@ function epClose(save) {
   if (save) {
     const w = watchlist[window._epIdx];
     if (w) {
-      // 娓呯悊绌哄钩鍙帮紙鏃㈡病 name 涔熸病 url锛?
+      // 清理空平台（既没 name 也没 url）
       w.platforms = w.platforms.filter(p => (p.name && p.name.trim()) || (p.url && p.url.trim()) || p.platform);
-      // 纭繚鑷冲皯鏈変竴涓?isPrimary
+      // 确保至少有一个 isPrimary
       if (w.platforms.length > 0 && !w.platforms.some(p => p.isPrimary)) {
         w.platforms[0].isPrimary = true;
         w.platform = w.platforms[0].platform;
@@ -2104,57 +2104,57 @@ function epClose(save) {
       }
       saveWatchlist();
       renderMylist();
-      showToast('鉁?骞冲彴宸蹭繚瀛?);
+      showToast('✅ 平台已保存');
     }
   }
   document.getElementById('editPlatformsModal')?.remove();
   window._epIdx = -1;
 }
 
-// ======================== PLATFORM POPUP锛堜豢灏忕▼搴?platform-popup锛?========================
+// ======================== PLATFORM POPUP（仿小程序 platform-popup） ========================
 function openPlatformPopup(tmdbId) {
   const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
   if (!w) return;
   const enriched = enrichWatchlistItem(w);
   const { name, cover, status, currentEpisode, latestEpisode, platforms, platform, platformName, updateFrequency, hasCover } = enriched;
   const rawName = (name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-  const statusText = MYLIST_STATUS_TEXT[status] || '杩界暘涓?;
+  const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
   const seasonMulti = enriched.latestSeason > 1 || enriched.currentSeason > 1;
   const currentLabel = seasonMulti
-    ? `S${enriched.currentSeason}路E${currentEpisode}`
-    : (currentEpisode ? `绗?{currentEpisode}闆哷 : '-');
+    ? `S${enriched.currentSeason}·E${currentEpisode}`
+    : (currentEpisode ? `第${currentEpisode}集` : '-');
   const latestLabel = seasonMulti
-    ? `S${enriched.latestSeason}路E${latestEpisode}`
-    : (latestEpisode ? `绗?{latestEpisode}闆哷 : '?');
+    ? `S${enriched.latestSeason}·E${latestEpisode}`
+    : (latestEpisode ? `第${latestEpisode}集` : '?');
   const platBrand = platform ? PLATFORM_BRAND[platform] : null;
   const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
   const platColor = platBrand ? platBrand.color : '#8B7AA8';
-  const platLabel = platBrand ? platBrand.name : (platformName || platform || '鍏朵粬');
+  const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
 
-  // 杩囨护鏈夋晥骞冲彴
+  // 过滤有效平台
   const validPlatforms = platforms.filter(p => p && p.platform);
 
-  // 骞冲彴鍒楄〃 HTML
-  // 鎸夐挳閫昏緫锛?
-  //   - 鏈?url 鈫?鐩存帴鎵撳紑璇?URL
-  //   - 鏃?url 鈫?鎵撳紑骞冲彴鎼滅储椤碉紙鐢ㄧ暘鍚嶄綔涓哄叧閿瘝锛?
-  //   - 缁熶竴鏂囨銆屽墠寰€銆?
+  // 平台列表 HTML
+  // 按钮逻辑：
+  //   - 有 url → 直接打开该 URL
+  //   - 无 url → 打开平台搜索页（用番名作为关键词）
+  //   - 统一文案「前往」
   const platformListHtml = validPlatforms.length === 0
-    ? '<div class="platform-empty-tip">璇ョ暘鏆傛棤骞冲彴淇℃伅<br>鐐逛笂鏂广€屼竴閿悳绱€嶅幓鍚勫钩鍙版悳</div>'
+    ? '<div class="platform-empty-tip">该番暂无平台信息<br>点上方「一键搜索」去各平台搜</div>'
     : `<div class="platform-list">${validPlatforms.map(p => {
         const brand = PLATFORM_BRAND[p.platform] || null;
         const logo = brand ? brand.svg : PLATFORM_FALLBACK_SVG;
         const color = brand ? brand.color : '#8B7AA8';
         const pName = p.name || (brand ? brand.name : p.platform);
         const pUrl = (p.url || '').trim();
-        // 缁熶竴銆屽墠寰€銆嶆寜閽細鏈?url 鐩磋烦锛涙棤 url 鐢ㄥ钩鍙版悳绱?URL
+        // 统一「前往」按钮：有 url 直跳；无 url 用平台搜索 URL
         const targetUrl = pUrl
           || (PLATFORM_SEARCH_URL[p.platform] ? PLATFORM_SEARCH_URL[p.platform] + encodeURIComponent(w.name || '') : '');
         const btnHtml = targetUrl
-          ? `<button class="platform-action-btn link" onclick="window.open('${esc(targetUrl)}','_blank','noopener')">鍓嶅線 鈥?/button>`
-          : `<button class="platform-action-btn copy" disabled style="opacity:.5;cursor:not-allowed">鏆備笉鍙敤</button>`;
-        // 鎴柇 URL 鐢ㄤ簬鏄剧ず锛堟渶澶?40 瀛楃锛?
-        const urlPreview = targetUrl.length > 40 ? targetUrl.slice(0, 40) + '鈥? : targetUrl;
+          ? `<button class="platform-action-btn link" onclick="window.open('${esc(targetUrl)}','_blank','noopener')">前往 ›</button>`
+          : `<button class="platform-action-btn copy" disabled style="opacity:.5;cursor:not-allowed">暂不可用</button>`;
+        // 截断 URL 用于显示（最多 40 字符）
+        const urlPreview = targetUrl.length > 40 ? targetUrl.slice(0, 40) + '…' : targetUrl;
         return `<div class="platform-item">
           <span class="platform-item-icon">${logo}</span>
           <div class="platform-item-body">
@@ -2163,12 +2163,12 @@ function openPlatformPopup(tmdbId) {
           </div>
           <div class="platform-item-actions">
             ${btnHtml}
-            ${targetUrl ? `<button class="platform-action-btn copyurl" onclick="copyToClipboard('${esc(targetUrl)}','馃敆 宸插鍒堕摼鎺?)" title="澶嶅埗閾炬帴">馃搵</button>` : ''}
+            ${targetUrl ? `<button class="platform-action-btn copyurl" onclick="copyToClipboard('${esc(targetUrl)}','🔗 已复制链接')" title="复制链接">📋</button>` : ''}
           </div>
         </div>`;
       }).join('')}</div>`;
 
-  // 绉婚櫎宸插瓨鍦ㄧ殑
+  // 移除已存在的
   document.getElementById('platformPopup')?.remove();
 
   const div = document.createElement('div');
@@ -2178,8 +2178,8 @@ function openPlatformPopup(tmdbId) {
   div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">馃幀 ${esc(name || '')}</div>
-      <button class="modal-close" onclick="document.getElementById('platformPopup')?.remove()">鉁?/button>
+      <div class="modal-title">🎬 ${esc(name || '')}</div>
+      <button class="modal-close" onclick="document.getElementById('platformPopup')?.remove()">✕</button>
     </div>
     <div class="modal-body">
       <div class="platform-card">
@@ -2195,18 +2195,18 @@ function openPlatformPopup(tmdbId) {
             ${platform
               ? `<span class="platform-card-platform-icon">${platLogo}</span>
                  <span class="platform-card-platform-name">${esc(platLabel)}</span>`
-              : '<span class="platform-card-platform-name">鏆傛棤骞冲彴</span>'}
-            ${updateFrequency ? `<span class="platform-card-schedule">路 ${esc(updateFrequency)}</span>` : ''}
+              : '<span class="platform-card-platform-name">暂无平台</span>'}
+            ${updateFrequency ? `<span class="platform-card-schedule">· ${esc(updateFrequency)}</span>` : ''}
           </div>
           <div class="platform-card-episode">
-            <span style="color:#C44AFF;font-weight:700">杩借嚦${currentLabel || '-'}</span>
-            路 鏇存柊鑷?{latestLabel}
+            <span style="color:#C44AFF;font-weight:700">追至${currentLabel || '-'}</span>
+            · 更新至${latestLabel}
           </div>
         </div>
       </div>
       <button class="platform-copy-all" onclick="window.open('https://search.bilibili.com/all?keyword=' + encodeURIComponent('${rawName}'), '_blank', 'noopener')">
-        <span class="platform-copy-all-icon">馃攳</span>
-        <span class="platform-copy-all-text">涓€閿悳绱細${esc(name || '')}</span>
+        <span class="platform-copy-all-icon">🔍</span>
+        <span class="platform-copy-all-text">一键搜索：${esc(name || '')}</span>
       </button>
       <div class="platform-divider"></div>
       ${platformListHtml}
@@ -2215,17 +2215,17 @@ function openPlatformPopup(tmdbId) {
   document.body.appendChild(div);
 }
 
-// 澶嶅埗鎼滅储璇?
+// 复制搜索词
 function copyPlatformSearch(name) {
   if (!name) return;
-  copyToClipboard(name, '馃搵 宸插鍒躲€? + name + '銆?);
+  copyToClipboard(name, '📋 已复制「' + name + '」');
 }
 
-// 澶嶅埗骞冲彴鎼滅储閾炬帴锛堟棤 url 鏃剁殑鍏滃簳锛?
+// 复制平台搜索链接（无 url 时的兜底）
 function copyPlatformLink(platform, name) {
   const searchPrefix = PLATFORM_SEARCH_URL[platform] || 'https://www.bing.com/search?q=';
   const url = searchPrefix + encodeURIComponent(name || '');
-  copyToClipboard(url, '馃敆 宸插鍒?' + (PLATFORM_BRAND[platform] ? PLATFORM_BRAND[platform].name : platform) + ' 鎼滅储閾炬帴');
+  copyToClipboard(url, '🔗 已复制 ' + (PLATFORM_BRAND[platform] ? PLATFORM_BRAND[platform].name : platform) + ' 搜索链接');
 }
 
 function copyToClipboard(text, successMsg) {
@@ -2242,7 +2242,7 @@ function fallbackCopy(text, successMsg) {
   document.body.appendChild(ta);
   ta.select();
   try { document.execCommand('copy'); showToast(successMsg); }
-  catch (e) { showToast('鉂?澶嶅埗澶辫触锛岃鎵嬪姩閫変腑'); }
+  catch (e) { showToast('❌ 复制失败，请手动选中'); }
   document.body.removeChild(ta);
 }
 
@@ -2254,7 +2254,7 @@ function openProgress(tmdbId) {
   const enriched = enrichWatchlistItem(w);
   const { latestEpisode, latestSeason, currentSeason } = enriched;
 
-  // 澶氬鏀寔锛氫紭鍏堢敤 watchlist.latestSeason锛屽惁鍒欑敤 animeDb.seasonEpisodeCounts 闀垮害
+  // 多季支持：优先用 watchlist.latestSeason，否则用 animeDb.seasonEpisodeCounts 长度
   const seasonCounts = a && a.seasonEpisodeCounts ? a.seasonEpisodeCounts : null;
   const totalSeasons = Math.max(
     latestSeason || 1,
@@ -2262,7 +2262,7 @@ function openProgress(tmdbId) {
     seasonCounts ? Object.keys(seasonCounts).length : 1
   );
 
-  // 姣忓鏈€鏂伴泦鏁帮紙鐢ㄤ簬"鏇存柊鑷?灞曠ず锛?
+  // 每季最新集数（用于"更新至"展示）
   const seasonLatest = (s) => {
     if (s === latestSeason) return latestEpisode;
     if (seasonCounts && seasonCounts[String(s)]) return seasonCounts[String(s)];
@@ -2270,15 +2270,15 @@ function openProgress(tmdbId) {
     return 0;
   };
 
-  // 瀛ｉ€夋嫨 chip
+  // 季选择 chip
   const seasonChips = [];
   for (let i = 1; i <= totalSeasons; i++) {
-    seasonChips.push(`<button class="season-chip ${i === currentSeason ? 'active' : ''}" data-season="${i}" onclick="pickSeason(${i})">绗?{i}瀛?/button>`);
+    seasonChips.push(`<button class="season-chip ${i === currentSeason ? 'active' : ''}" data-season="${i}" onclick="pickSeason(${i})">第${i}季</button>`);
   }
 
   activeSeason = currentSeason || 1;
   const activeLatest = seasonLatest(activeSeason) || latestEpisode;
-  // 瀛樹簡澶氬皯闆?= 鍏ㄥ墽宸叉挱鍑烘€婚泦鏁?- 宸茬湅闆嗘暟锛堣法瀛ｇ疮璁★紝涓嶅彈褰撳墠閫変腑瀛ｅ奖鍝嶏級
+  // 存了多少集 = 全剧已播出总集数 - 已看集数（跨季累计，不受当前选中季影响）
   let totalReleased = activeLatest;
   if (seasonCounts) {
     const vals = Object.values(seasonCounts);
@@ -2287,7 +2287,7 @@ function openProgress(tmdbId) {
   const banked = totalReleased ? totalReleased - w.watchedEpisode : 0;
   _progressCtx = { w, seasonLatest, seasonCounts };
 
-  // closeProgressModal 宸叉彁鍗囦负鍏ㄥ眬鍑芥暟锛堣 MODAL HELPERS锛夛紝渚涘唴鑱?onclick 璋冪敤
+  // closeProgressModal 已提升为全局函数（见 MODAL HELPERS），供内联 onclick 调用
 
   const div = document.createElement('div');
   div.className = 'modal-overlay';
@@ -2296,26 +2296,26 @@ function openProgress(tmdbId) {
   div.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title">馃摵 ${esc(w.name)}</div>
-      <button class="modal-close" onclick="closeProgressModal()">鉁?/button>
+      <div class="modal-title">📺 ${esc(w.name)}</div>
+      <button class="modal-close" onclick="closeProgressModal()">✕</button>
     </div>
-    <div class="progress-tmdb" title="鐐瑰嚮澶嶅埗 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','宸插鍒?TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
+    <div class="progress-tmdb" title="点击复制 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','已复制 TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
     <div class="modal-body progress-body">
-      <p class="progress-hint">鏇存柊浣犵殑杩界暘杩涘害</p>
+      <p class="progress-hint">更新你的追番进度</p>
       ${totalSeasons > 1 ? `<div class="season-row" id="seasonRow">${seasonChips.join('')}</div>` : ''}
       <div class="progress-input-row">
-        <span class="progress-suffix">宸茬湅鍒?/span>
+        <span class="progress-suffix">已看到</span>
         <div class="progress-input-wrap">
           <input id="popupEpisode" type="number" min="0" max="${activeLatest || 999}" value="${w.watchedEpisode}" class="progress-input">
         </div>
-        <span class="progress-suffix">闆?/span>
+        <span class="progress-suffix">集</span>
       </div>
-      ${activeLatest ? `<span class="progress-reminder">鏈€鏂?${activeLatest} 闆?路 瀛樹簡 ${Math.max(0, banked)} 闆?/span>` : ''}
-      ${banked > 0 ? `<button class="progress-catchup" onclick="document.getElementById('popupEpisode').value=${activeLatest};showToast('鈿?宸茶拷鍒版渶鏂?)">鈿?宸茶拷鍒版渶鏂?/button>` : ''}
+      ${activeLatest ? `<span class="progress-reminder">最新 ${activeLatest} 集 · 存了 ${Math.max(0, banked)} 集</span>` : ''}
+      ${banked > 0 ? `<button class="progress-catchup" onclick="document.getElementById('popupEpisode').value=${activeLatest};showToast('⚡ 已追到最新')">⚡ 已追到最新</button>` : ''}
     </div>
     <div class="modal-actions">
-      <button class="btn btn-cancel" onclick="closeProgressModal()">鍙栨秷</button>
-      <button class="btn btn-primary" onclick="saveProgress('${tmdbId}')">淇濆瓨</button>
+      <button class="btn btn-cancel" onclick="closeProgressModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveProgress('${tmdbId}')">保存</button>
     </div>
   </div>`;
   syncBodyScroll();
@@ -2335,7 +2335,7 @@ function pickSeason(s) {
   const ctx = _progressCtx;
   if (!ctx) return;
   const activeLatest = ctx.seasonLatest(s);
-  // 瀛樹簡闆嗘暟璺ㄥ涓嶅彉锛屾澶勫彧鍒锋柊銆屾渶鏂般€嶆樉绀?+ input max + 杩藉埌鏈€鏂版寜閽?
+  // 存了集数跨季不变，此处只刷新「最新」显示 + input max + 追到最新按钮
   let totalReleased = activeLatest;
   if (ctx.seasonCounts) {
     const vals = Object.values(ctx.seasonCounts);
@@ -2346,13 +2346,13 @@ function pickSeason(s) {
   if (inp) inp.max = activeLatest || 999;
   const reminder = document.querySelector('#progressModal .progress-reminder');
   if (reminder) {
-    reminder.innerHTML = '鏈€鏂?' + (activeLatest || '?') + ' 闆?路 瀛樹簡 ' + banked + ' 闆?;
+    reminder.innerHTML = '最新 ' + (activeLatest || '?') + ' 集 · 存了 ' + banked + ' 集';
   }
   const catchupBtn = document.querySelector('#progressModal .progress-catchup');
   if (catchupBtn) {
     if (banked > 0 && activeLatest) {
       catchupBtn.style.display = '';
-      catchupBtn.setAttribute('onclick', 'document.getElementById(\'popupEpisode\').value=' + activeLatest + ';showToast(\'鈿?宸茶拷鍒版渶鏂癨')');
+      catchupBtn.setAttribute('onclick', 'document.getElementById(\'popupEpisode\').value=' + activeLatest + ';showToast(\'⚡ 已追到最新\')');
     } else {
       catchupBtn.style.display = 'none';
     }
@@ -2361,17 +2361,17 @@ function pickSeason(s) {
 
 function saveProgress(tmdbId) {
   const ep = parseInt(document.getElementById('popupEpisode').value);
-  if (isNaN(ep) || ep < 0) { showToast('璇疯緭鍏ユ湁鏁堥泦鏁?); return; }
+  if (isNaN(ep) || ep < 0) { showToast('请输入有效集数'); return; }
   const idx = watchlist.findIndex(w => String(w.tmdbId) === String(tmdbId));
   if (idx === -1) return;
   watchlist[idx].watchedEpisode = ep;
   if (activeSeason) watchlist[idx].watchedSeason = activeSeason;
-  // status 涓嶅啀鐢?saveProgress 璁＄畻锛岀敱 enrichWatchlistItem 鍔ㄦ€佺畻锛堝彧淇濈暀 dropped锛?
+  // status 不再由 saveProgress 计算，由 enrichWatchlistItem 动态算（只保留 dropped）
   if (watchlist[idx].status !== 'dropped') delete watchlist[idx].status;
   saveWatchlist();
   closeProgressModal();
   renderMylist();
-  showToast('鉁?杩涘害宸叉洿鏂?);
+  showToast('✅ 进度已更新');
 }
 
 // ======================== ANIME DETAIL ========================
@@ -2384,9 +2384,9 @@ function openDetail(tmdbId) {
   const cover = a ? a.cover : (w ? w.cover : '');
   const hasCover = cover && (cover.startsWith('http://') || cover.startsWith('https://') || cover.startsWith('/api/img?p=') || cover.startsWith('/api/img?u=') || cover.startsWith('data:'));
   const status = a ? getStatusForAnime(a) : (w.status || 'raising');
-  const statusText = STATUS_TEXT[status] || '杩界暘涓?;
+  const statusText = STATUS_TEXT[status] || '追番中';
   const platforms = (a ? a.platforms : w ? w.platforms : []) || [];
-  const categoryLabel = a ? (a.categoryLabel || (a.category === 'cdrama' ? '鍥戒骇鍓? : a.category === 'kdrama' ? '闊╁墽' : '鐣墽')) : '鐣墽';
+  const categoryLabel = a ? (a.categoryLabel || (a.category === 'cdrama' ? '国产剧' : a.category === 'kdrama' ? '韩剧' : '番剧')) : '番剧';
 
   const div = document.createElement('div');
   div.className = 'modal-overlay';
@@ -2399,41 +2399,41 @@ function openDetail(tmdbId) {
         ? `<img class="detail-cover" src="${esc(proxyCover(cover))}" loading="lazy" onerror="this.style.display='none'">`
         : `<div class="detail-cover" style="display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:rgba(196,74,255,0.30)">${(name||'?').charAt(0)}</div>`}
       <div class="detail-name">${esc(name)}</div>
-      <div class="detail-tmdb" title="鐐瑰嚮澶嶅埗 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','宸插鍒?TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
+      <div class="detail-tmdb" title="点击复制 TMDB ID" onclick="copyToClipboard('${esc(String(tmdbId))}','已复制 TMDB ID: ${esc(String(tmdbId))}')">TMDB ID: ${esc(String(tmdbId))}</div>
       <div class="detail-meta">
         <span class="cover-status ${status}" style="position:static;display:inline-block;margin-right:4px">${statusText}</span>
         <span style="font-size:10px;font-weight:600;color:var(--orange,#ff9f43);margin-right:4px">${esc(categoryLabel)}</span>
         ${a && a.regionLabel ? esc(a.regionLabel) : ''}
-        ${a && a.latestEpisode ? ' 路 鏇存柊鑷?E' + a.latestEpisode : ''}
-        ${a && a.totalEpisodes ? ' 路 鍏?' + a.totalEpisodes + ' 闆? : ''}
-        ${a && a.voteAverage ? ' 路 猸?' + a.voteAverage.toFixed(1) : ''}
+        ${a && a.latestEpisode ? ' · 更新至 E' + a.latestEpisode : ''}
+        ${a && a.totalEpisodes ? ' · 共 ' + a.totalEpisodes + ' 集' : ''}
+        ${a && a.voteAverage ? ' · ⭐ ' + a.voteAverage.toFixed(1) : ''}
       </div>
-      ${w ? `<div style="margin-top:6px;font-size:12px;color:var(--purple);font-weight:700">杩借嚦 E${w.watchedEpisode}</div>` : ''}
+      ${w ? `<div style="margin-top:6px;font-size:12px;color:var(--purple);font-weight:700">追至 E${w.watchedEpisode}</div>` : ''}
       ${a && a.overview ? `<div class="detail-overview">${esc(a.overview)}</div>` : ''}
       ${platforms.length > 0 ? `<div class="detail-platforms">${platforms.map(p => '<span class="detail-platform-tag">' + esc(p.platform) + '</span>').join('')}</div>` : ''}
     </div>
     <div class="modal-actions">
       ${inList
-        ? `<button class="btn btn-danger" onclick="document.getElementById('detailModal')?.remove();removeFromList('${tmdbId}')">绉婚櫎杩界暘</button>
-           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">鏇存柊杩涘害</button>
-           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">鏇村鎿嶄綔</button>`
-        : `<button class="btn btn-cancel" onclick="document.getElementById('detailModal')?.remove()">鍏抽棴</button>
-           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">+ 鍔犲叆杩界暘</button>
-           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">鏇村鎿嶄綔</button>`}
+        ? `<button class="btn btn-danger" onclick="document.getElementById('detailModal')?.remove();removeFromList('${tmdbId}')">移除追番</button>
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();openProgress('${tmdbId}')">更新进度</button>
+           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">更多操作</button>`
+        : `<button class="btn btn-cancel" onclick="document.getElementById('detailModal')?.remove()">关闭</button>
+           <button class="btn btn-primary" onclick="document.getElementById('detailModal')?.remove();addToList('${tmdbId}')">+ 加入追番</button>
+           <button class="btn btn-more" onclick="toggleMoreActions('${tmdbId}')">更多操作</button>`}
     </div>
   </div>`;
   document.body.appendChild(div);
 }
 
-// ======================== RENDER MY LIST (浠垮皬绋嬪簭 pages/index) ========================
-// 鐘舵€佸垽瀹氾細鎸夊皬绋嬪簭 processAnimeList 閫昏緫锛屼絾鍙湅 watchlist + animeDb
+// ======================== RENDER MY LIST (仿小程序 pages/index) ========================
+// 状态判定：按小程序 processAnimeList 逻辑，但只看 watchlist + animeDb
 function getMylistStatus(w) {
   if (w.status === 'dropped') return 'dropped';
-  // 鐢?animeDb 鐨勬渶鏂版暟鎹紙姣忔鍚屾鑷姩鏇存柊锛夊垽鏂暘鏈韩鏄惁宸插畬缁?
+  // 用 animeDb 的最新数据（每次同步自动更新）判断番本身是否已完结
   const a = resolveAnime(w.tmdbId);
   const latestEp = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
   const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
-  // 澶氬涓旀墍鏈夊閮藉埌椤?= 宸插畬缁擄紱鐢?seasonEpisodeCounts
+  // 多季且所有季都到顶 = 已完结；用 seasonEpisodeCounts
   if (a && a.seasonEpisodeCounts) {
     const totalS = a.totalSeasons || 1;
     let allDone = true;
@@ -2446,79 +2446,79 @@ function getMylistStatus(w) {
   } else if (latestEp && w.watchedEpisode >= latestEp && (w.watchedSeason || 1) >= latestSeason) {
     return 'finished';
   }
-  // 杩藉埌鏈€鏂?= caughtup锛堝凡杩藉畬鏈疆锛?
+  // 追到最新 = caughtup（已追完本轮）
   if (latestEp && w.watchedEpisode >= latestEp) return 'caughtup';
   return 'raising';
 }
 
 const MYLIST_STATUS_TEXT = {
-  raising: '杩界暘涓?, caughtup: '宸茶拷瀹?, finished: '宸茶拷瀹?, dropped: '宸插純鐣?, unknown: '杩界暘涓?
+  raising: '追番中', caughtup: '已追完', finished: '已追完', dropped: '已弃番', unknown: '追番中'
 };
 
-// 骞冲彴淇℃伅锛堝甫 logo SVG + 鍝佺墝鑹?+ 涓枃鍚?+ 鐭瓧绗︼級
-// SVG 鏉ユ簮锛堝叏閮?raw 鎶撹嚜鍏紑 CDN锛寁iewBox 鍚勫紓锛夛細
-//   - bilibili: simple-icons (24脳24) - https://dl.svgcdn.com/svg/simple-icons/bilibili.svg
-//   - iqiyi:    arcticons   (48脳48) - https://dl.svgcdn.com/svg/arcticons/iqiyi.svg
-//   - migu:     arcticons   (48脳48) - https://dl.svgcdn.com/svg/arcticons/migu.svg
-//   - youku:    brandico    (1000脳1000) - https://dl.svgcdn.com/svg/brandico/youku.svg
-//   - tencent:  鑷敾        (48脳48) - 涓夎壊鎾斁涓夎锛堟 #FA8036 + 缁?#74CA12 + 钃?#168CF5锛?
-//   - bilibili_intl: 澶嶇敤 bilibili
-// 鍏ㄩ儴 SVG 宸插唴宓屽叿浣撻鑹诧紙涓嶄緷璧?currentColor锛夛紝澶栧眰鏃犳煋鑹茶儗鏅€?
+// 平台信息（带 logo SVG + 品牌色 + 中文名 + 短字符）
+// SVG 来源（全部 raw 抓自公开 CDN，viewBox 各异）：
+//   - bilibili: simple-icons (24×24) - https://dl.svgcdn.com/svg/simple-icons/bilibili.svg
+//   - iqiyi:    arcticons   (48×48) - https://dl.svgcdn.com/svg/arcticons/iqiyi.svg
+//   - migu:     arcticons   (48×48) - https://dl.svgcdn.com/svg/arcticons/migu.svg
+//   - youku:    brandico    (1000×1000) - https://dl.svgcdn.com/svg/brandico/youku.svg
+//   - tencent:  自画        (48×48) - 三色播放三角（橙 #FA8036 + 绿 #74CA12 + 蓝 #168CF5）
+//   - bilibili_intl: 复用 bilibili
+// 全部 SVG 已内嵌具体颜色（不依赖 currentColor），外层无染色背景。
 const PLATFORM_BRAND = {
   wukong: {
-    name: '鎮熺┖娴忚鍣?, short: '鎮?, color: '#FF6B35',
+    name: '悟空浏览器', short: '悟', color: '#FF6B35',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#FF6B35"/><path fill="none" stroke="#FFD23F" stroke-width="2.6" stroke-linecap="round" d="M11.5 17.5 Q24 11 36.5 17.5"/><path fill="#FFF1E6" d="M24 15.5c-3.2-3.6-9.6-1.9-9 4.2.5 5 4 9 9 10.3 5-1.3 8.5-5.3 9-10.3.6-6.1-5.8-7.8-9-4.2z"/><circle cx="20.3" cy="21" r="1.7" fill="#3A2A1A"/><circle cx="27.7" cy="21" r="1.7" fill="#3A2A1A"/><path fill="none" stroke="#3A2A1A" stroke-width="1.6" stroke-linecap="round" d="M20.5 26.5 Q24 29 27.5 26.5"/></svg>'
   },
   bilibili: {
-    name: '鍝斿摡鍝斿摡', short: 'B', color: '#00A1D6',
+    name: '哔哩哔哩', short: 'B', color: '#00A1D6',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
   },
   tencent: {
-    name: '鑵捐瑙嗛', short: '鑵?, color: '#168CF5',
-    // 涓夎壊鎾斁涓夎锛氭(宸? + 缁?涓? + 钃?鍙? + 涓棿鐧借壊鎾斁鍥炬爣
+    name: '腾讯视频', short: '腾', color: '#168CF5',
+    // 三色播放三角：橙(左) + 绿(中) + 蓝(右) + 中间白色播放图标
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#FA8036" d="M4 8 L20 8 L20 40 L4 40 Z"/><path fill="#74CA12" d="M16 8 L32 8 L32 40 L16 40 Z"/><path fill="#168CF5" d="M28 8 L44 8 L44 40 L28 40 Z"/><polygon fill="#FFFFFF" points="20,16 32,24 20,32"/></svg>'
   },
   iqiyi: {
-    name: '鐖卞鑹?, short: '鐖?, color: '#00DC5A',
-    // 鏉ヨ嚜 arcticons iqiyi.svg (line 鐗?锛屾暣浣撴煋缁?
+    name: '爱奇艺', short: '爱', color: '#00DC5A',
+    // 来自 arcticons iqiyi.svg (line 版)，整体染绿
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="none" stroke="#00DC5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M9.5 5.5h29c2.216 0 4 1.784 4 4v29c0 2.216-1.784 4-4 4h-29c-2.216 0-4-1.784-4-4v-29c0-2.216 1.784-4 4-4"/><path fill="#00DC5A" d="M11.836 19.016c0 .414-.333.75-.744.75a.747.747 0 0 1-.744-.75c0-.414.333-.75.744-.75c.41 0 .744.336.744.75"/><path fill="none" stroke="#00DC5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M11.092 22.216v7.199m10.197 0l-3.438-3.6m-.001 3.6c-1.983 0-3.437-1.6-3.437-3.466v-3.6c0-2 1.586-3.6 3.438-3.6h0c1.983 0 3.438 1.6 3.438 3.6v3.466c0 2-1.455 3.6-3.438 3.6m6.494-10.665v10.665m9.933-10.665l-3.438 5.332l-3.438-5.332m3.438 10.665v-5.333m6.494-5.332v10.665"/></svg>'
   },
   youku: {
-    name: '浼橀叿', short: '浼?, color: '#1492FF',
-    // 鏉ヨ嚜 brandico youku.svg (mono 鍗曡壊), 鏁翠綋鏌撹摑
+    name: '优酷', short: '优', color: '#1492FF',
+    // 来自 brandico youku.svg (mono 单色), 整体染蓝
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#1492FF" d="M449.69 139.688c-15.29.025-30.615 4.098-43.781 13.188c-28.992 20.037-45.122 81.793-64.594 125.75c-21.444 48.358-40.259 97.095-61.156 132.594c-56.519-64.128-95.077-206.254-163.156-258.344c-21.959-16.783-70.099-16.305-91.781 0c-58.645 44.149.194 122.203 23.781 163.156c51.773 89.789 109.164 185.937 152.969 268.531c-28.476 75.092-172.29 287.292 20.406 275.313c46.636-30.14 66.384-92.854 91.75-149.594c51.861-116.102 95.923-216.406 149.563-336.469c22.294-49.908 76-123.645 64.594-180.156c-6.391-31.499-42.38-54.028-78.594-53.969zm466.219 46.063c-27.866.279-55.968 13.293-68.125 38.5c-20.112 22.945-41.65 44.45-64.594 64.563c-11.023 13.893-23.501 26.333-37.375 37.375c-16.133 16.783-29.222 36.525-51 47.625V241.251c-.497-72.107-135.42-72.107-135.938 0v377.313c5.893 26.925 18.13 47.511 47.563 50.938h40.813c27.977-4.861 43.889-21.793 47.563-50.938V536.97c0-28.284-5.294-76.032 13.594-47.594c27.691 27.098 66.712 56.252 102 88.344c33.872 30.887 66.285 80.739 101.938 88.375c73.005 15.653 105.208-54.421 78.188-105.344c-28.534-53.832-110.717-88.282-146.156-135.969c23.883-54.654 153.715-88.23 142.75-183.531c-4.322-37.644-37.587-55.837-71.219-55.5z"/></svg>'
   },
   migu: {
-    name: '鍜挄', short: 'M', color: '#FF4F4F',
-    // 鏉ヨ嚜 arcticons migu.svg (line 鍗曡壊), 鏁翠綋鏌撶孩
+    name: '咪咕', short: 'M', color: '#FF4F4F',
+    // 来自 arcticons migu.svg (line 单色), 整体染红
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="37" height="37" x="5.5" y="5.5" fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" rx="4" ry="4"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m11.572 28.149l-.654-8.965l5.142 8.647l3.833-9.288l.654 8.96m8.916-6.627l.49 6.73a2.25 2.25 0 0 1-2.079 2.408h0a2.24 2.24 0 0 1-1.634-.542"/><rect width="4.499" height="5.961" x="25.186" y="21.032" fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" rx="2.249" ry="2.249" transform="rotate(175.825 27.436 24.012)"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m31.997 20.69l.27 3.703a2.25 2.25 0 0 0 2.407 2.08h0a2.25 2.25 0 0 0 2.08-2.408l-.27-3.702m.27 3.702l.164 2.243"/><circle cx="22.344" cy="18.632" r=".75" fill="#FF4F4F"/><path fill="none" stroke="#FF4F4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="m22.544 21.381l.434 5.945"/></svg>'
   },
   bilibili_intl: {
-    name: 'B绔欏浗闄?, short: 'Bi', color: '#00A1D6',
+    name: 'B站国际', short: 'Bi', color: '#00A1D6',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00A1D6" d="M17.813 4.653h.854q2.266.08 3.773 1.574Q23.946 7.72 24 9.987v7.36q-.054 2.266-1.56 3.773c-1.506 1.507-2.262 1.524-3.773 1.56H5.333q-2.266-.054-3.773-1.56C.053 19.614.036 18.858 0 17.347v-7.36q.054-2.267 1.56-3.76t3.773-1.574h.774l-1.174-1.12a1.23 1.23 0 0 1-.373-.906q0-.534.373-.907l.027-.027q.4-.373.92-.373t.92.373L9.653 4.44q.107.106.187.213h4.267a.8.8 0 0 1 .16-.213l2.853-2.747q.4-.373.92-.373c.347 0 .662.151.929.4s.391.551.391.907q0 .532-.373.906zM5.333 7.24q-1.12.027-1.88.773q-.76.748-.786 1.894v7.52q.026 1.146.786 1.893t1.88.773h13.334q1.12-.026 1.88-.773t.786-1.893v-7.52q-.026-1.147-.786-1.894t-1.88-.773zM8 11.107q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q0-.56.386-.947q.387-.386.947-.386m8 0q.56 0 .933.373q.375.374.4.96v1.173q-.025.586-.4.96q-.373.375-.933.374c-.56-.001-.684-.125-.933-.374q-.375-.373-.4-.96V12.44q.025-.586.4-.96q.373-.373.933-.373"/></svg>'
   },
 };
-// 骞冲彴鎼滅储 URL 鍏滃簳锛堝綋 platforms[i].url 涓虹┖鏃朵娇鐢級
+// 平台搜索 URL 兜底（当 platforms[i].url 为空时使用）
 const PLATFORM_SEARCH_URL = {
   bilibili: 'https://search.bilibili.com/all?keyword=',
   tencent:  'https://v.qq.com/x/search/?q=',
   iqiyi:    'https://search.iqiyi.com/o?key=',
   youku:    'https://so.youku.com/search_video/q_',
   migu:     'https://www.migu.cn/search?keyword=',
-  // 鎮熺┖娴忚鍣ㄦ槸 iOS 娴忚鍣紙闈炶棰戠珯锛夛細鏃犵洿閾炬椂鍥為€€鍒扮綉椤垫悳绱紝閾炬帴鍦ㄦ偀绌哄唴鎵撳紑
+  // 悟空浏览器是 iOS 浏览器（非视频站）：无直链时回退到网页搜索，链接在悟空内打开
   wukong:   'https://www.baidu.com/s?wd=',
 };
-// 缁欐湭鐭ュ钩鍙板厹搴曪紙"鍏朵粬" 鐢ㄧ伆鑹查棶鍙峰渾锛?
+// 给未知平台兜底（"其他" 用灰色问号圆）
 const PLATFORM_FALLBACK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#DFE6E9"/><text x="24" y="32" text-anchor="middle" fill="#636E72" font-size="22" font-weight="bold" font-family="sans-serif">?</text></svg>';
 
-// "enrich"锛氭妸 watchlist 鐨勪竴鏉?+ 鍏宠仈鐨?animeDb 椤瑰悎骞舵垚"鍚庣瑙嗗浘"锛?
-// 璺熷皬绋嬪簭 processAnimeList 杈撳嚭瀵归綈锛坈urrentEpisode/latestEpisode/status/platforms 绛夛級
-// 鑷剤鏍囪锛歟nrich 鏃惰嫢闈犲悕瀛楃籂姝ｄ簡閿欑殑 tmdbId锛岀疆浣嶅悗鍦?render 鏈熬鍐欏洖 localStorage
+// "enrich"：把 watchlist 的一条 + 关联的 animeDb 项合并成"后端视图"，
+// 跟小程序 processAnimeList 输出对齐（currentEpisode/latestEpisode/status/platforms 等）
+// 自愈标记：enrich 时若靠名字纠正了错的 tmdbId，置位后在 render 末尾写回 localStorage
 let _watchlistIdDirty = false;
 
-// 缁熶竴瑙ｆ瀽鏌愬墽鍏冩暟鎹細鍏堟煡 animeDb锛堟瘡鏃ュ埛鏂扮殑杩界暘鍓ч泦鏁版嵁锛夛紝鍥為€€鍒?watchlist.meta 蹇収
-// 灏侀潰浠ｇ悊锛歩mage.tmdb.org 鍦ㄥ浗鍐呭父琚/涓嶇ǔ瀹氾紝缁熶竴鏀硅蛋 Cloudflare 杈圭紭浠ｇ悊 /api/img锛?
-// 娴忚鍣ㄥ彧璁块棶 anime-coze-cyy.pages.dev锛堝浗鍐呭彲杈撅級锛岀敱 CF 鍥炴簮鎷夊浘銆?
+// 统一解析某剧元数据：先查 animeDb（每日刷新的追番剧集数据），回退到 watchlist.meta 快照
+// 封面代理：image.tmdb.org 在国内常被墙/不稳定，统一改走 Cloudflare 边缘代理 /api/img，
+// 浏览器只访问 anime-coze-cyy.pages.dev（国内可达），由 CF 回源拉图。
 function proxyCover(url) {
   if (!url) return '';
   if (url.startsWith('/api/img') || url.startsWith('data:') || url.startsWith('./') || url.startsWith('/')) return url;
@@ -2526,7 +2526,7 @@ function proxyCover(url) {
   return url;
 }
 
-// 缁熶竴瑙ｆ瀽鏌愬墽鍏冩暟鎹細鍏堟煡 animeDb锛堟瘡鏃ュ埛鏂扮殑杩界暘鍓ч泦鏁版嵁锛夛紝鍥為€€鍒?watchlist.meta 蹇収
+// 统一解析某剧元数据：先查 animeDb（每日刷新的追番剧集数据），回退到 watchlist.meta 快照
 function resolveAnime(tmdbId) {
   let a = animeDb.find((x) => String(x.tmdbId) === String(tmdbId));
   if (a) return a;
@@ -2536,30 +2536,30 @@ function resolveAnime(tmdbId) {
 }
 
 function enrichWatchlistItem(w) {
-  // 浼樺厛鎸?tmdbId 绮剧‘鍖归厤锛堝瓨鐨勫氨鏄?TMDB 鐨?id锛屽悗缁洿鎺ュ搴旓級
+  // 优先按 tmdbId 精确匹配（存的就是 TMDB 的 id，后续直接对应）
   let a = animeDb.find(x => String(x.tmdbId) === String(w.tmdbId));
-  if (!a && w.meta) a = w.meta;   // 瀹炴椂鎼滅储/鏈湴琛ュ厖鍓х殑鍏冩暟鎹揩鐓э紙鍒锋柊鍚庝粛鍙敤锛?
-  // 瀛樼殑 tmdbId 閿?缂哄け鏃讹紝鎸夊悕瀛楀厹搴曟壘鍒扮湡韬紝骞惰嚜鎰堝啓鍥炴纭?id
+  if (!a && w.meta) a = w.meta;   // 实时搜索/本地补充剧的元数据快照（刷新后仍可用）
+  // 存的 tmdbId 错/缺失时，按名字兜底找到真身，并自愈写回正确 id
   if (!a && w.name) {
     a = animeDb.find(x => x.name && x.name === w.name);
     if (a && String(w.tmdbId) !== String(a.tmdbId)) {
-      w.tmdbId = a.tmdbId;       // 鎸佷箙鍖栦负 TMDB 姝ｇ‘ id锛屼笅娆¤捣绾?id 鍖归厤
-      _watchlistIdDirty = true;  // 鏍囪寰呬繚瀛?
+      w.tmdbId = a.tmdbId;       // 持久化为 TMDB 正确 id，下次起纯 id 匹配
+      _watchlistIdDirty = true;  // 标记待保存
     }
   }
-  // latestEpisode 浼樺厛鍙?animeDb锛堟瘡娆″悓姝ヨ嚜鍔ㄦ洿鏂帮級锛寃atchlist 鍏滃簳
+  // latestEpisode 优先取 animeDb（每次同步自动更新），watchlist 兜底
   const latestEpisode = (a && a.latestEpisode != null) ? a.latestEpisode : (w.latestEpisode || 0);
   const latestSeason = (a && a.latestSeason != null) ? a.latestSeason : (w.latestSeason || 1);
-  // 骞冲彴鍒楄〃锛歸atchlist 浼樺厛锛宎nimeDb 鍏滃簳
+  // 平台列表：watchlist 优先，animeDb 兜底
   const platforms = (w.platforms && w.platforms.length) ? w.platforms : (a && a.platforms ? a.platforms : []);
   const primaryPlatform = platforms.find(p => p.isPrimary) || platforms[0] || null;
-  // 鐘舵€侊細dropped 淇濈暀鐢ㄦ埛鏍囪锛屽叾浣欏缁堟寜鏈€鏂版暟鎹噸鏂拌绠?
+  // 状态：dropped 保留用户标记，其余始终按最新数据重新计算
   const status = w.status === 'dropped' ? 'dropped' : getMylistStatus(w);
-  // 鍓╀綑闆嗘暟 = latestEpisode - watchedEpisode
+  // 剩余集数 = latestEpisode - watchedEpisode
   const remaining = status === 'finished' ? 0 : Math.max(0, latestEpisode - w.watchedEpisode);
-  // 鏇存柊棰戠巼锛氫紭鍏堢敤鐣墽搴?anime 鐨?nextAirDate 瀹炴椂鎺ㄧ畻锛堜笌娣诲姞椤?browseCard 涓€鑷达級锛岃拷鐣嚜甯﹀€煎厹搴?
+  // 更新频率：优先用番剧库 anime 的 nextAirDate 实时推算（与添加页 browseCard 一致），追番自带值兜底
   const updateFrequency = (a ? computeUpdateFrequency(a) : '') || w.updateFrequency || '';
-  const catLabels = { anime: '鐣墽', cdrama: '鍥戒骇鍓?, kdrama: '闊╁墽', jdrama: '鏃ュ墽' };
+  const catLabels = { anime: '番剧', cdrama: '国产剧', kdrama: '韩剧', jdrama: '日剧' };
   const acat = (a && a.category) || 'anime';
   return {
     ...w,
@@ -2578,17 +2578,17 @@ function enrichWatchlistItem(w) {
     platform: primaryPlatform ? primaryPlatform.platform : '',
     platformName: primaryPlatform ? (primaryPlatform.name || primaryPlatform.platform) : '',
     updateFrequency,
-    // 灏侀潰鏄惁鍙敤
+    // 封面是否可用
     hasCover: !!(a && a.cover && (a.cover.startsWith('http') || a.cover.startsWith('/api/img') || a.cover.startsWith('data:'))),
   };
 }
 
-// ======================== RENDER UPDATES锛堣拷鐣垪琛ㄤ腑鏈€鏂伴泦鏁版湁鏇存柊鐨勶級 ========================
+// ======================== RENDER UPDATES（追番列表中最新集数有更新的） ========================
 function renderUpdates() {
   const list = document.getElementById('updatesList');
 
   if (watchlist.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">馃摥</div><p class="text">杩樻病鏈夎拷鐣憿~</p><p class="sub">鍏堝幓娣诲姞鍓ч泦鍚?馃挄</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有追番呢~</p><p class="sub">先去添加剧集吧 💕</p></div>';
     return;
   }
 
@@ -2602,7 +2602,7 @@ function renderUpdates() {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  // 杩囨护锛氳拷鐣垪琛ㄤ腑闈炲純鐣殑銆佹渶鏂伴泦鏁板湪鏄ㄦ棩鎴栦粖鏃ユ洿鏂扮殑锛堥€氳繃 nextAirDate 鍒ゆ柇鏈€鏂颁竴闆嗙殑鎾嚭鏃ワ級
+  // 过滤：追番列表中非弃番的、最新集数在昨日或今日更新的（通过 nextAirDate 判断最新一集的播出日）
   const updated = enriched.filter(it => {
     if (it.status === 'dropped') return false;
     const a = resolveAnime(it.tmdbId);
@@ -2612,13 +2612,13 @@ function renderUpdates() {
   });
 
   if (updated.length === 0) {
-    document.getElementById('updateTabToday').textContent = '馃啎 浠婃棩鏇存柊';
-    document.getElementById('updateTabYesterday').textContent = '馃搮 鏄ㄦ棩鏇存柊';
-    list.innerHTML = '<div class="empty-state"><div class="icon">馃摥</div><p class="text">鏄ㄦ棩鍜屼粖鏃ユ病鏈夋洿鏂扮殑杩界暘</p><p class="sub">绛夌暘鍓ф洿鏂板悗鍐嶆潵鐪嬬湅鍚</p></div>';
+    document.getElementById('updateTabToday').textContent = '🆕 今日更新';
+    document.getElementById('updateTabYesterday').textContent = '📅 昨日更新';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">昨日和今日没有更新的追番</p><p class="sub">等番剧更新后再来看看吧~</p></div>';
     return;
   }
 
-  // 鎺掑簭锛氫粖鏃ユ洿鏂板湪鍓嶏紝鍐嶆寜鍓у悕鎺掑簭
+  // 排序：今日更新在前，再按剧名排序
   updated.sort((a, b) => {
     const aIsToday = (() => { const aa = resolveAnime(a.tmdbId); if (!aa || !aa.nextAirDate) return false; return new Date(aa.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
     const bIsToday = (() => { const ba = resolveAnime(b.tmdbId); if (!ba || !ba.nextAirDate) return false; return new Date(ba.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
@@ -2627,7 +2627,7 @@ function renderUpdates() {
     return (a.name || '').localeCompare(b.name || '', 'zh');
   });
 
-  // 鍒嗙粍锛氫粖鏃ユ洿鏂?/ 鏄ㄦ棩鏇存柊
+  // 分组：今日更新 / 昨日更新
   const todayItems = [];
   const yesterdayItems = [];
   updated.forEach(it => {
@@ -2640,11 +2640,11 @@ function renderUpdates() {
     }
   });
 
-  // 鏇存柊瀛愭爣绛句笂鐨勬暟閲?
-  document.getElementById('updateTabToday').textContent = '馃啎 浠婃棩鏇存柊' + (todayItems.length > 0 ? ' (' + todayItems.length + ')' : '');
-  document.getElementById('updateTabYesterday').textContent = '馃搮 鏄ㄦ棩鏇存柊' + (yesterdayItems.length > 0 ? ' (' + yesterdayItems.length + ')' : '');
+  // 更新子标签上的数量
+  document.getElementById('updateTabToday').textContent = '🆕 今日更新' + (todayItems.length > 0 ? ' (' + todayItems.length + ')' : '');
+  document.getElementById('updateTabYesterday').textContent = '📅 昨日更新' + (yesterdayItems.length > 0 ? ' (' + yesterdayItems.length + ')' : '');
 
-  // 鏍煎紡鍖栨棩鏈熶负 MM/DD
+  // 格式化日期为 MM/DD
   const fmtDate = dateStr => {
     if (!dateStr) return '';
     const d = new Date(dateStr + 'T00:00:00');
@@ -2653,11 +2653,11 @@ function renderUpdates() {
 
   const buildUpdateCard = (it) => {
     const { tmdbId, name, cover, status, hasCover, latestEpisode, latestSeason } = it;
-    const statusText = MYLIST_STATUS_TEXT[status] || '杩界暘涓?;
+    const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
     const seasonMulti = latestSeason > 1;
     const latestLabel = seasonMulti
-      ? 'S' + latestSeason + '路E' + latestEpisode
-      : (latestEpisode ? '绗? + latestEpisode + '闆? : '?');
+      ? 'S' + latestSeason + '·E' + latestEpisode
+      : (latestEpisode ? '第' + latestEpisode + '集' : '?');
     const a = resolveAnime(tmdbId);
     const updateDateStr = a && a.nextAirDate ? fmtDate(a.nextAirDate) : '';
 
@@ -2675,18 +2675,18 @@ function renderUpdates() {
       '<span class="name-text">' + esc(name || '') + '</span>' +
       '</div>' +
       '<div class="anime-episode-info">' +
-      '<span class="ep-current">鏇存柊鑷? + latestLabel + '</span>' +
+      '<span class="ep-current">更新至' + latestLabel + '</span>' +
       '</div>' +
       '</div>' +
       (updateDateStr ? '<div class="update-time">' + updateDateStr + '</div>' : '') +
       '</div>';
   };
 
-  // 鏍规嵁褰撳墠閫変腑鐨勫瓙 tab 鍙睍绀哄搴斿垎缁?
+  // 根据当前选中的子 tab 只展示对应分组
   const activeItems = currentUpdateFilter === 'today' ? todayItems : yesterdayItems;
   if (activeItems.length === 0) {
-    const emptyMsg = currentUpdateFilter === 'today' ? '浠婂ぉ娌℃湁鏇存柊鐨勮拷鐣? : '鏄ㄥぉ娌℃湁鏇存柊鐨勮拷鐣?;
-    list.innerHTML = '<div class="empty-state"><div class="icon">馃摥</div><p class="text">' + emptyMsg + '</p><p class="sub">鍒囨崲鏍囩鐪嬬湅鍙︿竴澶╁惂~</p></div>';
+    const emptyMsg = currentUpdateFilter === 'today' ? '今天没有更新的追番' : '昨天没有更新的追番';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">' + emptyMsg + '</p><p class="sub">切换标签看看另一天吧~</p></div>';
     return;
   }
   list.innerHTML = activeItems.map(buildUpdateCard).join('');
@@ -2697,15 +2697,15 @@ function renderMylist() {
   const list = document.getElementById('mylistList');
 
   if (watchlist.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">馃摥</div><p class="text">杩樻病鏈夌暘鍓у憿~</p><p class="sub">鐐瑰彸涓婅 + 娣诲姞鐣墽鍚?馃挄</p></div>';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有番剧呢~</p><p class="sub">点右上角 + 添加番剧吧 💕</p></div>';
     return;
   }
 
-  // enrich + 鐘舵€佺瓫閫?+ 鎼滅储杩囨护
+  // enrich + 状态筛选 + 搜索过滤
   const enriched = watchlist.map(enrichWatchlistItem);
-  // 鑷剤锛氳嫢鏈绾犳浜嗛敊鐨?tmdbId锛屽啓鍥?localStorage锛堜笅娆＄函 id 鍖归厤锛屼笉鍐嶉潬鍚嶅瓧鍏滃簳锛?
+  // 自愈：若本次纠正了错的 tmdbId，写回 localStorage（下次纯 id 匹配，不再靠名字兜底）
   if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlistLocal(); }
-  // 鍏ㄩ儴 = 鎺掗櫎 dropped 鍗冲彲锛坮aising + caughtup + finished 鍏ㄦ樉绀猴紝涓庛€屽凡杩藉畬銆嶆爣绛惧舰鎴愬寘鍚叧绯伙級
+  // 全部 = 排除 dropped 即可（raising + caughtup + finished 全显示，与「已追完」标签形成包含关系）
   let filtered = enriched;
   if (currentMylistFilter === 'all') {
     filtered = filtered.filter(it => it.status !== 'dropped');
@@ -2718,56 +2718,56 @@ function renderMylist() {
   if (q) {
     filtered = filtered.filter(it => (it.name || '').toLowerCase().includes(q));
   }
-  // 鎺掑簭锛氳拷鐣腑(raising) 鍦ㄥ墠锛屽凡杩藉畬(caughtup/finished) 鍦ㄥ悗
+  // 排序：追番中(raising) 在前，已追完(caughtup/finished) 在后
   const _statusOrder = { raising: 0, caughtup: 1, finished: 1, dropped: 2, unknown: 0 };
   filtered.sort((a, b) => (_statusOrder[a.status] ?? 0) - (_statusOrder[b.status] ?? 0));
   if (filtered.length === 0) {
-    const emptyMsg = q ? `娌℃湁鎵惧埌鍖呭惈銆?{q}銆嶇殑杩界暘` : '璇ュ垎绫讳笅娌℃湁杩界暘';
-    list.innerHTML = '<div class="empty-state"><div class="icon">馃摥</div><p class="text">' + emptyMsg + '</p></div>';
+    const emptyMsg = q ? `没有找到包含「${q}」的追番` : '该分类下没有追番';
+    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">' + emptyMsg + '</p></div>';
     return;
   }
 
   list.innerHTML = filtered.map(it => {
     const { tmdbId, name, cover, status, hasCover, currentEpisode, latestEpisode, currentSeason, latestSeason, remaining, platforms, platform, platformName, updateFrequency } = it;
-    const statusText = MYLIST_STATUS_TEXT[status] || '杩界暘涓?;
-    // 澶氬 vs 鍗曞
+    const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+    // 多季 vs 单季
     const seasonMulti = latestSeason > 1 || currentSeason > 1;
-    // "杩借嚦绗琘闆? / "鏇存柊鑷崇Y闆?
+    // "追至第Y集" / "更新至第Y集"
     const currentLabel = seasonMulti
-      ? `S${currentSeason}路E${currentEpisode}`
-      : (currentEpisode ? `绗?{currentEpisode}闆哷 : '-');
+      ? `S${currentSeason}·E${currentEpisode}`
+      : (currentEpisode ? `第${currentEpisode}集` : '-');
     const latestLabel = seasonMulti
-      ? `S${latestSeason}路E${latestEpisode}`
-      : (latestEpisode ? `绗?{latestEpisode}闆哷 : '?');
-    // 骞冲彴 tag: 鐢?inline SVG 娓叉煋 logo锛堟浛浠ｅ師鏉ョ殑鑹插潡瀛楃锛?
+      ? `S${latestSeason}·E${latestEpisode}`
+      : (latestEpisode ? `第${latestEpisode}集` : '?');
+    // 平台 tag: 用 inline SVG 渲染 logo（替代原来的色块字符）
     const platBrand = platform ? PLATFORM_BRAND[platform] : null;
     const platLogo = platBrand ? platBrand.svg : PLATFORM_FALLBACK_SVG;
     const platShort = platBrand ? platBrand.short : (platform ? platform.charAt(0).toUpperCase() : '');
     const platColor = platBrand ? platBrand.color : '#8B7AA8';
-    const platLabel = platBrand ? platBrand.name : (platformName || platform || '鍏朵粬');
-    // 涓诲钩鍙般€屽幓鐪嬨€嶆寜閽紙涓绘搷浣滐紝缃《 + 甯﹀瓨闆嗚鏍囷級
+    const platLabel = platBrand ? platBrand.name : (platformName || platform || '其他');
+    // 主平台「去看」按钮（主操作，置顶 + 带存集角标）
     let goWatchBtn = '';
     if (platforms.length > 0) {
       const primaryPlat = platforms.find(p => p.isPrimary) || platforms[0];
       const pu = (primaryPlat.url || '').trim();
       const goUrl = pu || (PLATFORM_SEARCH_URL[primaryPlat.platform] ? PLATFORM_SEARCH_URL[primaryPlat.platform] + encodeURIComponent(name || '') : '');
       if (goUrl) {
-        const goLabel = pu ? '鍘荤湅' : '鎼滅湅';
+        const goLabel = pu ? '去看' : '搜看';
         const showBadge = (remaining > 0 && status !== 'dropped');
         goWatchBtn = `<div class="btn-go-wrap">
-          <button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="鍓嶅線${esc(platLabel)}瑙傜湅">${goLabel}</button>
+          <button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button>
           ${showBadge ? `<span class="go-badge">${remaining}</span>` : ''}
         </div>`;
       }
     }
-    // 鍙充晶鎿嶄綔锛歳aising 鏄剧ず"杩芥洿"锛堟鎿嶄綔锛屾棤瑙掓爣锛夛紱dropped 鏄剧ず"宸插純鐣?锛沜aughtup/finished 鏄剧ず"宸茶拷瀹?
+    // 右侧操作：raising 显示"追更"（次操作，无角标）；dropped 显示"已弃番"；caughtup/finished 显示"已追完"
     let actionHtml = '';
     if (status === 'raising') {
-      actionHtml = `<button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="鏇存柊杩涘害"><span class="catch-label">杩芥洿</span></button>`;
+      actionHtml = `<button class="btn-catch" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="更新进度"><span class="catch-label">追更</span></button>`;
     } else if (status === 'dropped') {
-      actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="鎿嶄綔">宸插純鐣?/button>`;
+      actionHtml = `<button class="btn-status dropped" onclick="event.stopPropagation();openDetail('${tmdbId}')" title="操作">已弃番</button>`;
     } else if (status === 'caughtup' || status === 'finished') {
-      actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="鏌ョ湅杩涘害">宸茶拷瀹?/button>`;
+      actionHtml = `<button class="btn-status caughtup" onclick="event.stopPropagation();openProgress('${tmdbId}')" title="查看进度">已追完</button>`;
     }
     return `<div class="wl-item" onclick="openDetail('${tmdbId}')">
       <div class="card-deco"></div>
@@ -2788,12 +2788,12 @@ function renderMylist() {
                 <span class="platform-icon platform-icon-svg" aria-label="${esc(platLabel)}" title="${esc(platLabel)}">${platLogo}</span>
                 <span class="platform-name">${esc(platLabel)}</span>
               </span>`
-            : `<span class="platform-empty">鏆傛棤骞冲彴</span>`}
+            : `<span class="platform-empty">暂无平台</span>`}
           ${updateFrequency ? `<span class="anime-schedule">${esc(updateFrequency)}</span>` : ''}
         </div>
         <div class="anime-episode-info">
-          <span><span class="ep-current">杩借嚦${currentLabel || '-'}</span></span>
-          <span>鏇存柊鑷?{latestLabel}</span>
+          <span><span class="ep-current">追至${currentLabel || '-'}</span></span>
+          <span>更新至${latestLabel}</span>
         </div>
       </div>
       <div class="anime-actions">${goWatchBtn}${actionHtml}</div>
@@ -2802,14 +2802,14 @@ function renderMylist() {
 }
 
 // ======================== PERSIST (LOCAL) ========================
-// 鐢ㄦ埛鍗曟潯鎿嶄綔锛堝姞/鍒?鏀硅繘搴?寮冪暘/缂栬緫骞冲彴绛夛級淇濆瓨锛氭湰鏈烘寔涔呭寲 + 绔嬪嵆涓婁紶 Gitee锛?
-// 涓婁紶鏈熼棿鏁撮〉鍔犺浇鍔ㄧ敾閿佸畾锛岀粨鏋滆繑鍥炲墠涓嶅彲缁х画鎿嶄綔銆?
+// 用户单条操作（加/删/改进度/弃番/编辑平台等）保存：本机持久化 + 立即上传 Gitee，
+// 上传期间整页加载动画锁定，结果返回前不可继续操作。
 function saveWatchlist() {
   saveWatchlistLocal();
   pushWatchlist(true);
 }
-// 鎸夊悕瀛楀幓閲嶈拷鐣垪琛紙鐣墽搴撳伓鏈夊悓鍚嶄笉鍚?tmdbId 鐨勬潯鐩紝閬垮厤"鎴戠殑鍒楄〃"鍑虹幇閲嶅鐣墽锛?
-// 鍚屽悕澶氭潯鏃朵繚鐣欙細鍦ㄥ簱鍐?鏈夋纭?tmdbId) 涓?latestEpisode 鏇撮珮鐨勪竴鏉?
+// 按名字去重追番列表（番剧库偶有同名不同 tmdbId 的条目，避免"我的列表"出现重复番剧）
+// 同名多条时保留：在库内(有正确 tmdbId) 且 latestEpisode 更高的一条
 function dedupeWatchlistByName() {
   if (watchlist.length < 2) return false;
   const seen = new Set();
@@ -2834,44 +2834,44 @@ function saveSettings() {
 }
 
 // ======================== CLOUD WATCHLIST SYNC (Gitee via CF proxy) ========================
-// 娴忚鍣ㄥ悓婧愯皟鐢?/api/proxy锛岀敱 Cloudflare 杈圭紭杞彂鍒?Gitee API锛堥伩寮€ CORS锛屽墠绔笉淇濆瓨浠讳綍 Token锛夈€?
-// Gitee token / 浠撳簱鍐欏湪 Cloudflare Pages 鐜鍙橀噺锛屼笉杩涘墠绔簮鐮併€?
+// 浏览器同源调用 /api/proxy，由 Cloudflare 边缘转发到 Gitee API（避开 CORS，前端不保存任何 Token）。
+// Gitee token / 仓库写在 Cloudflare Pages 环境变量，不进前端源码。
 const GITEE_WATCHLIST_PATH = 'data/watchlist.json';
 const PROXY_BASE = '/api/proxy';
 
 let _syncTimer = null;
 
-// 浠?Gitee 鎷夊彇鏈€鏂拌拷鍓ц褰曪紱浠ｇ悊涓嶅彲鐢ㄦ椂鍥為€€鍒扮珯鐐瑰悓婧愬揩鐓э紙姣忔棩宸ヤ綔娴侀暅鍍忕殑 data/watchlist.json锛?
+// 从 Gitee 拉取最新追剧记录；代理不可用时回退到站点同源快照（每日工作流镜像的 data/watchlist.json）
 async function pullWatchlist(showMsg = false) {
   try {
     const resp = await fetch(`${PROXY_BASE}?path=${encodeURIComponent(GITEE_WATCHLIST_PATH)}`, { cache: 'no-store' });
-    if (resp.status === 404) { if (showMsg) showToast('鈽侊笍 浜戠杩樻病鏈夎拷鍓ц褰?); return; }
+    if (resp.status === 404) { if (showMsg) showToast('☁️ 云端还没有追剧记录'); return; }
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const text = await resp.text();
     const data = text ? JSON.parse(text) : [];
     if (!Array.isArray(data)) return;
     mergeWatchlist(data);
     markSynced();
-    if (showMsg) showToast(`馃攧 宸插埛鏂帮紝褰撳墠 ${watchlist.length} 鏉¤拷鍓ц褰昤);
+    if (showMsg) showToast(`🔄 已刷新，当前 ${watchlist.length} 条追剧记录`);
   } catch (e) {
     if (await tryFallbackSnapshot(showMsg)) return;
-    if (showMsg) showToast('鉂?浜戠鍒锋柊澶辫触锛屽凡淇濈暀鏈満鏁版嵁');
+    if (showMsg) showToast('❌ 云端刷新失败，已保留本机数据');
   }
 }
 
-// 淇濆瓨杩藉墽璁板綍鍒?Gitee锛堢粡浠ｇ悊锛?
-let _uploadingToGitee = false;   // 涓婁紶 Gitee 杩涜涓爣蹇楋紙闃查噸鍏?+ 鏁撮〉閿佸畾锛?
-// 鏁撮〉閿佸畾閬僵寮€鍏筹紙涓婁紶 Gitee 鏈熼棿绂佹缁х画鎿嶄綔锛?
+// 保存追剧记录到 Gitee（经代理）
+let _uploadingToGitee = false;   // 上传 Gitee 进行中标志（防重入 + 整页锁定）
+// 整页锁定遮罩开关（上传 Gitee 期间禁止继续操作）
 function setUploadLock(on) {
   const overlay = document.getElementById('uploadBlockOverlay');
   if (overlay) overlay.classList.toggle('hidden', !on);
 }
 
-// 涓婁紶鏈満杩界暘鍒楄〃鍒?Gitee锛堢粡 /api/proxy锛夈€?
-// block=true锛堥粯璁わ級锛氭暣椤靛姞杞藉姩鐢?+ 閿佸畾锛岀粨鏋滆繑鍥炲墠涓嶅彲鎿嶄綔锛涢槻閲嶅叆銆?
+// 上传本机追番列表到 Gitee（经 /api/proxy）。
+// block=true（默认）：整页加载动画 + 锁定，结果返回前不可操作；防重入。
 async function pushWatchlist(block = true) {
   if (block) {
-    if (_uploadingToGitee) return;   // 涓婁竴娆′笂浼犳湭缁撴潫锛屽拷鐣ラ噸澶嶈Е鍙?
+    if (_uploadingToGitee) return;   // 上一次上传未结束，忽略重复触发
     _uploadingToGitee = true;
     setUploadLock(true);
   }
@@ -2891,30 +2891,30 @@ async function pushWatchlist(block = true) {
       const records = (typeof rj.records === 'number') ? rj.records : watchlist.length;
       const kb = rj.bytes ? (rj.bytes / 1024).toFixed(1) + 'KB' : '';
       const sub = [
-        `${repo}${branch ? ' 路 ' + branch : ''}`,
-        `${records} 鏉¤拷鍓ц褰昤,
-        sha ? `鎻愪氦 ${sha}` : '',
+        `${repo}${branch ? ' · ' + branch : ''}`,
+        `${records} 条追剧记录`,
+        sha ? `提交 ${sha}` : '',
         kb,
-      ].filter(Boolean).join('   路   ');
-      showSuccessToast('鉁?宸叉垚鍔熶繚瀛樺埌 Gitee', sub);
+      ].filter(Boolean).join('   ·   ');
+      showSuccessToast('✅ 已成功保存到 Gitee', sub);
     } else {
       const err = await resp.json().catch(() => ({}));
       console.warn('push watchlist failed', err);
       const detail = (err && err.error) ? String(err.error).slice(0, 32) : `HTTP ${resp.status}`;
-      showToast(`鈿狅笍 鍚屾 Gitee 澶辫触锛?{detail}锛夛紝宸蹭繚鐣欐湰鏈篳);
+      showToast(`⚠️ 同步 Gitee 失败（${detail}），已保留本机`);
     }
   } catch (e) {
     console.warn('push watchlist error', e);
-    showToast('鈿狅笍 鍚屾 Gitee 澶辫触锛堢綉缁滐級锛屽凡淇濈暀鏈満');
+    showToast('⚠️ 同步 Gitee 失败（网络），已保留本机');
   } finally {
     if (block) { setUploadLock(false); _uploadingToGitee = false; }
   }
 }
 
-// 鐢ㄤ簯绔?蹇収鏁版嵁鏇挎崲鏈満杩界暘鍒楄〃锛堟寜 tmdbId 鍘婚噸锛夛紱浠呮湰鏈烘寔涔呭寲锛屼笉鍥炴帹閬垮厤鍥炵幆
+// 用云端/快照数据替换本机追番列表（按 tmdbId 去重）；仅本机持久化，不回推避免回环
 function mergeWatchlist(data) {
   if (!Array.isArray(data)) return;
-  // 瀹夊叏缃戯細浜戠杩斿洖绌烘暟缁勬椂涓嶈鐩栵紙閬垮厤浜戠绌烘暟鎹竻绌烘湰鏈猴級銆?
+  // 安全网：云端返回空数组时不覆盖（避免云端空数据清空本机）。
   if (data.length === 0) return;
   const map = new Map();
   data.forEach(cw => { if (cw && cw.tmdbId != null) map.set(String(cw.tmdbId), cw); });
@@ -2924,7 +2924,7 @@ function mergeWatchlist(data) {
   renderMylist();
 }
 
-// 浠ｇ悊涓嶅彲鐢ㄦ椂锛屽皾璇曠敤绔欑偣鍚屾簮蹇収锛堟瘡鏃ュ伐浣滄祦浠?Gitee 闀滃儚锛?
+// 代理不可用时，尝试用站点同源快照（每日工作流从 Gitee 镜像）
 async function tryFallbackSnapshot(showMsg) {
   try {
     const fb = await fetch('./data/watchlist.json', { cache: 'no-store' });
@@ -2932,44 +2932,44 @@ async function tryFallbackSnapshot(showMsg) {
     const data = await fb.json();
     if (!Array.isArray(data) || !data.length) return false;
     mergeWatchlist(data);
-    if (showMsg) showToast(`馃攧 宸茬敤绔欑偣蹇収鍒锋柊锛?{watchlist.length} 鏉★級`);
+    if (showMsg) showToast(`🔄 已用站点快照刷新（${watchlist.length} 条）`);
     return true;
   } catch (_) { return false; }
 }
 
-// 璁板綍涓€娆℃垚鍔熷悓姝ョ殑鏃堕棿鎴筹紙渚涖€屽悓姝ヤ腑蹇冦€嶅睍绀猴級
+// 记录一次成功同步的时间戳（供「同步中心」展示）
 function markSynced() {
   settings.lastSyncAt = new Date().toISOString();
   saveSettings();
   updateSyncStatus();
 }
 
-// 鏈満淇濆瓨鍚?3 绉掕嚜鍔ㄥ悓姝ュ埌浜戠
+// 本机保存后 3 秒自动同步到云端
 function scheduleSync() {
   clearTimeout(_syncTimer);
   _syncTimer = setTimeout(() => pushWatchlist(true), 3000);
 }
 
-// 浠呮湰鏈烘寔涔呭寲锛堜笉瑙﹀彂缃戠粶锛?
+// 仅本机持久化（不触发网络）
 function saveWatchlistLocal() {
   localStorage.setItem('anime_coze_watchlist', JSON.stringify(watchlist));
 }
 
-// 瀵煎嚭銆岃拷鐣褰曘€嶄负 JSON 鏂囨湰锛堥€傞厤鎵嬫満绔細涓嶄緷璧栨枃浠讹紝鐩存帴澶嶅埗锛?
+// 导出「追番记录」为 JSON 文本（适配手机端：不依赖文件，直接复制）
 function exportConfig() {
   const text = JSON.stringify(watchlist, null, 2);
   const ta = document.getElementById('cfgTextArea');
   if (ta) ta.value = text;
   const cp = document.getElementById('copyCfgBtn');
   if (cp) cp.style.display = '';
-  showToast(`馃摛 宸茬敓鎴愬浠斤紙${watchlist.length} 閮級锛屽彲鐐广€屽鍒躲€嶄繚瀛榒);
+  showToast(`📤 已生成备份（${watchlist.length} 部），可点「复制」保存`);
 }
 
-// 澶嶅埗閰嶇疆鏂囨湰鍒板壀璐存澘
+// 复制配置文本到剪贴板
 function copyConfigText() {
   const ta = document.getElementById('cfgTextArea');
   if (!ta || !ta.value) return;
-  const done = () => showToast('馃搵 宸插鍒堕厤缃枃鏈?);
+  const done = () => showToast('📋 已复制配置文本');
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(ta.value).then(done).catch(() => fallbackCopy(ta, done));
   } else {
@@ -2978,57 +2978,57 @@ function copyConfigText() {
 }
 function fallbackCopy(ta, done) {
   ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
-  try { document.execCommand('copy'); done(); } catch (e) { showToast('鉂?澶嶅埗澶辫触锛岃鎵嬪姩閫夋嫨'); }
+  try { document.execCommand('copy'); done(); } catch (e) { showToast('❌ 复制失败，请手动选择'); }
   if (window.getSelection) window.getSelection().removeAllRanges();
 }
 
-// 浠?JSON 鏂囨湰瀵煎叆銆岃拷鐣褰曘€嶅苟鎸夊墽闆嗘櫤鑳藉悎骞讹紝闅忓悗涓婁紶浜戠锛岄€傞厤鎵嬫満绔?
+// 从 JSON 文本导入「追番记录」并按剧集智能合并，随后上传云端，适配手机端
 function importConfigFromText() {
   const ta = document.getElementById('cfgTextArea');
   const raw = (ta && ta.value || '').trim();
-  if (!raw) { showToast('鉂?璇峰厛绮樿创杩界暘澶囦唤 JSON'); return; }
+  if (!raw) { showToast('❌ 请先粘贴追番备份 JSON'); return; }
   let data;
   try {
     data = JSON.parse(raw);
   } catch (err) {
-    showToast('鉂?澶囦唤 JSON 鏃犳晥'); return;
+    showToast('❌ 备份 JSON 无效'); return;
   }
-  if (!Array.isArray(data)) { showToast('鉂?杩欎笉鏄拷鐣浠斤紙搴斾负 JSON 鏁扮粍锛?); return; }
+  if (!Array.isArray(data)) { showToast('❌ 这不是追番备份（应为 JSON 数组）'); return; }
   const before = watchlist.length;
-  mergeWatchlist(data);          // 鎸?tmdbId/鍚嶅瓧鍚堝苟锛屼笉瑕嗙洊宸叉湁璁板綍
+  mergeWatchlist(data);          // 按 tmdbId/名字合并，不覆盖已有记录
   updateSyncStatus();
-  showToast(`鉁?宸插鍏ュ苟鍚堝苟锛?{before} 鈫?${watchlist.length} 閮級`);
-  scheduleSync();               // 鍚堝苟缁撴灉鑷姩鍚屾鍥炰簯绔?
+  showToast(`✅ 已导入并合并（${before} → ${watchlist.length} 部）`);
+  scheduleSync();               // 合并结果自动同步回云端
 }
 
 // ======================== REFRESH ========================
 function refreshWatchlist() {
-  // 鏁撮〉鍒锋柊锛氱瓑浠蜂簬娴忚鍣?F5 / 閲嶆柊鍔犺浇锛屼繚璇佽拷鐣垪琛ㄤ笌鐣墽搴撻兘浠庢渶鏂伴儴缃查噸鏂板姞杞?
+  // 整页刷新：等价于浏览器 F5 / 重新加载，保证追番列表与番剧库都从最新部署重新加载
   location.reload();
 }
 
-// ======================== UPLOAD (鍏滃簳) ========================
-// 鎵嬪姩鎶婃湰鏈烘渶鏂拌拷鍓у垪琛ㄤ笂浼犲埌 Gitee锛堢粡 /api/proxy锛夈€?
-// 鐢ㄤ簬鑷姩 3 绉掑悓姝ユ湭瑙﹀彂銆佹垨鎯崇珛鍒诲己鍒惰鐩栦簯绔椂鐨勫厹搴曘€?
+// ======================== UPLOAD (兜底) ========================
+// 手动把本机最新追剧列表上传到 Gitee（经 /api/proxy）。
+// 用于自动 3 秒同步未触发、或想立刻强制覆盖云端时的兜底。
 async function uploadWatchlist() {
-  if (_uploadingToGitee) return;            // 宸叉湁涓婁紶鍦ㄨ繘琛岋紝閬垮厤閲嶅鐐瑰嚮
+  if (_uploadingToGitee) return;            // 已有上传在进行，避免重复点击
   const btn = document.getElementById('uploadBtn');
   const prevText = btn ? btn.textContent : '';
-  if (btn) { btn.disabled = true; btn.textContent = '鈴?涓婁紶涓?; }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 上传中'; }
   try {
-    await pushWatchlist(true);              // 鍐呴儴澶勭悊鏁撮〉閿佸畾/瑙ｉ攣 + 鎴愬姛澶辫触 toast
+    await pushWatchlist(true);              // 内部处理整页锁定/解锁 + 成功失败 toast
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = prevText; }
   }
 }
 
 // ======================== MODAL HELPERS ========================
-// 婊氬姩閿佹敼涓?娲剧敓鐘舵€?锛氬彧瑕佹湁浠绘剰寮圭獥鍙灏遍攣锛屽叧闂换涓€涓兘鍩轰簬瀹為檯鐘舵€佽繕鍘燂紝
-// 閬垮厤宓屽寮圭獥锛堝璇︽儏鈫掕繘搴︼級鍏抽棴鏃惰鎶婃粴鍔ㄩ攣姘镐箙鐣欎笅瀵艰嚧椤甸潰鏃犳硶婊戝姩銆?
+// 滚动锁改为"派生状态"：只要有任意弹窗可见就锁，关闭任一个都基于实际状态还原，
+// 避免嵌套弹窗（如详情→进度）关闭时误把滚动锁永久留下导致页面无法滑动。
 let _scrollLockY = 0;
 function syncBodyScroll() {
-  // 鍙椤甸潰涓婂瓨鍦ㄤ换鎰忋€屽彲瑙併€嶇殑寮圭獥灞傚氨閿佷綇鑳屾櫙婊氬姩锛?
-  // 涓嶅啀閫愪釜鍒椾妇寮圭獥 id锛岄伩鍏嶆柊澧炲脊绐楋紙platformPopup / editPlatformsModal 绛夛級婕忛攣瀵艰嚧鑳屾櫙浠嶅彲婊戝姩銆?
+  // 只要页面上存在任意「可见」的弹窗层就锁住背景滚动；
+  // 不再逐个列举弹窗 id，避免新增弹窗（platformPopup / editPlatformsModal 等）漏锁导致背景仍可滑动。
   const anyOpen = !!document.querySelector('.modal-overlay:not(.hidden)');
   if (anyOpen) {
     if (!document.body.classList.contains('modal-locked')) {
@@ -3042,8 +3042,8 @@ function syncBodyScroll() {
     window.scrollTo(0, _scrollLockY);
   }
 }
-// 鑷姩鍚屾锛氫换鎰忓脊绐?append / remove 鎴栧垏鎹?.hidden 绫绘椂閲嶆柊璁＄畻婊氬姩閿侊紝
-// 褰诲簳瑙勯伩銆屾紡璋?syncBodyScroll銆嶅鑷寸殑鑳屾櫙鍙粦锛堟悳绱㈠脊绐楁浘鍥犵洿鎺ュ垏 .hidden 绫昏€屾紡閿侊級銆?
+// 自动同步：任意弹窗 append / remove 或切换 .hidden 类时重新计算滚动锁，
+// 彻底规避「漏调 syncBodyScroll」导致的背景可滑（搜索弹窗曾因直接切 .hidden 类而漏锁）。
 const _scrollLockObserver = new MutationObserver(syncBodyScroll);
 _scrollLockObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 function closeProgressModal() {
