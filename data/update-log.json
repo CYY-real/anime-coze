@@ -529,5 +529,13 @@
       "latestSeason": 1,
       "latestEpisode": 150
     }
+  ],
+  "2026-07-17": [
+    {
+      "tmdbId": "124003",
+      "name": "完美世界",
+      "latestSeason": 1,
+      "latestEpisode": 278
+    }
   ]
 }
