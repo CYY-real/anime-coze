@@ -479,7 +479,7 @@
       "tmdbId": "291392",
       "name": "野狗骨头",
       "latestSeason": 1,
-      "latestEpisode": 19
+      "latestEpisode": 21
     },
     {
       "tmdbId": "297438",
@@ -492,6 +492,18 @@
       "name": "给你梦想",
       "latestSeason": 1,
       "latestEpisode": 2
+    },
+    {
+      "tmdbId": "259231",
+      "name": "斩神之凡尘神域",
+      "latestSeason": 2,
+      "latestEpisode": 6
+    },
+    {
+      "tmdbId": "286506",
+      "name": "百花杀",
+      "latestSeason": 1,
+      "latestEpisode": 16
     }
   ]
 }
