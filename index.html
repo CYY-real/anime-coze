@@ -1675,11 +1675,13 @@ function openAddModal() {
   document.getElementById('addSearchModal').classList.remove('hidden');
   document.getElementById('addSearchInput').value = '';
   document.getElementById('addSearchResults').innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p class="text">输入关键词搜索你要追的剧集</p></div>';
+  syncBodyScroll(); // 锁背景滚动，避免弹窗内滑动穿透到下方页面
   setTimeout(() => document.getElementById('addSearchInput').focus(), 200);
 }
 
 function closeAddModal() {
   document.getElementById('addSearchModal').classList.add('hidden');
+  syncBodyScroll(); // 还原背景滚动锁
 }
 
 function debounceAddSearch() {
@@ -2987,9 +2989,10 @@ function syncBodyScroll() {
     window.scrollTo(0, _scrollLockY);
   }
 }
-// 自动同步：任意弹窗 append / remove 时重新计算滚动锁，彻底规避「漏调 syncBodyScroll」导致的背景可滑。
+// 自动同步：任意弹窗 append / remove 或切换 .hidden 类时重新计算滚动锁，
+// 彻底规避「漏调 syncBodyScroll」导致的背景可滑（搜索弹窗曾因直接切 .hidden 类而漏锁）。
 const _scrollLockObserver = new MutationObserver(syncBodyScroll);
-_scrollLockObserver.observe(document.body, { childList: true });
+_scrollLockObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 function closeProgressModal() {
   const el = document.getElementById('progressModal');
   if (el) el.remove();
