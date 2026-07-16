@@ -504,6 +504,18 @@
       "name": "百花杀",
       "latestSeason": 1,
       "latestEpisode": 16
+    },
+    {
+      "tmdbId": "202977",
+      "name": "SBS 특집 다큐멘터리",
+      "latestSeason": 18,
+      "latestEpisode": 800
+    },
+    {
+      "tmdbId": "276567",
+      "name": "夫妻的博弈",
+      "latestSeason": 1,
+      "latestEpisode": 11
     }
   ]
 }
