@@ -46,7 +46,9 @@ async function giteePutJSON(relPath, content, sha) {
     const err = await resp.json().catch(() => ({}));
     throw new Error(`Gitee PUT ${relPath} 失败: HTTP ${resp.status} ${err.message || ''}`);
   }
-  return resp.json();
+  const result = await resp.json().catch(() => ({}));
+  const commitSha = result.commit && result.commit.sha ? result.commit.sha.slice(0, 7) : '-';
+  return { ok: true, commitSha, data: result };
 }
 
 // ---- 发通知 ----
@@ -194,8 +196,16 @@ async function main() {
   // 6) 更新 watchlist.json（推送 lastNotifiedEpisode 变化）
   if (sent) {
     try {
-      await giteePutJSON('watchlist.json', JSON.stringify(watchlist, null, 2), watchlistSha);
-      console.log(`✅ watchlist.json 已更新 (${updates.length} 条 lastNotifiedEpisode)`);
+      const r = await giteePutJSON('watchlist.json', JSON.stringify(watchlist, null, 2), watchlistSha);
+      console.log('');
+      console.log('────────────────────────────────────────────────────');
+      console.log('✅ 已成功更新到 Gitee');
+      console.log(`   • 仓库    : ${GITEE_OWNER}/${GITEE_REPO}  (分支 ${GITEE_BRANCH})`);
+      console.log(`   • 路径    : watchlist.json`);
+      console.log(`   • 更新条数: ${updates.length} 条 lastNotifiedEpisode`);
+      console.log(`   • 提交    : ${r.commitSha}`);
+      console.log(`   • 仓库地址: https://gitee.com/${GITEE_OWNER}/${GITEE_REPO}`);
+      console.log('────────────────────────────────────────────────────');
     } catch (e) {
       console.error(`❌ watchlist.json 更新失败: ${e.message}`);
     }
