@@ -63,7 +63,9 @@ function normalizeShow(detail, region) {
     latestSeason: lea && lea.season_number ? lea.season_number : totalSeasons,
     latestEpisode: lea && lea.episode_number ? lea.episode_number : 0,
     nextAirDate: nea && nea.air_date ? nea.air_date : '',
-    updateFrequency: nea ? '周更' : '已完结',
+    updateFrequency: (detail.number_of_seasons != null)
+      ? (nea ? '周更' : '已完结')
+      : '', // 搜索场景无详情数据时不瞎猜状态
     totalSeasons,
     seasonEpisodeCounts,
     totalEpisodes: detail.number_of_episodes || 0,
@@ -94,7 +96,9 @@ export async function onRequest(context) {
   if (!token) return json({ error: 'server misconfigured: missing TMDB_ACCESS_TOKEN' }, 500, cors);
 
   try {
-    // 1) 搜索（不过滤类型/地区，覆盖动画+真人、日/国/韩/美）
+    // 搜索（不过滤类型/地区，覆盖动画+真人、日/国/韩/美）
+    // 不再调详情 API：搜索返回的字段（name/poster/overview/origin_country 等）对添加剧集足够，
+    // 省去 8 次并行详情调用，让搜索从 ~3s 降到 ~400ms。
     const searchUrl = `${TMDB_BASE}/search/tv?query=${encodeURIComponent(q)}&language=zh-CN&page=${page}&include_adult=false`;
     const sResp = await fetch(searchUrl, {
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
@@ -104,24 +108,9 @@ export async function onRequest(context) {
     const results = (sJson.results || []).slice(0, 12);
     if (results.length === 0) return json({ results: [] }, 200, cors);
 
-    // 2) 并行抓取前 8 个详情，拿到最新集数(last_episode_to_air)，让"追更"有意义
-    const top = results.slice(0, 8);
-    const details = await Promise.all(
-      top.map((r) =>
-        fetch(`${TMDB_BASE}/tv/${r.id}?language=zh-CN`, {
-          headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
-        })
-          .then((res) => (res.ok ? res.json() : null))
-          .catch(() => null)
-      )
-    );
-    const detailById = {};
-    details.forEach((d) => { if (d && d.id) detailById[d.id] = d; });
-
     const out = results.map((r) => {
-      const d = detailById[r.id] || r;
-      const region = (d.origin_country && d.origin_country[0]) || (r.origin_country && r.origin_country[0]) || '';
-      return normalizeShow(d, region);
+      const region = (r.origin_country && r.origin_country[0]) || '';
+      return normalizeShow(r, region);
     });
     return json({ results: out, page, total_results: sJson.total_results || out.length }, 200, cors);
   } catch (e) {
