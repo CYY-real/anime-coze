@@ -208,7 +208,9 @@ async function fetchKbEpisode(vodId) {
     });
     if (!resp.ok) return null;
     const html = await resp.text();
-    const m = html.match(/更新至\s*(\d+)\s*集/);
+    // 取页面第一个出现的「更新至X集 / 全X集」：主状态永远排在底部推荐列表之前，
+    // 故首匹配即当前番本体的最新/总集数；推荐区里的其它番数字会被自然忽略。
+    const m = html.match(/(?:更新至|全)\s*(\d+)\s*集/);
     if (!m) return null;
     const ep = parseInt(m[1], 10);
     return Number.isFinite(ep) && ep > 0 ? ep : null;
