@@ -25,9 +25,6 @@ if (typeof fetch === 'undefined') {
 const TMDB_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 const TMDB_BASE = process.env.TMDB_BASE_URL || 'https://api.themoviedb.org/3';
 const LANG = process.env.TMDB_LANG || 'zh-CN';
-const REGIONS = (process.env.TMDB_REGIONS || 'JP,CN,KR').split(',').filter(Boolean);
-const GENRE_ANIMATION = 16;
-const PAGES = parseInt(process.env.TMDB_PAGES) || 2;
 
 // 可选：配置了 GITEE_* 环境变量时，额外镜像一份到 Gitee（前端读取的是 GitHub 同源 data/anime.json）
 const GITEE_TOKEN = process.env.GITEE_ACCESS_TOKEN;
@@ -192,31 +189,48 @@ function updateChangeLog(newArr, dataDir) {
   console.log(`📝 更新日志：${today} 记录 ${log[today].length} 部有更新`);
 }
 
+// ---- 短期兜底数据源：6789kb（聚合站，更新通常比 TMDB 快；稳定性差，随时可能失效）----
+// 映射表 data/source-6789kb.json: { "<tmdbId>": <vodId 数字，如 33453> }
+// 找不到 vodId（null/缺失）或抓取失败时自动回退 TMDB，不阻断主流程。
+async function fetchKbEpisode(vodId) {
+  if (!vodId) return null;
+  const url = `https://www.6789kb.com/vod/${vodId}.html`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+  try {
+    const resp = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+        'Referer': 'https://www.6789kb.com/',
+        'Accept': 'text/html,application/xhtml+xml',
+      },
+      signal: controller.signal,
+    });
+    if (!resp.ok) return null;
+    const html = await resp.text();
+    const m = html.match(/更新至\s*(\d+)\s*集/);
+    if (!m) return null;
+    const ep = parseInt(m[1], 10);
+    return Number.isFinite(ep) && ep > 0 ? ep : null;
+  } catch (e) {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function main() {
   const out = [];
-  const seen = new Set();          // tmdbId 去重
-  const nameIndex = new Map();     // name -> 在 out 中的下标，用于同名保留更完整的一条
+  const seen = new Set();
   let skippedNoName = 0;
   let skippedDetailFail = 0;
   let skippedDup = 0;
 
-  // 合并单条（含同名去重：保留 latestEpisode 更高的一条）
   function ingest(preset) {
     if (!preset || !preset.tmdbId || !preset.name) { skippedNoName++; return; }
     const key = `${preset.tmdbId}-tv`;
     if (seen.has(key)) { skippedDup++; return; }
-    const nm = preset.name;
-    if (nameIndex.has(nm)) {
-      const idx = nameIndex.get(nm);
-      if (preset.latestEpisode > out[idx].latestEpisode) {
-        out[idx] = preset;   // 用更完整的替换已存的同名条目
-        seen.add(key);
-      }
-      skippedDup++;
-      return;
-    }
     seen.add(key);
-    nameIndex.set(nm, out.length);
     out.push(preset);
     const epNote = preset.latestEpisode
       ? `更新至 S${preset.latestSeason}E${preset.latestEpisode}`
@@ -224,53 +238,54 @@ async function main() {
     console.log(`+ ${preset.name} (${preset.regionLabel}) ${epNote}`);
   }
 
-  // 双通道抓取：animationOnly=true 保留日漫/国漫完整覆盖；false 全量补充真人国产剧/韩剧/日剧
-  async function fetchRegion(region, animationOnly) {
-    for (let p = 1; p <= PAGES; p++) {
-      const params = { language: LANG, page: p, with_origin_country: region, sort_by: 'popularity.desc' };
-      if (animationOnly) params.with_genres = GENRE_ANIMATION;
-      const resp = await tmdbGet('/discover/tv', params);
-      if (!resp.ok) {
-        console.warn(`[discover] ${region}${animationOnly ? '(动画)' : '(全量)'} page ${p} 失败: ${resp.status}`);
-        continue;
-      }
-      const items = (resp.body && resp.body.results) || [];
-      for (const it of items) {
-        if (!it || !it.id) continue;
-        const detailResp = await tmdbGet(`/tv/${it.id}`, { language: LANG });
-        if (!detailResp.ok) { skippedDetailFail++; continue; }
-        ingest(normalize(detailResp.body, region));
-      }
-    }
-  }
-
-  for (const region of REGIONS) {
-    await fetchRegion(region, true);   // 动画通道：保日漫/国漫覆盖
-    await fetchRegion(region, false);  // 全量通道：补真人国产剧/韩剧/日剧
-  }
-
-  // 自动固定追踪：识别追番列表里 discover 热度榜覆盖不到的剧，显式拉进主库，
-  // 使其集数/更新频率随每日同步自动刷新（否则永远用追番里的 meta 死数据）。
-  // 来源是 data/watchlist.json——CI 中已提前从 Gitee 拉取真实追番，故任何「搜索加入」的剧都会自动纳入。
+  // 仅从追番列表中获取需追踪的 TMDB ID，不再抓取全网番剧
   const pinnedIds = collectTrackedIdsFromWatchlist();
-  console.log(`[自动固定] 识别出 ${pinnedIds.size} 个需固定追踪的 TMDB ID`);
+  console.log(`[追番同步] 识别出 ${pinnedIds.size} 个需追踪的 TMDB ID`);
+  if (pinnedIds.size === 0) {
+    console.log('⚠️ 追番列表为空，生成空 anime.json');
+  }
+
+  // 加载 6789kb 兜底映射（短期源；缺失/无条目则全部回退 TMDB）
+  let kbMap = {};
+  try {
+    const kbPath = path.join(__dirname, '..', 'data', 'source-6789kb.json');
+    if (fs.existsSync(kbPath)) kbMap = JSON.parse(fs.readFileSync(kbPath, 'utf8'));
+  } catch (e) { console.warn('⚠️ 读取 6789kb 映射失败，全部回退 TMDB:', e.message); }
+
   for (const id of pinnedIds) {
     const key = `${id}-tv`;
-    if (seen.has(key)) { console.log(`- [固定] ${id} 已被 discover 覆盖，跳过`); continue; }
+    if (seen.has(key)) continue;
     const resp = await tmdbGet(`/tv/${id}`, { language: LANG });
-    if (!resp.ok) { console.warn(`[固定] /tv/${id} 失败: ${resp.status}，跳过`); continue; }
-    // region 用 TMDB 返回的产地推断（遮天/眷思量均为 CN），normalize 据此定分类与地区标签
-    const region = (resp.body.origin_country && resp.body.origin_country[0]) || 'CN';
-    ingest(normalize(resp.body, region));
+    if (!resp.ok) { console.warn(`[追番同步] /tv/${id} 失败: ${resp.status}，跳过`); continue; }
+    const region = (resp.body.origin_country && resp.body.origin_country[0]) || '';
+    const preset = normalize(resp.body, region);
+    // 优先用 6789kb 的最新集数（比 TMDB 快的短期兜底）；失败/无映射/被封则回退 TMDB
+    const vodId = kbMap[String(id)];
+    if (vodId) {
+      const kbEp = await fetchKbEpisode(vodId);
+      if (kbEp) {
+        const tmdbEp = preset.latestEpisode || 0;
+        let merged = Math.max(tmdbEp, kbEp);
+        if (preset.totalEpisodes > 0) merged = Math.min(merged, preset.totalEpisodes);
+        if (merged !== preset.latestEpisode) {
+          console.log(`  ↳ 6789kb 覆盖: ${preset.name} E${tmdbEp} → E${merged}`);
+          preset.latestEpisode = merged;
+        } else {
+          console.log(`  ↳ 6789kb 一致: ${preset.name} E${merged}`);
+        }
+      } else {
+        console.log(`  ↳ 6789kb 未取到，沿用 TMDB: ${preset.name}`);
+      }
+    }
+    ingest(preset);
   }
 
-  // 追加本地补充番剧（避免被 TMDB 每日整体覆盖）
+  // 追加本地补充番剧
   for (const extra of LOCAL_EXTRA_ANIME) {
     const key = `${extra.tmdbId}-tv`;
     if (seen.has(key)) continue;
-    // 若 TMDB 抓取已包含同名剧，优先用 TMDB 数据，跳过本地补充以免重复
     if (out.some((x) => x.name === extra.name)) {
-      console.log(`- [本地补充] ${extra.name} 已被 TMDB 覆盖，跳过`);
+      console.log(`- [本地补充] ${extra.name} 已被覆盖，跳过`);
       continue;
     }
     seen.add(key);
