@@ -837,25 +837,41 @@ html,body{
   max-width:80vw;
 }
 
-/* 上传 Gitee 成功时的醒目提示卡片（比普通 toast 更突出、带明细） */
+/* 上传 Gitee 成功时的醒目提示卡片（全宽底部卡片 + 品牌渐变，绝不可能忽略） */
 .success-toast{
-  position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-14px);
-  display:flex;align-items:flex-start;gap:11px;
-  background:#fff;border-radius:18px;padding:14px 20px 14px 15px;
-  box-shadow:0 12px 44px rgba(34,22,55,.26);border:1px solid rgba(255,255,255,.9);
-  z-index:10000;opacity:0;pointer-events:none;max-width:90vw;width:max-content;
-  transition:opacity .28s ease, transform .28s ease;
+  position:fixed;left:20px;right:20px;bottom:90px;
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,#7c3aed,#a855f7,#c084fc);
+  border-radius:20px;padding:16px 20px;
+  box-shadow:0 8px 40px rgba(124,58,237,.55),0 0 0 1px rgba(255,255,255,.25) inset;
+  z-index:10000;opacity:0;pointer-events:none;
+  transform:translateY(30px) scale(.95);
+  transition:opacity .28s cubic-bezier(.22,.61,.36,1), transform .28s cubic-bezier(.22,.61,.36,1);
+  max-width:500px;margin:0 auto;
 }
-.success-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.success-toast.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
 .success-ico{
-  flex:0 0 auto;width:28px;height:28px;border-radius:50%;
-  background:linear-gradient(135deg,#34d399,#10b981);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
-  box-shadow:0 4px 14px rgba(16,185,129,.42);
+  flex:0 0 auto;width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.28);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:800;line-height:1;
+  backdrop-filter:blur(4px);
 }
-.success-body{display:flex;flex-direction:column;gap:3px;min-width:0;}
-.success-title{font-size:14px;font-weight:700;color:#1f1633;line-height:1.2;}
-.success-sub{font-size:12px;font-weight:500;color:#6b6280;line-height:1.45;}
+.success-body{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
+.success-title{
+  font-size:16px;font-weight:800;color:#fff;line-height:1.3;
+  text-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+.success-sub{
+  font-size:12px;font-weight:500;color:rgba(255,255,255,.82);line-height:1.45;
+}
+/* 短暂的 backdrop 暗层，进一步强调"发生了重要的事" */
+.success-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.18);
+  z-index:9999;opacity:0;pointer-events:none;
+  transition:opacity .28s ease;
+}
+.success-backdrop.show{opacity:1;}
 
 /* 上传到 Gitee 时的整页锁定遮罩 */
 .upload-block-overlay{
@@ -1412,13 +1428,15 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 <!-- Toast -->
 <div id="toast" class="toast" style="opacity:0"></div>
 
-<!-- 上传 Gitee 成功醒目提示 -->
-<div id="successToast" class="success-toast">
+<!-- 上传 Gitee 成功醒目提示（全宽底部卡片 + backdrop） -->
+<div id="successBackdrop" class="success-backdrop" onclick="dismissSuccessToast()"></div>
+<div id="successToast" class="success-toast" onclick="dismissSuccessToast()">
   <div class="success-ico">✓</div>
   <div class="success-body">
     <div class="success-title" id="successTitle"></div>
     <div class="success-sub" id="successSub"></div>
   </div>
+  <button style="flex:0 0 auto;background:rgba(255,255,255,.22);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;cursor:pointer;backdrop-filter:blur(4px);-webkit-tap-highlight-color:transparent" onclick="event.stopPropagation();dismissSuccessToast()" aria-label="关闭">✕</button>
 </div>
 
 <!-- Settings Modal -->
@@ -1511,16 +1529,25 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.style.opacity = '0', 2200);
 }
 
-// 上传 Gitee 成功时的醒目提示（带仓库/分支/记录数/提交等明细）
+// 上传 Gitee 成功时的醒目提示（品牌渐变底部卡片 + backdrop，绝不可能忽略）
 let _successTimer;
 function showSuccessToast(title, sub) {
   const el = document.getElementById('successToast');
+  const bd = document.getElementById('successBackdrop');
   if (!el) { showToast(title); return; }
   document.getElementById('successTitle').textContent = title;
   document.getElementById('successSub').textContent = sub || '';
+  if (bd) bd.classList.add('show');
   el.classList.add('show');
   clearTimeout(_successTimer);
-  _successTimer = setTimeout(() => el.classList.remove('show'), 3800);
+  _successTimer = setTimeout(dismissSuccessToast, 5000);
+}
+function dismissSuccessToast() {
+  const el = document.getElementById('successToast');
+  const bd = document.getElementById('successBackdrop');
+  if (el) el.classList.remove('show');
+  if (bd) bd.classList.remove('show');
+  clearTimeout(_successTimer);
 }
 
 // ======================== TAB SWITCH ========================
