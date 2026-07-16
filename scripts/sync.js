@@ -323,12 +323,14 @@ async function giteeUploadJson(filePath, content) {
   url.searchParams.set('access_token', GITEE_TOKEN);
   const resp = await fetch(url, { method: 'GET', headers: { Accept: 'application/json', 'User-Agent': 'tmdb-sync' } });
   const existing = resp.ok ? await resp.json().catch(() => null) : null;
+  const existedBefore = !!(existing && existing.sha);
   const sha = existing && existing.sha ? existing.sha : undefined;
   const uploadUrl = new URL(`https://gitee.com/api/v5${apiPath}`);
+  const commitMsg = `sync: update anime.json @ ${new Date().toISOString().slice(0, 10)}`;
   const body = {
     access_token: GITEE_TOKEN,
     content: Buffer.from(content, 'utf8').toString('base64'),
-    message: `sync: update anime.json @ ${new Date().toISOString().slice(0, 10)}`,
+    message: commitMsg,
     branch: GITEE_BRANCH,
   };
   if (sha) body.sha = sha;
@@ -341,7 +343,25 @@ async function giteeUploadJson(filePath, content) {
     const err = await uploadResp.json().catch(() => ({}));
     throw new Error(`Gitee 上传失败: HTTP ${uploadResp.status} ${err.message || ''}`);
   }
-  console.log(`📤 已镜像到 Gitee (${GITEE_OWNER}/${GITEE_REPO})`);
+  const result = await uploadResp.json().catch(() => ({}));
+  const bytes = Buffer.byteLength(content, 'utf8');
+  const kb = (bytes / 1024).toFixed(1);
+  const commitSha = result.commit && result.commit.sha ? result.commit.sha.slice(0, 7) : '-';
+  const op = existedBefore ? '更新已有文件' : '新建文件';
+  const repoUrl = `https://gitee.com/${GITEE_OWNER}/${GITEE_REPO}`;
+  const pagesUrl = process.env.GITEE_PAGES_URL || `https://${GITEE_OWNER}.gitee.io/${GITEE_REPO}/`;
+  console.log('');
+  console.log('────────────────────────────────────────────────────');
+  console.log('✅ 已成功镜像到 Gitee');
+  console.log(`   • 仓库    : ${GITEE_OWNER}/${GITEE_REPO}  (分支 ${GITEE_BRANCH})`);
+  console.log(`   • 路径    : ${filePath}`);
+  console.log(`   • 操作    : ${op}`);
+  console.log(`   • 大小    : ${kb} KB  (${bytes} 字节)`);
+  console.log(`   • 提交    : ${commitSha}`);
+  console.log(`   • 仓库地址: ${repoUrl}`);
+  console.log(`   • Pages   : ${pagesUrl}`);
+  console.log('────────────────────────────────────────────────────');
+  return { ok: true, commitSha, op, bytes };
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
