@@ -536,6 +536,13 @@
       "name": "完美世界",
       "latestSeason": 1,
       "latestEpisode": 278
+    },
+    {
+      "tmdbId": "229192",
+      "name": "沧元图",
+      "latestSeason": 1,
+      "latestEpisode": 86,
+      "source": "6789kb"
     }
   ]
 }
