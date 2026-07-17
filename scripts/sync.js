@@ -179,6 +179,7 @@ function updateChangeLog(newArr, dataDir) {
         name: a.name,
         latestSeason: a.latestSeason,
         latestEpisode: a.latestEpisode,
+        source: a.source || 'tmdb',
       });
     }
   }
@@ -331,6 +332,7 @@ async function main() {
     if (!resp.ok) { console.warn(`[追番同步] /tv/${id} 失败: ${resp.status}，跳过`); continue; }
     const region = (resp.body.origin_country && resp.body.origin_country[0]) || '';
     const preset = normalize(resp.body, region);
+    preset.source = 'tmdb'; // 默认数据来自 TMDB；被 6789kb 兜底覆盖时改 '6789kb'
     // 优先用 6789kb 的最新集数（比 TMDB 快的短期兜底）；失败/无映射/被封则回退 TMDB
     let vodId = kbMap[String(id)];
     if (!vodId) {
@@ -350,6 +352,7 @@ async function main() {
     if (vodId) {
       const kbEp = await fetchKbEpisode(vodId);
       if (kbEp) {
+        preset.source = '6789kb'; // 最新集数经 6789kb 兜底获取（即便与 TMDB 一致，也以它为准）
         const tmdbEp = preset.latestEpisode || 0;
         let merged = Math.max(tmdbEp, kbEp);
         if (preset.totalEpisodes > 0) merged = Math.min(merged, preset.totalEpisodes);
