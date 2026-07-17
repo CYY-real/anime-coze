@@ -653,10 +653,14 @@ html,body{
 .wl-item .src-badge.kb{
   color:#F59E0B;background:rgba(245,158,11,0.10);border-color:rgba(245,158,11,0.25);
 }
-/* 仅更新页：修复「文字与封面左右间距过宽」——父级 .wl-item 的 gap 从 10px 收窄；
-   顶部对齐让文字贴着封面左上、与番名同一条左边线；封面保持原尺寸(非主图问题)。不影响「我的追番」。 */
+/* 仅更新页：更新卡片文字少,若 .info 用 flex:1 铺满整行会导致右边一大片空白(看起来"松散/间距宽")。
+   改为 info 内容宽度紧贴封面,更新日期移到最右侧锚定,消除中间空白；顶部对齐与番名同左边线；封面保持原尺寸。不影响「我的追番」。 */
 #updatesList .wl-item{align-items:flex-start;gap:6px}
+#updatesList .info{flex:0 1 auto}
 #updatesList .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#updatesList .update-time{position:static;margin-left:auto;align-self:center;bottom:auto;right:auto}
+/* 无更新日期的卡片(个别昨日更新项):回退为信息区铺满,保持整齐 */
+#updatesList .wl-item.no-date .info{flex:1 1 auto}
 
 /* ============================================
    My List Header
@@ -2687,7 +2691,7 @@ function renderUpdates() {
       ? '<span class="src-badge kb" title="最新集数来自 6789kb 聚合站">🔗 6789kb</span>'
       : '<span class="src-badge tmdb" title="最新集数来自 TMDB">🎬 TMDB</span>';
 
-    return '<div class="wl-item" onclick="openDetail(\'' + tmdbId + '\')">' +
+    return '<div class="wl-item' + (updateDateStr ? '' : ' no-date') + '" onclick="openDetail(\'' + tmdbId + '\')">' +
       '<div class="card-deco"></div>' +
       '<div class="cover-wrap">' +
       (hasCover
