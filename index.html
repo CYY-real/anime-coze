@@ -653,9 +653,9 @@ html,body{
 .wl-item .src-badge.kb{
   color:#F59E0B;background:rgba(245,158,11,0.10);border-color:rgba(245,158,11,0.25);
 }
-/* 仅更新页：集数 + 数据来源标签并排；不影响「我的追番」(保持其原有 flex-direction:column 堆叠) */
-#updatesList .wl-item{align-items:flex-start}
-#updatesList .cover-wrap{width:64px;height:64px}
+/* 仅更新页：修复「文字与封面左右间距过宽」——父级 .wl-item 的 gap 从 10px 收窄；
+   顶部对齐让文字贴着封面左上、与番名同一条左边线；封面保持原尺寸(非主图问题)。不影响「我的追番」。 */
+#updatesList .wl-item{align-items:flex-start;gap:6px}
 #updatesList .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 
 /* ============================================
