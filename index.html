@@ -640,6 +640,21 @@ html,body{
   font-size:10px;color:#B8B0C8;font-weight:500;
 }
 
+/* 数据来源标签：TMDB / 6789kb */
+.wl-item .src-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:9px;font-weight:700;line-height:1;
+  padding:2px 6px;border-radius:7px;
+  border:1px solid transparent;flex-shrink:0;
+}
+.wl-item .src-badge.tmdb{
+  color:#0EA5E9;background:rgba(14,165,233,0.10);border-color:rgba(14,165,233,0.25);
+}
+.wl-item .src-badge.kb{
+  color:#F59E0B;background:rgba(245,158,11,0.10);border-color:rgba(245,158,11,0.25);
+}
+.wl-item .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
 /* ============================================
    My List Header
    注：用户要求"不置顶，跟内容一起滚走"——所以不加 sticky/fixed。
@@ -1349,10 +1364,6 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
         <div class="mylist-title">📺 更新</div>
       </div>
     </div>
-    <div class="sub-tabs" id="updateFilters">
-      <span id="updateTabToday" class="sub-tab active" data-ufilter="today" onclick="switchUpdateFilter(this)">🆕 今日更新</span>
-      <span id="updateTabYesterday" class="sub-tab" data-ufilter="yesterday" onclick="switchUpdateFilter(this)">📅 昨日更新</span>
-    </div>
     <div id="updatesList" class="anime-list"></div>
   </div>
 
@@ -1497,7 +1508,6 @@ let animeDb = [];   // 只含追番中剧集的 TMDB 数据（每日自动刷新
 let watchlist = [];
 let settings = { lastSyncAt: '', lastAnimeCount: 0 };
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
-let currentUpdateFilter = 'today'; // 更新页: today / yesterday
 let searchTimer;
 let activeSeason = 1;
 let _progressCtx = null;
@@ -1590,14 +1600,6 @@ function switchMylistFilter(el) {
   el.classList.add('active');
   currentMylistFilter = el.dataset.mfilter;
   renderMylist();
-}
-
-// 更新页：今日/昨日切换
-function switchUpdateFilter(el) {
-  document.querySelectorAll('#updateFilters .sub-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  currentUpdateFilter = el.dataset.ufilter;
-  renderUpdates();
 }
 
 // 静默加载追番剧集的最新 TMDB 数据（仅含追番中的剧，每日 GitHub Action 刷新 data/anime.json）  
@@ -2639,20 +2641,9 @@ function renderUpdates() {
   });
 
   if (updated.length === 0) {
-    document.getElementById('updateTabToday').textContent = '🆕 今日更新';
-    document.getElementById('updateTabYesterday').textContent = '📅 昨日更新';
     list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">昨日和今日没有更新的追番</p><p class="sub">等番剧更新后再来看看吧~</p></div>';
     return;
   }
-
-  // 排序：今日更新在前，再按剧名排序
-  updated.sort((a, b) => {
-    const aIsToday = (() => { const aa = resolveAnime(a.tmdbId); if (!aa || !aa.nextAirDate) return false; return new Date(aa.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
-    const bIsToday = (() => { const ba = resolveAnime(b.tmdbId); if (!ba || !ba.nextAirDate) return false; return new Date(ba.nextAirDate + 'T00:00:00').getTime() === today.getTime(); })();
-    if (aIsToday && !bIsToday) return -1;
-    if (!aIsToday && bIsToday) return 1;
-    return (a.name || '').localeCompare(b.name || '', 'zh');
-  });
 
   // 分组：今日更新 / 昨日更新
   const todayItems = [];
@@ -2666,10 +2657,10 @@ function renderUpdates() {
       yesterdayItems.push(it);
     }
   });
-
-  // 更新子标签上的数量
-  document.getElementById('updateTabToday').textContent = '🆕 今日更新' + (todayItems.length > 0 ? ' (' + todayItems.length + ')' : '');
-  document.getElementById('updateTabYesterday').textContent = '📅 昨日更新' + (yesterdayItems.length > 0 ? ' (' + yesterdayItems.length + ')' : '');
+  // 各组内按剧名排序
+  const byName = (a, b) => (a.name || '').localeCompare(b.name || '', 'zh');
+  todayItems.sort(byName);
+  yesterdayItems.sort(byName);
 
   // 格式化日期为 MM/DD
   const fmtDate = dateStr => {
@@ -2687,6 +2678,11 @@ function renderUpdates() {
       : (latestEpisode ? '第' + latestEpisode + '集' : '?');
     const a = resolveAnime(tmdbId);
     const updateDateStr = a && a.nextAirDate ? fmtDate(a.nextAirDate) : '';
+    // 数据来源：animeDb 里记录的 latestEpisode 来源（tmdb / 6789kb）
+    const src = a && a.source === '6789kb' ? '6789kb' : 'tmdb';
+    const srcBadge = src === '6789kb'
+      ? '<span class="src-badge kb" title="最新集数来自 6789kb 聚合站">🔗 6789kb</span>'
+      : '<span class="src-badge tmdb" title="最新集数来自 TMDB">🎬 TMDB</span>';
 
     return '<div class="wl-item" onclick="openDetail(\'' + tmdbId + '\')">' +
       '<div class="card-deco"></div>' +
@@ -2703,20 +2699,24 @@ function renderUpdates() {
       '</div>' +
       '<div class="anime-episode-info">' +
       '<span class="ep-current">更新至' + latestLabel + '</span>' +
+      srcBadge +
       '</div>' +
       '</div>' +
       (updateDateStr ? '<div class="update-time">' + updateDateStr + '</div>' : '') +
       '</div>';
   };
 
-  // 根据当前选中的子 tab 只展示对应分组
-  const activeItems = currentUpdateFilter === 'today' ? todayItems : yesterdayItems;
-  if (activeItems.length === 0) {
-    const emptyMsg = currentUpdateFilter === 'today' ? '今天没有更新的追番' : '昨天没有更新的追番';
-    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">' + emptyMsg + '</p><p class="sub">切换标签看看另一天吧~</p></div>';
-    return;
+  // 一页上下分组展示，不再切换 tab：今日在上、昨日在下
+  let html = '';
+  if (todayItems.length > 0) {
+    html += '<div class="update-group-header">🆕 今日更新 (' + todayItems.length + ')</div>';
+    html += todayItems.map(buildUpdateCard).join('');
   }
-  list.innerHTML = activeItems.map(buildUpdateCard).join('');
+  if (yesterdayItems.length > 0) {
+    html += '<div class="update-group-header">📅 昨日更新 (' + yesterdayItems.length + ')</div>';
+    html += yesterdayItems.map(buildUpdateCard).join('');
+  }
+  list.innerHTML = html;
 }
 
 function renderMylist() {
