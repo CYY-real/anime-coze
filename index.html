@@ -653,11 +653,11 @@ html,body{
 .wl-item .src-badge.kb{
   color:#F59E0B;background:rgba(245,158,11,0.10);border-color:rgba(245,158,11,0.25);
 }
-/* 仅更新页：名称与日期同处顶部一行(日期置右上,形成整齐的右对齐列),更新集数在下方；
-   整块内容垂直居中对齐封面,无大间距、紧凑。不影响「我的追番」。 */
+/* 仅更新页：番名与日期同处首行(日期紧贴番名,前缀"· ",不甩到右侧),其下为"更新至X + 来源"；
+   整块垂直居中于封面,无大间距。不影响「我的追番」。 */
 #updatesList .wl-item{align-items:center;gap:6px}
 #updatesList .info{flex:1 1 auto;min-width:0}
-#updatesList .anime-name-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+#updatesList .anime-name-row{display:flex;align-items:center;gap:6px;min-width:0}
 #updatesList .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 #updatesList .update-time{position:static;margin-left:0;align-self:center;bottom:auto;right:auto}
 
@@ -2704,12 +2704,11 @@ function renderUpdates() {
       '<div class="anime-name">' +
       '<span class="name-text">' + esc(name || '') + '</span>' +
       '</div>' +
-      (updateDateStr ? '<div class="update-time">' + updateDateStr + '</div>' : '') +
+      (updateDateStr ? '<span class="update-time">· ' + updateDateStr + '</span>' : '') +
       '</div>' +
       '<div class="anime-episode-info">' +
       '<span class="ep-current">更新至' + latestLabel + '</span>' +
       srcBadge +
-      '</div>' +
       '</div>' +
       '</div>';
   };
