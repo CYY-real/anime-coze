@@ -634,10 +634,10 @@ html,body{
 }
 .update-group-header:first-child{margin-top:0}
 
-/* Update time in bottom-right of update cards */
+/* 更新时间（仅更新页使用，内联于番名右侧，不绝对定位） */
 .wl-item .update-time{
-  position:absolute;bottom:8px;right:12px;
   font-size:10px;color:#B8B0C8;font-weight:500;
+  flex-shrink:0;white-space:nowrap;
 }
 
 /* 数据来源标签：TMDB / 6789kb */
@@ -653,13 +653,16 @@ html,body{
 .wl-item .src-badge.kb{
   color:#F59E0B;background:rgba(245,158,11,0.10);border-color:rgba(245,158,11,0.25);
 }
-/* 仅更新页：番名与日期同处首行(日期紧贴番名,前缀"· ",不甩到右侧),其下为"更新至X + 来源"；
-   整块垂直居中于封面,无大间距。不影响「我的追番」。 */
-#updatesList .wl-item{align-items:center;gap:6px}
-#updatesList .info{flex:1 1 auto;min-width:0}
-#updatesList .anime-name-row{display:flex;align-items:center;gap:6px;min-width:0}
-#updatesList .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-#updatesList .update-time{position:static;margin-left:0;align-self:center;bottom:auto;right:auto}
+/* 仅更新页：简单清晰的纵向布局，杜绝重叠。不影响「我的追番」。
+   首行：番名（可省略号）+ 更新时间；次行：最新集数 + 数据来源。整块垂直居中于封面。 */
+#updatesList .wl-item{align-items:center;gap:10px;padding:10px 12px}
+#updatesList .info{display:flex;flex-direction:column;gap:5px;flex:1 1 auto;min-width:0}
+#updatesList .u-top{display:flex;align-items:baseline;gap:8px;min-width:0}
+#updatesList .u-top .name-text{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:700;color:var(--text-primary)}
+#updatesList .u-top .update-time{flex-shrink:0}
+#updatesList .u-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+#updatesList .u-bottom .ep-current{color:#C44AFF;font-weight:700;font-size:12px;flex-shrink:0}
+#updatesList .u-bottom .src-badge{flex-shrink:0}
 
 /* ============================================
    My List Header
@@ -2690,7 +2693,7 @@ function renderUpdates() {
       ? '<span class="src-badge kb" title="最新集数来自 6789kb 聚合站">🔗 6789kb</span>'
       : '<span class="src-badge tmdb" title="最新集数来自 TMDB">🎬 TMDB</span>';
 
-    return '<div class="wl-item' + (updateDateStr ? '' : ' no-date') + '" onclick="openDetail(\'' + tmdbId + '\')">' +
+    return '<div class="wl-item update-card' + (updateDateStr ? '' : ' no-date') + '" onclick="openDetail(\'' + tmdbId + '\')">' +
       '<div class="card-deco"></div>' +
       '<div class="cover-wrap">' +
       (hasCover
@@ -2699,17 +2702,15 @@ function renderUpdates() {
       '<div class="cover-glow"></div>' +
       '<div class="cover-status ' + status + '">' + statusText + '</div>' +
       '</div>' +
-      '<div class="info" style="gap:4px">' +
-      '<div class="anime-name-row">' +
-      '<div class="anime-name">' +
-      '<span class="name-text">' + esc(name || '') + '</span>' +
-      '</div>' +
-      (updateDateStr ? '<span class="update-time">· ' + updateDateStr + '</span>' : '') +
-      '</div>' +
-      '<div class="anime-episode-info">' +
-      '<span class="ep-current">更新至' + latestLabel + '</span>' +
-      srcBadge +
-      '</div>' +
+      '<div class="info">' +
+        '<div class="u-top">' +
+          '<span class="name-text">' + esc(name || '') + '</span>' +
+          (updateDateStr ? '<span class="update-time">更新于 ' + updateDateStr + '</span>' : '') +
+        '</div>' +
+        '<div class="u-bottom">' +
+          '<span class="ep-current">更新至' + latestLabel + '</span>' +
+          srcBadge +
+        '</div>' +
       '</div>';
   };
 
