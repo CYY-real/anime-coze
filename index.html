@@ -653,7 +653,9 @@ html,body{
 .wl-item .src-badge.kb{
   color:#F59E0B;background:rgba(245,158,11,0.10);border-color:rgba(245,158,11,0.25);
 }
-.wl-item .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+/* 仅更新页：集数 + 数据来源标签并排；不影响「我的追番」(保持其原有 flex-direction:column 堆叠) */
+#updatesList .wl-item{align-items:flex-start}
+#updatesList .anime-episode-info{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 
 /* ============================================
    My List Header
