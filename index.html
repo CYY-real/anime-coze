@@ -656,7 +656,8 @@ html,body{
 /* 仅更新页：简单清晰的纵向布局，杜绝重叠。不影响「我的追番」。
    首行：番名（可省略号）+ 更新时间；次行：最新集数 + 数据来源。整块垂直居中于封面。 */
 /* 更新页卡片：完全自包含，不依赖全局 .wl-item .info 等规则，杜绝串味导致的重叠 */
-#updatesList .upd-card{display:flex;align-items:center;gap:10px;padding:10px 12px}
+#updatesList{display:flex;flex-direction:column;gap:10px}
+#updatesList .upd-card{display:flex;align-items:center;gap:10px;padding:10px 12px;width:100%;box-sizing:border-box}
 #updatesList .upd-body{flex:1 1 auto;min-width:0}
 #updatesList .upd-title{display:flex;align-items:baseline;gap:8px;min-width:0}
 #updatesList .upd-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:700;color:var(--text-primary)}
