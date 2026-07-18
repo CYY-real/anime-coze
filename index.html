@@ -3009,6 +3009,9 @@ function mergeWatchlist(data) {
   dedupeWatchlistByName();
   saveWatchlistLocal();
   renderMylist();
+  // 关键修复：云端/快照追番列表载入后，若正在看「更新」页需重渲染。
+  // renderUpdates 的 myIds 依赖 watchlist；否则 Gitee 拉取前用空 watchlist 渲染的空白不会刷新（表现为「更新记录没了」）。
+  if (!document.getElementById('tabUpdates').classList.contains('hidden')) renderUpdates();
 }
 
 // 代理不可用时，尝试用站点同源快照（每日工作流从 Gitee 镜像）
