@@ -661,7 +661,6 @@ html,body{
 #updatesList .upd-body{flex:1 1 auto;min-width:0}
 #updatesList .upd-title{display:flex;align-items:baseline;gap:8px;min-width:0}
 #updatesList .upd-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:700;color:var(--text-primary)}
-#updatesList .upd-time{flex-shrink:0;font-size:10px;color:#B8B0C8;white-space:nowrap}
 #updatesList .upd-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:5px;min-width:0}
 #updatesList .upd-ep{color:#C44AFF;font-weight:700;font-size:12px;flex-shrink:0}
 
@@ -2272,6 +2271,49 @@ function openPlatformPopup(tmdbId) {
   document.body.appendChild(div);
 }
 
+// 「去看」前先提示当前看到第几集，确认后再跳转外部页面（避免忘记看到哪集）
+function goWatchReminder(tmdbId, goUrl, platLabel) {
+  if (!goUrl) return;
+  const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+  const en = w ? enrichWatchlistItem(w) : null;
+  const seasonMulti = en ? (en.latestSeason > 1 || en.currentSeason > 1) : false;
+  const curLabel = en
+    ? (seasonMulti
+        ? `S${en.currentSeason}·E${en.currentEpisode}`
+        : (en.currentEpisode ? `第${en.currentEpisode}集` : '还没开始看'))
+    : '?';
+  const latestLabel = en
+    ? (seasonMulti
+        ? `S${en.latestSeason}·E${en.latestEpisode}`
+        : (en.latestEpisode ? `第${en.latestEpisode}集` : '?'))
+    : '?';
+  const name = en ? (en.name || '') : '';
+  const rawUrl = (goUrl || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+  document.getElementById('goWatchReminder')?.remove();
+  const div = document.createElement('div');
+  div.id = 'goWatchReminder';
+  div.className = 'modal-overlay';
+  div.onclick = function(e) { if (e.target === this) this.remove(); };
+  div.innerHTML = `<div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📺 ${esc(name)}</div>
+      <button class="modal-close" onclick="document.getElementById('goWatchReminder')?.remove()">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center;padding-top:8px">
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">你已看到</div>
+      <div style="font-size:26px;font-weight:800;color:#C44AFF;line-height:1.2;margin-bottom:6px">${curLabel}</div>
+      <div style="font-size:12px;color:var(--text-ghost)">更新至 ${latestLabel}</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-more" onclick="document.getElementById('goWatchReminder')?.remove()">取消</button>
+      <button class="btn btn-primary" onclick="document.getElementById('goWatchReminder')?.remove();window.open('${rawUrl}','_blank','noopener')">继续观看 ›</button>
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+}
+
 // 复制搜索词
 function copyPlatformSearch(name) {
   if (!name) return;
@@ -2681,15 +2723,8 @@ function renderUpdates() {
     return w ? enrichWatchlistItem(w) : null;
   };
 
-  const fmtDate = (dateStr) => {
-    const [y, m, d] = dateStr.split('-');
-    return Number(m) + '/' + Number(d);
-  };
-
-  const buildUpdateCard = (entry, dateStr) => {
+  const buildUpdateCard = (entry) => {
     const it = enrichOf(entry.tmdbId);
-    const name = (it && it.name) || entry.name || '?';
-    const cover = it ? it.cover : '';
     const hasCover = it ? it.hasCover : false;
     const status = it ? it.status : 'raising';
     const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
@@ -2699,7 +2734,6 @@ function renderUpdates() {
     const latestLabel = seasonMulti
       ? 'S' + latestSeason + '·E' + latestEpisode
       : (latestEpisode ? '第' + latestEpisode + '集' : '?');
-    const updateDateStr = fmtDate(dateStr);
     // 数据来源：更新日志里记录的来源（tmdb / 6789kb）
     const src = entry.source === '6789kb' ? '6789kb' : 'tmdb';
     const srcBadge = src === '6789kb'
@@ -2719,7 +2753,6 @@ function renderUpdates() {
       '<div class="upd-body">' +
         '<div class="upd-title">' +
           '<span class="upd-name">' + esc(name || '') + '</span>' +
-          '<span class="upd-time">更新于 ' + updateDateStr + '</span>' +
         '</div>' +
         '<div class="upd-meta">' +
           '<span class="upd-ep">更新至' + latestLabel + '</span>' +
@@ -2737,11 +2770,11 @@ function renderUpdates() {
   let html = '';
   if (todaySorted.length > 0) {
     html += '<div class="update-group-header">🆕 今日更新 (' + todaySorted.length + ') · ' + todayStr + '</div>';
-    html += todaySorted.map(e => buildUpdateCard(e, todayStr)).join('');
+    html += todaySorted.map(e => buildUpdateCard(e)).join('');
   }
   if (ySorted.length > 0) {
     html += '<div class="update-group-header">📅 昨日更新 (' + ySorted.length + ') · ' + yStr + '</div>';
-    html += ySorted.map(e => buildUpdateCard(e, yStr)).join('');
+    html += ySorted.map(e => buildUpdateCard(e)).join('');
   }
   list.innerHTML = html;
 }
@@ -2809,7 +2842,7 @@ function renderMylist() {
         const goLabel = pu ? '去看' : '搜看';
         const showBadge = (remaining > 0 && status !== 'dropped');
         goWatchBtn = `<div class="btn-go-wrap">
-          <button class="btn-go-watch" onclick="event.stopPropagation();window.open('${esc(goUrl)}','_blank','noopener')" title="前往${esc(platLabel)}观看">${goLabel}</button>
+          <button class="btn-go-watch" onclick="event.stopPropagation();goWatchReminder('${tmdbId}','${esc(goUrl)}','${esc(platLabel)}')" title="前往${esc(platLabel)}观看">${goLabel}</button>
           ${showBadge ? `<span class="go-badge">${remaining}</span>` : ''}
         </div>`;
       }
