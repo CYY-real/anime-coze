@@ -2745,14 +2745,14 @@ function renderUpdates() {
       '<div class="card-deco"></div>' +
       '<div class="cover-wrap">' +
       (hasCover
-        ? '<img class="cover" src="' + esc(proxyCover(cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="cover-placeholder" style="display:none">' + (name || '?').charAt(0) + '</div>'
-        : '<div class="cover-placeholder">' + (name || '?').charAt(0) + '</div>') +
+        ? '<img class="cover" src="' + esc(proxyCover(it.cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="cover-placeholder" style="display:none">' + (it.name || '?').charAt(0) + '</div>'
+        : '<div class="cover-placeholder">' + (it.name || '?').charAt(0) + '</div>') +
       '<div class="cover-glow"></div>' +
       '<div class="cover-status ' + status + '">' + statusText + '</div>' +
       '</div>' +
       '<div class="upd-body">' +
         '<div class="upd-title">' +
-          '<span class="upd-name">' + esc(name || '') + '</span>' +
+          '<span class="upd-name">' + esc(it.name || '') + '</span>' +
         '</div>' +
         '<div class="upd-meta">' +
           '<span class="upd-ep">更新至' + latestLabel + '</span>' +
