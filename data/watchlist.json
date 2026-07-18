@@ -24,7 +24,7 @@
     "tmdbId": 223911,
     "name": "仙逆",
     "watchedSeason": 1,
-    "watchedEpisode": 144,
+    "watchedEpisode": 149,
     "latestSeason": 1,
     "latestEpisode": 26,
     "threshold": 3,
@@ -45,7 +45,7 @@
     "tmdbId": 124003,
     "name": "完美世界",
     "watchedSeason": 1,
-    "watchedEpisode": 241,
+    "watchedEpisode": 263,
     "latestSeason": 1,
     "latestEpisode": 277,
     "threshold": 0,
@@ -56,7 +56,7 @@
       {
         "platform": "tencent",
         "name": "腾讯视频",
-        "url": "https://www.bwyy2026.com/bwplay/IC333L-2-242.html?share_token=3DDD7DAC-3449-400A-900F-4A7CB00FD73F",
+        "url": "https://www.6789kb.com/vod/22596.html",
         "isPrimary": true
       }
     ],
@@ -155,7 +155,7 @@
     "tmdbId": "127473",
     "name": "眷思量",
     "watchedSeason": 2,
-    "watchedEpisode": 15,
+    "watchedEpisode": 30,
     "latestSeason": 2,
     "latestEpisode": 15,
     "threshold": 0,
