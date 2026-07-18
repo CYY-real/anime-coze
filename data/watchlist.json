@@ -45,7 +45,7 @@
     "tmdbId": 124003,
     "name": "完美世界",
     "watchedSeason": 1,
-    "watchedEpisode": 263,
+    "watchedEpisode": 278,
     "latestSeason": 1,
     "latestEpisode": 277,
     "threshold": 0,
@@ -277,6 +277,41 @@
       "originCountry": "CN",
       "nextAirDate": "2026-07-15",
       "updateFrequency": "周更"
+    }
+  },
+  {
+    "tmdbId": 285709,
+    "name": "圣墟",
+    "watchedSeason": 1,
+    "watchedEpisode": 0,
+    "latestSeason": 1,
+    "latestEpisode": 0,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [],
+    "platform": "",
+    "updateFrequency": "",
+    "meta": {
+      "tmdbId": 285709,
+      "name": "圣墟",
+      "cover": "/api/img?p=/t/p/w500/1oxg4E6TSaFNGrBdqhcLmYKtoHU.jpg",
+      "category": "cdrama",
+      "categoryLabel": "",
+      "region": "CN",
+      "regionLabel": "国产剧",
+      "latestSeason": 1,
+      "latestEpisode": 0,
+      "seasonEpisodeCounts": {},
+      "totalEpisodes": 0,
+      "platforms": [],
+      "overview": "沧海成尘，雷电枯竭 那一缕幽雾又一次临近大地 世间的枷锁再次开启 一个全新的世界就此揭开神秘的一角……",
+      "firstAirDate": "",
+      "voteAverage": 0,
+      "originCountry": "CN",
+      "nextAirDate": "",
+      "updateFrequency": ""
     }
   }
 ]

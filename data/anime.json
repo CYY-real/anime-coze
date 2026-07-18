@@ -294,5 +294,30 @@
     "originCountry": "CN",
     "platforms": [],
     "source": "6789kb"
+  },
+  {
+    "tmdbId": 285709,
+    "name": "圣墟",
+    "displayName": "圣墟",
+    "cover": "/api/img?p=/t/p/w500/1oxg4E6TSaFNGrBdqhcLmYKtoHU.jpg",
+    "mediaType": "tv",
+    "region": "CN",
+    "regionLabel": "国漫",
+    "category": "anime",
+    "latestSeason": 1,
+    "latestEpisode": 1,
+    "nextAirDate": "",
+    "updateFrequency": "已完结",
+    "totalSeasons": 1,
+    "seasonEpisodeCounts": {
+      "1": 1
+    },
+    "totalEpisodes": 1,
+    "overview": "沧海成尘，雷电枯竭 那一缕幽雾又一次临近大地 世间的枷锁再次开启 一个全新的世界就此揭开神秘的一角……",
+    "firstAirDate": "",
+    "voteAverage": 0,
+    "originCountry": "CN",
+    "platforms": [],
+    "source": "6789kb"
   }
 ]
