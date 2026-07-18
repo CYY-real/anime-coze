@@ -1515,6 +1515,7 @@ body.modal-locked{position:fixed;left:0;right:0;top:0;width:100%;overflow:hidden
 <script>
 // ======================== STATE ========================
 let animeDb = [];   // 只含追番中剧集的 TMDB 数据（每日自动刷新）
+let updateLog = {}; // 更新日志：按北京时间日期键记录的「实际更新到几集」权威数据（每日自动刷新）
 let watchlist = [];
 let settings = { lastSyncAt: '', lastAnimeCount: 0 };
 let currentMylistFilter = 'all';  // 我的追番状态: all / raising / caughtup / finished / dropped
@@ -1612,8 +1613,25 @@ function switchMylistFilter(el) {
   renderMylist();
 }
 
-// 静默加载追番剧集的最新 TMDB 数据（仅含追番中的剧，每日 GitHub Action 刷新 data/anime.json）  
+// 静默加载追番剧集的最新 TMDB 数据（仅含追番中的剧，每日 GitHub Action 刷新 data/anime.json）
+// 同时加载「更新日志」(update-log.json) 作为「更新」页的权威数据源。
 async function refreshAnimeDb() {
+  // 1) 更新日志：每次都刷新，不受 anime 变更判断影响（每日新日志需即时反映）
+  try {
+    const logResp = await fetch('./data/update-log.json', { cache: 'no-store' });
+    if (logResp.ok) {
+      const logData = await logResp.json();
+      if (logData && typeof logData === 'object') {
+        const logChanged = JSON.stringify(logData) !== JSON.stringify(updateLog);
+        updateLog = logData;
+        if (logChanged && !document.getElementById('tabUpdates').classList.contains('hidden')) {
+          renderUpdates();
+        }
+      }
+    }
+  } catch (e) { /* 保留旧数据 */ }
+
+  // 2) 主库 anime.json
   try {
     const resp = await fetch('./data/anime.json', { cache: 'no-store' });
     if (!resp.ok) return;
@@ -2623,78 +2641,73 @@ function enrichWatchlistItem(w) {
 }
 
 // ======================== RENDER UPDATES（追番列表中最新集数有更新的） ========================
+// ======================== RENDER UPDATES（以「实际更新日志」为权威源） ========================
+// 修复点：原先按 nextAirDate（预告「将播」日）判定「今日更新」，导致「预告今天播、但集数还没抓到」时
+// 出现「进了今日更新组却显示旧集数」的矛盾。现改为以 update-log.json（CI 记录的「实际更新到几集」）为权威，
+// 按北京时间日期键取今日/昨日、且仅我的追番，集数直接取日志里记录的 latestEpisode，杜绝自相矛盾。
+function beijingTodayStr(offsetDays = 0) {
+  const d = new Date(Date.now() + 8 * 3600 * 1000 - offsetDays * 86400000);
+  return d.toISOString().slice(0, 10);
+}
+
 function renderUpdates() {
   const list = document.getElementById('updatesList');
 
-  if (watchlist.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">还没有追番呢~</p><p class="sub">先去添加剧集吧 💕</p></div>';
-    return;
-  }
+  // 我的追番（排除弃番）的 tmdbId 集合
+  const myIds = new Set(
+    watchlist
+      .filter(w => (w.status || 'raising') !== 'dropped')
+      .map(w => String(w.tmdbId))
+  );
 
-  const enriched = watchlist.map(enrichWatchlistItem);
-  if (_watchlistIdDirty) { _watchlistIdDirty = false; saveWatchlistLocal(); }
+  const todayStr = beijingTodayStr(0);
+  const yStr = beijingTodayStr(1);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  // 从更新日志取今日/昨日、且仅我的追番的条目（权威「实际更新」记录）
+  const pick = (dateStr) => (Array.isArray(updateLog[dateStr]) ? updateLog[dateStr] : [])
+    .filter(e => myIds.has(String(e.tmdbId)));
 
-  // 过滤：追番列表中非弃番的、最新集数在昨日或今日更新的（通过 nextAirDate 判断最新一集的播出日）
-  const updated = enriched.filter(it => {
-    if (it.status === 'dropped') return false;
-    const a = resolveAnime(it.tmdbId);
-    if (!a || !a.nextAirDate) return false;
-    const next = new Date(a.nextAirDate + 'T00:00:00');
-    return next.getTime() >= yesterday.getTime() && next.getTime() < tomorrow.getTime();
-  });
+  const todayEntries = pick(todayStr);
+  const yesterdayEntries = pick(yStr);
 
-  if (updated.length === 0) {
+  if (todayEntries.length === 0 && yesterdayEntries.length === 0) {
     list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p class="text">昨日和今日没有更新的追番</p><p class="sub">等番剧更新后再来看看吧~</p></div>';
     return;
   }
 
-  // 分组：今日更新 / 昨日更新
-  const todayItems = [];
-  const yesterdayItems = [];
-  updated.forEach(it => {
-    const a = resolveAnime(it.tmdbId);
-    const nd = a && a.nextAirDate ? a.nextAirDate : '';
-    if (nd && new Date(nd + 'T00:00:00').getTime() === today.getTime()) {
-      todayItems.push(it);
-    } else {
-      yesterdayItems.push(it);
-    }
-  });
-  // 各组内按剧名排序
-  const byName = (a, b) => (a.name || '').localeCompare(b.name || '', 'zh');
-  todayItems.sort(byName);
-  yesterdayItems.sort(byName);
-
-  // 格式化日期为 MM/DD
-  const fmtDate = dateStr => {
-    if (!dateStr) return '';
-    const d = new Date(dateStr + 'T00:00:00');
-    return (d.getMonth() + 1) + '/' + d.getDate();
+  // 取追番条目（用于封面 / 状态 / 剧名展示）；集数、来源、日期一律以更新日志为准
+  const enrichOf = (tmdbId) => {
+    const w = watchlist.find(x => String(x.tmdbId) === String(tmdbId));
+    return w ? enrichWatchlistItem(w) : null;
   };
 
-  const buildUpdateCard = (it) => {
-    const { tmdbId, name, cover, status, hasCover, latestEpisode, latestSeason } = it;
+  const fmtDate = (dateStr) => {
+    const [y, m, d] = dateStr.split('-');
+    return Number(m) + '/' + Number(d);
+  };
+
+  const buildUpdateCard = (entry, dateStr) => {
+    const it = enrichOf(entry.tmdbId);
+    const name = (it && it.name) || entry.name || '?';
+    const cover = it ? it.cover : '';
+    const hasCover = it ? it.hasCover : false;
+    const status = it ? it.status : 'raising';
     const statusText = MYLIST_STATUS_TEXT[status] || '追番中';
+    const latestEpisode = entry.latestEpisode;
+    const latestSeason = entry.latestSeason || 1;
     const seasonMulti = latestSeason > 1;
     const latestLabel = seasonMulti
       ? 'S' + latestSeason + '·E' + latestEpisode
       : (latestEpisode ? '第' + latestEpisode + '集' : '?');
-    const a = resolveAnime(tmdbId);
-    const updateDateStr = a && a.nextAirDate ? fmtDate(a.nextAirDate) : '';
-    // 数据来源：animeDb 里记录的 latestEpisode 来源（tmdb / 6789kb）
-    const src = a && a.source === '6789kb' ? '6789kb' : 'tmdb';
+    const updateDateStr = fmtDate(dateStr);
+    // 数据来源：更新日志里记录的来源（tmdb / 6789kb）
+    const src = entry.source === '6789kb' ? '6789kb' : 'tmdb';
     const srcBadge = src === '6789kb'
       ? '<span class="src-badge kb" title="最新集数来自 6789kb 聚合站">🔗 6789kb</span>'
       : '<span class="src-badge tmdb" title="最新集数来自 TMDB">🎬 TMDB</span>';
+    const tmdbId = entry.tmdbId;
 
-    return '<div class="wl-item upd-card' + (updateDateStr ? '' : ' no-date') + '" onclick="openDetail(\'' + tmdbId + '\')">' +
+    return '<div class="wl-item upd-card" onclick="openDetail(\'' + tmdbId + '\')">' +
       '<div class="card-deco"></div>' +
       '<div class="cover-wrap">' +
       (hasCover
@@ -2706,7 +2719,7 @@ function renderUpdates() {
       '<div class="upd-body">' +
         '<div class="upd-title">' +
           '<span class="upd-name">' + esc(name || '') + '</span>' +
-          (updateDateStr ? '<span class="upd-time">更新于 ' + updateDateStr + '</span>' : '') +
+          '<span class="upd-time">更新于 ' + updateDateStr + '</span>' +
         '</div>' +
         '<div class="upd-meta">' +
           '<span class="upd-ep">更新至' + latestLabel + '</span>' +
@@ -2716,15 +2729,19 @@ function renderUpdates() {
     '</div>';
   };
 
-  // 一页上下分组展示，不再切换 tab：今日在上、昨日在下
+  const byName = (a, b) => (a.name || '').localeCompare(b.name || '', 'zh');
+  const todaySorted = [...todayEntries].sort(byName);
+  const ySorted = [...yesterdayEntries].sort(byName);
+
+  // 一页上下分组展示，不再切换 tab：今日在上、昨日在下（组标题带日期，与 sync.js 时区一致）
   let html = '';
-  if (todayItems.length > 0) {
-    html += '<div class="update-group-header">🆕 今日更新 (' + todayItems.length + ')</div>';
-    html += todayItems.map(buildUpdateCard).join('');
+  if (todaySorted.length > 0) {
+    html += '<div class="update-group-header">🆕 今日更新 (' + todaySorted.length + ') · ' + todayStr + '</div>';
+    html += todaySorted.map(e => buildUpdateCard(e, todayStr)).join('');
   }
-  if (yesterdayItems.length > 0) {
-    html += '<div class="update-group-header">📅 昨日更新 (' + yesterdayItems.length + ')</div>';
-    html += yesterdayItems.map(buildUpdateCard).join('');
+  if (ySorted.length > 0) {
+    html += '<div class="update-group-header">📅 昨日更新 (' + ySorted.length + ') · ' + yStr + '</div>';
+    html += ySorted.map(e => buildUpdateCard(e, yStr)).join('');
   }
   list.innerHTML = html;
 }
