@@ -569,5 +569,14 @@
       "latestEpisode": 1,
       "source": "6789kb"
     }
+  ],
+  "2026-07-20": [
+    {
+      "tmdbId": "223911",
+      "name": "仙逆",
+      "latestSeason": 1,
+      "latestEpisode": 150,
+      "source": "6789kb"
+    }
   ]
 }
