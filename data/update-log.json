@@ -663,5 +663,14 @@
       "latestEpisode": 153,
       "source": "6789kb"
     }
+  ],
+  "2026-07-30": [
+    {
+      "tmdbId": "259231",
+      "name": "斩神之凡尘神域",
+      "latestSeason": 2,
+      "latestEpisode": 8,
+      "source": "6789kb"
+    }
   ]
 }
