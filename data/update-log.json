@@ -688,5 +688,14 @@
       "latestEpisode": 88,
       "source": "6789kb"
     }
+  ],
+  "2026-08-01": [
+    {
+      "tmdbId": "228429",
+      "name": "斗罗大陆Ⅱ绝世唐门",
+      "latestSeason": 1,
+      "latestEpisode": 164,
+      "source": "6789kb"
+    }
   ]
 }
