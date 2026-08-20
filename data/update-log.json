@@ -1,20 +1,4 @@
 {
-  "2026-07-22": [
-    {
-      "tmdbId": "224839",
-      "name": "遮天",
-      "latestSeason": 1,
-      "latestEpisode": 172,
-      "source": "6789kb"
-    },
-    {
-      "tmdbId": "218642",
-      "name": "师兄啊师兄",
-      "latestSeason": 1,
-      "latestEpisode": 151,
-      "source": "6789kb"
-    }
-  ],
   "2026-07-23": [
     {
       "tmdbId": "259231",
@@ -280,5 +264,14 @@
       "source": "6789kb"
     }
   ],
-  "2026-08-20": []
+  "2026-08-20": [],
+  "2026-08-21": [
+    {
+      "tmdbId": "124003",
+      "name": "完美世界",
+      "latestSeason": 1,
+      "latestEpisode": 283,
+      "source": "6789kb"
+    }
+  ]
 }
