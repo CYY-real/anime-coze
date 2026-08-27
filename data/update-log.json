@@ -265,5 +265,13 @@
       "source": "6789kb"
     }
   ],
-  "2026-08-27": []
+  "2026-08-27": [
+    {
+      "tmdbId": "124003",
+      "name": "完美世界",
+      "latestSeason": 1,
+      "latestEpisode": 284,
+      "source": "6789kb"
+    }
+  ]
 }
