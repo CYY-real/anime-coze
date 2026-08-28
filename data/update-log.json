@@ -1,13 +1,4 @@
 {
-  "2026-07-30": [
-    {
-      "tmdbId": "259231",
-      "name": "斩神之凡尘神域",
-      "latestSeason": 2,
-      "latestEpisode": 8,
-      "source": "6789kb"
-    }
-  ],
   "2026-07-31": [
     {
       "tmdbId": "124003",
@@ -264,6 +255,15 @@
       "name": "沧元图",
       "latestSeason": 1,
       "latestEpisode": 92,
+      "source": "6789kb"
+    }
+  ],
+  "2026-08-29": [
+    {
+      "tmdbId": "228429",
+      "name": "斗罗大陆Ⅱ绝世唐门",
+      "latestSeason": 1,
+      "latestEpisode": 168,
       "source": "6789kb"
     }
   ]
