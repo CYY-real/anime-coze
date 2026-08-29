@@ -1,20 +1,4 @@
 {
-  "2026-07-31": [
-    {
-      "tmdbId": "124003",
-      "name": "完美世界",
-      "latestSeason": 1,
-      "latestEpisode": 280,
-      "source": "6789kb"
-    },
-    {
-      "tmdbId": "229192",
-      "name": "沧元图",
-      "latestSeason": 1,
-      "latestEpisode": 88,
-      "source": "6789kb"
-    }
-  ],
   "2026-08-01": [
     {
       "tmdbId": "228429",
@@ -273,5 +257,6 @@
       "latestEpisode": 189,
       "source": "6789kb"
     }
-  ]
+  ],
+  "2026-08-30": []
 }
