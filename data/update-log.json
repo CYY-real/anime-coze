@@ -1,27 +1,4 @@
 {
-  "2026-08-14": [
-    {
-      "tmdbId": "124003",
-      "name": "完美世界",
-      "latestSeason": 1,
-      "latestEpisode": 282,
-      "source": "6789kb"
-    },
-    {
-      "tmdbId": "259231",
-      "name": "斩神之凡尘神域",
-      "latestSeason": 2,
-      "latestEpisode": 15,
-      "source": "6789kb"
-    },
-    {
-      "tmdbId": "229192",
-      "name": "沧元图",
-      "latestSeason": 1,
-      "latestEpisode": 90,
-      "source": "6789kb"
-    }
-  ],
   "2026-08-15": [
     {
       "tmdbId": "228429",
@@ -272,5 +249,6 @@
       "latestEpisode": 191,
       "source": "6789kb"
     }
-  ]
+  ],
+  "2026-09-13": []
 }
