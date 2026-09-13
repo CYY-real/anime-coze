@@ -1,20 +1,4 @@
 {
-  "2026-08-15": [
-    {
-      "tmdbId": "228429",
-      "name": "斗罗大陆Ⅱ绝世唐门",
-      "latestSeason": 1,
-      "latestEpisode": 166,
-      "source": "6789kb"
-    },
-    {
-      "tmdbId": "106449",
-      "name": "凡人修仙传",
-      "latestSeason": 1,
-      "latestEpisode": 187,
-      "source": "6789kb"
-    }
-  ],
   "2026-08-16": [],
   "2026-08-17": [
     {
@@ -250,5 +234,14 @@
       "source": "6789kb"
     }
   ],
-  "2026-09-13": []
+  "2026-09-13": [],
+  "2026-09-14": [
+    {
+      "tmdbId": "223911",
+      "name": "仙逆",
+      "latestSeason": 1,
+      "latestEpisode": 158,
+      "source": "6789kb"
+    }
+  ]
 }
