@@ -313,5 +313,40 @@
       "nextAirDate": "",
       "updateFrequency": ""
     }
+  },
+  {
+    "tmdbId": 271413,
+    "name": "完美世界剧场版 火之灰烬",
+    "watchedSeason": 1,
+    "watchedEpisode": 0,
+    "latestSeason": 1,
+    "latestEpisode": 0,
+    "threshold": 0,
+    "notifyEnabled": true,
+    "lastNotifiedAt": "",
+    "lastNotifiedEpisode": 0,
+    "platforms": [],
+    "platform": "",
+    "updateFrequency": "",
+    "meta": {
+      "tmdbId": 271413,
+      "name": "完美世界剧场版 火之灰烬",
+      "cover": "/api/img?p=/t/p/w500/mklZsHIITnvq7ApuPq5oG7NHyjA.jpg",
+      "category": "cdrama",
+      "categoryLabel": "",
+      "region": "CN",
+      "regionLabel": "国产剧",
+      "latestSeason": 1,
+      "latestEpisode": 0,
+      "seasonEpisodeCounts": {},
+      "totalEpisodes": 0,
+      "platforms": [],
+      "overview": "完美世界动画首部剧场版  火桑重逢奏响罪血悲歌，灰烬落处石灵绝境重生。",
+      "firstAirDate": "2024-09-14",
+      "voteAverage": 7.5,
+      "originCountry": "CN",
+      "nextAirDate": "",
+      "updateFrequency": ""
+    }
   }
 ]

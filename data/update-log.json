@@ -1,5 +1,4 @@
 {
-  "2026-08-18": [],
   "2026-08-19": [
     {
       "tmdbId": "218642",
@@ -249,6 +248,15 @@
       "latestSeason": 1,
       "latestEpisode": 159,
       "source": "6789kb"
+    }
+  ],
+  "2026-09-17": [
+    {
+      "tmdbId": "271413",
+      "name": "完美世界剧场版 火之灰烬",
+      "latestSeason": 1,
+      "latestEpisode": 4,
+      "source": "tmdb"
     }
   ]
 }
