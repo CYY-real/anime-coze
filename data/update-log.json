@@ -1,13 +1,4 @@
 {
-  "2026-08-19": [
-    {
-      "tmdbId": "218642",
-      "name": "师兄啊师兄",
-      "latestSeason": 1,
-      "latestEpisode": 155,
-      "source": "6789kb"
-    }
-  ],
   "2026-08-20": [],
   "2026-08-21": [
     {
@@ -257,6 +248,15 @@
       "latestSeason": 1,
       "latestEpisode": 4,
       "source": "tmdb"
+    }
+  ],
+  "2026-09-18": [
+    {
+      "tmdbId": "124003",
+      "name": "完美世界",
+      "latestSeason": 1,
+      "latestEpisode": 287,
+      "source": "6789kb"
     }
   ]
 }
