@@ -28,7 +28,7 @@
         "url": ""
       }
     ],
-    "source": "tmdb"
+    "source": "6789kb"
   },
   {
     "tmdbId": 223911,
@@ -72,7 +72,7 @@
     "category": "anime",
     "latestSeason": 1,
     "latestEpisode": 288,
-    "nextAirDate": "2026-10-01",
+    "nextAirDate": "2026-12-31",
     "updateFrequency": "周更",
     "totalSeasons": 1,
     "seasonEpisodeCounts": {
@@ -112,7 +112,7 @@
     "totalEpisodes": 101,
     "overview": "沧元界妖邪作乱，人族饱受摧残，主角孟川自小立下为母复仇的誓言，以镜湖道院为起点，凭借坚毅无畏的心志与利落果决的刀法身手，惩处奸恶，溃灭妖族，登顶四大道院，名满东宁府，拜上元初山，成就一代神魔。",
     "firstAirDate": "2023-06-22",
-    "voteAverage": 9.1,
+    "voteAverage": 9.143,
     "originCountry": "CN",
     "platforms": [],
     "source": "6789kb"
@@ -159,7 +159,7 @@
     "category": "anime",
     "latestSeason": 1,
     "latestEpisode": 161,
-    "nextAirDate": "2026-09-30",
+    "nextAirDate": "2026-10-07",
     "updateFrequency": "周更",
     "totalSeasons": 1,
     "seasonEpisodeCounts": {
