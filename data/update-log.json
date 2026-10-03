@@ -1,5 +1,4 @@
 {
-  "2026-09-03": [],
   "2026-09-04": [
     {
       "tmdbId": "124003",
@@ -254,6 +253,15 @@
       "name": "沧元图",
       "latestSeason": 1,
       "latestEpisode": 97,
+      "source": "6789kb"
+    }
+  ],
+  "2026-10-03": [
+    {
+      "tmdbId": "228429",
+      "name": "斗罗大陆Ⅱ绝世唐门",
+      "latestSeason": 1,
+      "latestEpisode": 173,
       "source": "6789kb"
     }
   ]
