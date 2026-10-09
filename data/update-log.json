@@ -241,5 +241,20 @@
     }
   ],
   "2026-10-08": [],
-  "2026-10-09": []
+  "2026-10-09": [
+    {
+      "tmdbId": "228429",
+      "name": "斗罗大陆Ⅱ绝世唐门",
+      "latestSeason": 1,
+      "latestEpisode": 174,
+      "source": "6789kb"
+    },
+    {
+      "tmdbId": "229192",
+      "name": "沧元图",
+      "latestSeason": 1,
+      "latestEpisode": 98,
+      "source": "6789kb"
+    }
+  ]
 }
