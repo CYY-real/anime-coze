@@ -256,5 +256,13 @@
       "source": "6789kb"
     }
   ],
-  "2026-10-10": []
+  "2026-10-10": [
+    {
+      "tmdbId": "106449",
+      "name": "凡人修仙传",
+      "latestSeason": 1,
+      "latestEpisode": 195,
+      "source": "6789kb"
+    }
+  ]
 }
