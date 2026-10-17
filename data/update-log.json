@@ -1,13 +1,4 @@
 {
-  "2026-09-17": [
-    {
-      "tmdbId": "271413",
-      "name": "完美世界剧场版 火之灰烬",
-      "latestSeason": 1,
-      "latestEpisode": 4,
-      "source": "tmdb"
-    }
-  ],
   "2026-09-18": [
     {
       "tmdbId": "124003",
@@ -241,6 +232,15 @@
       "name": "沧元图",
       "latestSeason": 1,
       "latestEpisode": 99,
+      "source": "6789kb"
+    }
+  ],
+  "2026-10-17": [
+    {
+      "tmdbId": "228429",
+      "name": "斗罗大陆Ⅱ绝世唐门",
+      "latestSeason": 1,
+      "latestEpisode": 175,
       "source": "6789kb"
     }
   ]
