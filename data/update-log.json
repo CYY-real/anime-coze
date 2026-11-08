@@ -279,6 +279,13 @@
       "latestSeason": 1,
       "latestEpisode": 1,
       "source": "6789kb"
+    },
+    {
+      "tmdbId": "223911",
+      "name": "仙逆",
+      "latestSeason": 1,
+      "latestEpisode": 166,
+      "source": "6789kb"
     }
   ]
 }
