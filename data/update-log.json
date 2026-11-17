@@ -1,5 +1,4 @@
 {
-  "2026-10-18": [],
   "2026-10-19": [
     {
       "tmdbId": "223911",
@@ -279,5 +278,21 @@
       "source": "6789kb"
     }
   ],
-  "2026-11-16": []
+  "2026-11-16": [],
+  "2026-11-17": [
+    {
+      "tmdbId": "127473",
+      "name": "眷思量",
+      "latestSeason": 2,
+      "latestEpisode": 15,
+      "source": "tmdb"
+    },
+    {
+      "tmdbId": "285709",
+      "name": "圣墟",
+      "latestSeason": 1,
+      "latestEpisode": 0,
+      "source": "tmdb"
+    }
+  ]
 }

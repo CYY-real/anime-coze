@@ -28,7 +28,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 223911,
@@ -59,7 +59,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 124003,
@@ -90,7 +90,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 229192,
@@ -115,7 +115,7 @@
     "voteAverage": 9.1,
     "originCountry": "CN",
     "platforms": [],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 228429,
@@ -146,7 +146,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 218642,
@@ -177,7 +177,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 259537,
@@ -210,7 +210,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 127473,
@@ -222,7 +222,7 @@
     "regionLabel": "国漫",
     "category": "anime",
     "latestSeason": 2,
-    "latestEpisode": 30,
+    "latestEpisode": 15,
     "nextAirDate": "",
     "updateFrequency": "已完结",
     "totalSeasons": 3,
@@ -237,7 +237,7 @@
     "voteAverage": 8.8,
     "originCountry": "CN",
     "platforms": [],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 224839,
@@ -268,7 +268,7 @@
         "url": ""
       }
     ],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 259231,
@@ -294,7 +294,7 @@
     "voteAverage": 7.9,
     "originCountry": "CN",
     "platforms": [],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 285709,
@@ -306,7 +306,7 @@
     "regionLabel": "国漫",
     "category": "anime",
     "latestSeason": 1,
-    "latestEpisode": 1,
+    "latestEpisode": 0,
     "nextAirDate": "",
     "updateFrequency": "已完结",
     "totalSeasons": 1,
@@ -319,7 +319,7 @@
     "voteAverage": 0,
     "originCountry": "CN",
     "platforms": [],
-    "source": "6789kb"
+    "source": "tmdb"
   },
   {
     "tmdbId": 271413,
