@@ -1,13 +1,4 @@
 {
-  "2026-10-19": [
-    {
-      "tmdbId": "223911",
-      "name": "仙逆",
-      "latestSeason": 1,
-      "latestEpisode": 163,
-      "source": "6789kb"
-    }
-  ],
   "2026-10-20": [],
   "2026-10-21": [
     {
@@ -293,6 +284,36 @@
       "latestSeason": 1,
       "latestEpisode": 0,
       "source": "tmdb"
+    }
+  ],
+  "2026-11-18": [
+    {
+      "tmdbId": "127473",
+      "name": "眷思量",
+      "latestSeason": 2,
+      "latestEpisode": 30,
+      "source": "6789kb"
+    },
+    {
+      "tmdbId": "218642",
+      "name": "师兄啊师兄",
+      "latestSeason": 1,
+      "latestEpisode": 168,
+      "source": "6789kb"
+    },
+    {
+      "tmdbId": "224839",
+      "name": "遮天",
+      "latestSeason": 1,
+      "latestEpisode": 190,
+      "source": "6789kb"
+    },
+    {
+      "tmdbId": "285709",
+      "name": "圣墟",
+      "latestSeason": 1,
+      "latestEpisode": 1,
+      "source": "6789kb"
     }
   ]
 }
