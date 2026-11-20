@@ -1,20 +1,4 @@
 {
-  "2026-10-21": [
-    {
-      "tmdbId": "224839",
-      "name": "遮天",
-      "latestSeason": 1,
-      "latestEpisode": 186,
-      "source": "6789kb"
-    },
-    {
-      "tmdbId": "218642",
-      "name": "师兄啊师兄",
-      "latestSeason": 1,
-      "latestEpisode": 164,
-      "source": "6789kb"
-    }
-  ],
   "2026-10-22": [],
   "2026-10-23": [
     {
@@ -315,5 +299,14 @@
       "source": "6789kb"
     }
   ],
-  "2026-11-19": []
+  "2026-11-19": [],
+  "2026-11-20": [
+    {
+      "tmdbId": "229192",
+      "name": "沧元图",
+      "latestSeason": 1,
+      "latestEpisode": 104,
+      "source": "6789kb"
+    }
+  ]
 }
