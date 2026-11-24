@@ -3,7 +3,7 @@
     "tmdbId": 106449,
     "name": "凡人修仙传",
     "displayName": "凡人修仙传",
-    "cover": "/api/img?p=/t/p/w500/u1VRjvvCIVwb1MUhoxSAUimhoKZ.jpg",
+    "cover": "/api/img?p=/t/p/w500/ernIpey6ZaqAzaZU0T8UUxJdL0m.jpg",
     "mediaType": "tv",
     "region": "CN",
     "regionLabel": "国漫",
@@ -16,10 +16,10 @@
     "seasonEpisodeCounts": {
       "1": 211
     },
-    "totalEpisodes": 210,
+    "totalEpisodes": 211,
     "overview": "看机智的凡人小子韩立如何稳健发展、步步为营，战魔道、夺至宝、驰骋星海、快意恩仇，成为纵横三界的强者。他日仙界重相逢，一声道友尽沧桑。",
     "firstAirDate": "2020-07-25",
-    "voteAverage": 8.527,
+    "voteAverage": 8.5,
     "originCountry": "CN",
     "platforms": [
       {
